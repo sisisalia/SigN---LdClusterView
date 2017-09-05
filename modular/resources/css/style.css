@@ -1,0 +1,194 @@
+body {
+    color:#333333;
+    font-family:'Lucida Grande', Verdana, Arial, Sans-Serif;
+    font-size: 80%;
+    background-color: #F0F0F0;
+    line-height: 1.4em;
+}
+
+.tableDemo {
+    background-color: transparent;
+    margin-right: 10px;
+    padding: 6px;
+    position: absolute;
+}
+
+.leftSpace {
+    width: 20%;
+}
+
+.rightSpace {
+    width: 20%;
+}
+
+.mainPlot{
+    width: 59%;
+}
+
+.plot{
+    width: 100%;
+}
+
+.tableDemo th {
+    color: white;
+    text-shadow: 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A, 0 0 18px #29215A;
+}
+
+
+#table-1 th {
+    background-color: #29215A;
+    color: white;
+}
+
+#table-1 td, th {
+    padding-right: 8px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 75%;
+    vertical-align: top;
+}
+
+.leftSpace {
+    padding-left: 8px;
+}
+
+.category td {
+    background-color: #E4EBF3;
+}
+
+#table-1 {
+    /*position: relative;*/
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.myDragClass{
+    background: #B5EEAC;
+}
+
+#table-1 .dragHandle {
+    width: 1%;
+    background: #D3D3D3;
+    border-style: outset;
+    border-width: 2px;
+
+}
+
+#table-1 .showDragHandle {
+    background: #57A7C8;
+}
+
+
+.domain {
+    fill : none;
+    stroke : black;
+    stroke-width : 1;
+}
+
+.tick line {
+    stroke : blue;
+    stroke-width : 1;
+}
+.tick text {
+    font-family : Verdana, Arial, sans-serif;
+    font-size : 9px;
+    font-weight : normal;
+}
+
+#hoverSVG { 
+  stroke: #5C5C5C;  
+  fill: none;
+  stroke-width: 1px;
+  opacity: 0.7;
+}
+
+#mainSVG {
+    background: white;
+}
+
+.mainContent td{
+    display:inline-block; float:left;
+}
+
+#tooltip {
+        position: absolute;
+        text-align: justify;
+        height: auto;
+        padding: 10px;
+        background-color: #FCFFAE;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        pointer-events: none;
+}
+
+#tooltip.hidden {
+        display: none;
+}
+
+#tooltip p {
+        margin: 0;
+        font-family: sans-serif;
+        font-size: 12px;
+}
+
+.glyphicon p {
+    text-decoration: none;
+    color: red;
+    background: black;
+}
+
+.modal-body{
+    font-size: 125%;
+    line-height: 3;
+}
+
+.ruler-point{
+    font-size: 150%;
+    text-align: center;
+    font-weight:bold;
+    padding: 5px;
+}
+
+.custom-menu {
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    white-space: nowrap;
+    font-family: sans-serif;
+    color: #333;
+    border-radius: 5px;
+    padding: 0;
+}
+
+.custom-menu-body{
+    padding: 4;
+    padding-bottom: 2;
+    line-height: 1;
+    font-size: 13;
+    text-align: center;
+    text-decoration: none;
+    background: #F1F1F1;
+}
+
+.custom-menu-body li{
+    cursor: pointer;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.custom-menu-body li:hover {
+    background-color: #DEF;
+}
+
+.ruler-btn{
+    margin: 2px;
+    width: 20%;
+}
+
+.ruler-btn:hover{
+    background: #A0A0A0 ;
+}

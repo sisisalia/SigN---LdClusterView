@@ -1,0 +1,263 @@
+<html>
+    <link rel="stylesheet" href="resources/css/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="resources/css/bootstrap-3.3.7-dist/css/bootstrap-toggle.min.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
+    <body>
+        <p id="extraDetails"></p>
+        <div  style='position: relative;'>
+            <table id="table-1" class="tableDemo" height="0"></table>
+            <svg id="mainSVG" width="100%">
+            </svg>
+        </div>
+        <div id="tooltip" class="hidden">
+            <p id="value"></p>
+        </div>
+        <!-- Configuration Modal -->
+        <div id="configureModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h5><b>Configure Plots</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        <p> <i>Choose plots to display</i>
+                            <br>
+                        Invisible
+                        <ul id="invisible" class="connectedSortable" style="border:1px solid black">
+                        <li class="show_mainGenes">Genes Plot</li>
+                        <li class="show_mainLeafNodes">Leaf Nodes Plot</li>
+
+                    </ul>
+
+                        Visible
+                        <ul id="visible" class="connectedSortable" style="border:1px solid black">
+                            <li class="show_mainSankeyPlot">Sankey Plot</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="renderEverything();" data-dismiss="modal">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Context menu modal -->
+        <div id="context-menu" class="modal fade custom-menu" role="dialog">
+            <div id="context-menu-modal" class="modal-dialog">
+                <div id="context-menu-body" class="modal-body custom-menu-body">
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="resources/js/utilities/jquery-ui-1.12.4.js"></script>
+        <script type="text/javascript" src="resources/js/utilities/jquery-ui.js"></script>
+        <!--<script type="text/javascript" src="resources/js/utilities/jquery-v340.js"></script>-->
+        <!--<script type="text/javascript" src="resources/js/utilities/jquery-ui-v340.js"></script>-->
+        <script type="text/javascript" src="resources/js/utilities/jquery.sprintf.js"></script>
+        <script type="text/javascript" src="resources/js/utilities/jquery.tablednd-v340.js"></script>
+        <script type="text/javascript" src="resources/js/utilities/d3.min.js"></script>
+        <script type="text/javascript" src="resources/js/utilities/d3-tip.js"></script>
+        <script type="text/javascript" src="resources/js/utilities/bootstrap.min.js"></script>
+        <script type="text/javascript" src="resources/js/utilities/bootstrap-toggle.min.js"></script>
+        <script type="text/javascript" src="resources/js/utilities/sankey.js"></script>
+        <script type="text/javascript" src="resources/js/plots/hierarchicalClustering.js"></script>
+        <script type="text/javascript" src="resources/js/plots/insertRow.js"></script>
+        <script type="text/javascript" src="resources/js/plots/ruler.js"></script>
+        <script type="text/javascript" src="resources/js/plots/manhattanPlot.js"></script>
+        <script type="text/javascript" src="resources/js/plots/genesPlot.js"></script>
+        <script type="text/javascript" src="resources/js/plots/leafNodesPlot.js"></script>
+        <script type="text/javascript" src="resources/js/plots/dendrogramPlot.js"></script>
+        <script type="text/javascript" src="resources/js/plots/emptyTab.js"></script>
+        <script type="text/javascript" src="resources/js/plots/addEvents.js"></script>
+        <script type="text/javascript" src="resources/js/data/data.js"></script>
+        <script type="text/javascript" src="resources/js/data/snpData.js"></script>
+        <script type="text/javascript" src="resources/js/data/genesData.js"></script>
+        <script type="text/javascript" src="resources/js/data/manhattanData.js"></script>
+        <script type="text/javascript" src="resources/js/data/methylationData.js"></script>
+        <script type="text/javascript" src="resources/js/data/getData.js"></script>
+        <script type="text/javascript" src="resources/js/data/setmqtls.js"></script>
+        <script type="text/javascript" src="resources/js/plots/hoverLine.js"></script>
+        <script type="text/javascript" src="resources/js/plots/barChartPlot.js"></script>
+        <script type="text/javascript" src="resources/js/plots/sankeyPlot.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $( "#invisible, #visible" ).sortable({
+                    connectWith: ".connectedSortable"
+                }).disableSelection();
+                getData();
+                dataFunctions();
+                var selected_study;
+                data = computeDistance(data);
+                html = $.map(eqtl_study_order, function(n, i) {
+                    return $.sprintf("<li class='show_mainMan' id='%s'>%s (P=%0.3E)</li>", n, n, eqtl_studies[n][0].p);
+                });
+                $('#invisible').append(html);
+                bar_chart_choices = [];
+                for(var i=0; i < Object.keys(methylation_data).length; i++){
+                    bar_chart_choices.push(Object.keys(methylation_data)[i]);
+                    $('#invisible').append($.sprintf("<li class='show_mainBar' id='%s'>%s</li>",Object.keys(methylation_data)[i], Object.keys(methylation_data)[i]));
+                };
+                plotObjects = {
+                    "show_mainMan" : {"type": "manhattanPlot", "plotId": "mainMan", "leftPlotId": "leftMan", "rightPlotId": "rightMan"},
+                    "show_mainGenes" : {"type": "genesPlot", "plotId": "mainGenes", "leftPlotId": "leftGenes", "rightPlotId": "rightGenes"},
+                    "show_mainLeafNodes" : {"type": "leafNodesPlot", "plotId": "mainLeafNodes", "leftPlotId": "leftLeafNodes", "rightPlotId": "rightLeafNodes"},
+                    "show_mainBar" : {"type": "barChartPlot", "plotId": "mainBarChart", "leftPlotId": "leftBarChart", "rightPlotId": "rightBarChart"},
+                    "show_mainSankeyPlot" : {"type" : "sankeyPlot", "plotId" : "mainSankeyPlot", "leftPlotId" : "leftSankeyPlot", "rightPlotId" : "rightSankeyPlot"},
+                };
+                renderEverything();
+            });
+
+            $(window).resize(function() {
+              renderEverything();
+            });
+
+            function configureList(){
+                $('#invisible').html(invisible);
+                $('#visible').html(visible);
+            }
+
+            function renderEverything(){
+                $("#table-1").empty();
+
+                plotOrder = [];
+                $("#visible").children().each(function(d){
+                    var class_name = $(this).attr('class');
+                    if(class_name.indexOf(' ') != -1){
+                        class_name = class_name.substring(0, class_name.indexOf(' '));
+                    }
+                    var temp = $.extend( true, {}, plotObjects[class_name] );
+                    temp.plotId = temp.plotId + d;
+                    temp.leftPlotId = temp.leftPlotId + d;
+                    temp.rightPlotId = temp.rightPlotId + d;
+                    if($(this).attr('id') != null){
+                        temp.data = $(this).attr('id');
+                    }
+                    plotOrder.push(temp);
+                });
+
+                invisible = $('#invisible').html();
+                visible = $('#visible').html();
+                deleted_track = [];
+
+                var size = 0;
+                if($("#window_size_select").val() == "Full Screen")
+                    size = screen.width;
+                else
+                    size = parseFloat($("#window_size_select").val());
+                $("#table-1").attr('width', size);
+
+                dataFunctions();
+                drawAxis("table-1", "leftGenomicAxis", "genomic_axis", "rightGenomicAxis", data);
+
+                for(var i = 0; i < plotOrder.length; i++){
+                    var plot = plotOrder[i];
+                    if(plot.type == "manhattanPlot")
+                        drawManhattanPlot("table-1", eqtl_studies[plot.data], true, plot.plotId, plot.leftPlotId, plot.rightPlotId, plot.data);
+                    if(plot.type == "genesPlot")
+                        drawGenesPlot("table-1", genes_data, true, plot.plotId, plot.leftPlotId, plot.rightPlotId);
+                    else if(plot.type == "leafNodesPlot")
+                        drawLeafNodesPlot("table-1", data.leaf_nodes, data.allDistances, true, plot.plotId, plot.leftPlotId, plot.rightPlotId, true);
+                    else if(plot.type == 'barChartPlot')
+                        drawBarChartPlot("table-1", methylation_data, true, plot.leftPlotId, plot.rightPlotId, plot.plotId, plot.data);
+                    else if(plot.type == 'sankeyPlot')
+                        drawSankeyPlot("table-1", data, true, plot.plotId, plot.leftPlotId, plot.rightPlotId);
+                }
+                // document.body.style.width = '700px';
+                sizeAndFunctions();
+            }
+
+            function changeSize(){
+               renderEverything();
+            }
+
+            function updateLD(){
+              ld_distance = parseFloat($("#cutoff_select").val());
+            }
+
+            function dataFunctions(){
+                data.distance_cutoff = ld_distance;
+                selected_study = [];
+                $('.selected_study').each(function(d){
+                  if($(this).is(':checked')){
+                    selected_study.push($(this).attr('id'));
+                  }
+                });
+                // data.selected_study = $("#selected_study").val();
+                data = computeDendrogram(data, data.distance_cutoff);
+            }
+
+            function nthIndex(str, pat, n){
+                var L= str.length, i= -1;
+                while(n-- && i++<L){
+                    i= str.indexOf(pat, i);
+                    if (i < 0) break;
+                }
+                return i;
+            }
+
+            function sizeAndFunctions(plots){
+
+                $('#table-1').tableDnD({
+                    onDragClass: "myDragClass",
+                    onDrop: function(table, row) {
+                        for(var i = 0; i < plotOrder.length; i++){
+                            var pos = 0;
+                            for(var j = 0; j < table.children.length; j++){
+                                // if()
+                                if(table.children[j].children[2].children[0].id == plotOrder[i].plotId)
+                                    break;
+                                pos++;
+                            }
+                            plotOrder[i].position = pos;
+                        }
+                    }
+                });
+                // dont know what is this for
+                $("#table-1 .dragHandle").hover(function() {
+                    $(this).addClass('showDragHandle');
+                    $(this).closest('tr').addClass('myDragClass');
+
+                }, function() {
+                  $(this).removeClass('showDragHandle');
+                  $(this).closest('tr').removeClass('myDragClass');
+                });
+
+                $(".close-plot").on("click", function(d){
+                    var plotId = $(this.closest('tr')).attr("id");
+                    plotId = plotId.replace(/\D/g, '');
+                    var number = parseInt(plotId) + 1;
+                    deleted_track.push(number);
+                    var reduced = 0;
+                    for(var i = 0; i < deleted_track.length; i++){
+                        if(number > deleted_track[i]) reduced++;
+                    }
+                    number -= reduced;
+                    var index1 = nthIndex(visible, '<li', number);
+                    var index2 = nthIndex(visible, '</li>', number);
+                    var temp = visible.substring(index1, index2 + 5);
+                    visible = visible.replace(temp, '');
+                    invisible += temp;
+                    this.closest('tr').remove();
+                    $("#mainSVG").attr("x", $("#table-1").offset().left);
+                    $("#mainSVG").attr("y", $("#table-1").offset().top);
+                    $("#mainSVG").attr("height", $("#table-1").height() + 40);
+                    $("#mainSVG").attr("width", $("#table-1").width() + 40);
+                });
+
+                $("#mainSVG").attr("x", $("#table-1").offset().left);
+                $("#mainSVG").attr("y", $("#table-1").offset().top);
+                $("#mainSVG").attr("height", $("#table-1").height() + 40);
+                $("#mainSVG").attr("width", $("#table-1").width() + 40);
+                enableHover("mainSVG");
+
+                for(var i = 0; i < plotOrder.length; i++){
+                    addEvents("mainSVG", plotOrder[i].type, plotOrder[i].plotId);
+                }
+
+            }
+
+        </script>
+    </body>
+</html>
