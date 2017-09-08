@@ -55,7 +55,7 @@ d3.sankey = function() {
     };
 
     sankey.link = function() {
-        var curvature = .5;
+        var curvature = 0.5;
 
         // x0 = line start X
         // y0 = line start Y

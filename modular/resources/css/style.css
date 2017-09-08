@@ -192,3 +192,23 @@ body {
 .ruler-btn:hover{
     background: #A0A0A0 ;
 }
+
+li{
+    list-style-type: none;
+    cursor : move;
+    border: 1px solid black;
+    margin : 10px;
+    margin-left: -30px;
+    padding-left : 5px;
+    box-shadow: 2px 2px 2px #888888;
+}
+
+.link {
+    fill: none;
+    /*stroke: #000;*/
+    stroke-opacity: .5;
+}
+
+.link:hover {
+    stroke-opacity: .8;
+}

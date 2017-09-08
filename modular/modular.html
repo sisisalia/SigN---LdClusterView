@@ -23,17 +23,24 @@
                     <div class="modal-body">
                         <p> <i>Choose plots to display</i>
                             <br>
-                        Invisible
-                        <ul id="invisible" class="connectedSortable" style="border:1px solid black">
-                        <li class="show_mainGenes">Genes Plot</li>
-                        <li class="show_mainLeafNodes">Leaf Nodes Plot</li>
 
-                    </ul>
-
-                        Visible
+                        <div class="row">
+                        <div class="col col-lg-6">
+                            Available
                         <ul id="visible" class="connectedSortable" style="border:1px solid black">
                             <li class="show_mainSankeyPlot">Sankey Plot</li>
                         </ul>
+                        </div>
+
+                        <div class="col col-lg-6">
+                        Not available
+                        <ul id="invisible" class="connectedSortable" style="border:1px solid black">
+                            <li class="show_mainGenes">Genes Plot</li>
+                            <li class="show_mainLeafNodes">Leaf Nodes Plot</li>
+                        </ul>
+                        </div>
+                    </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
