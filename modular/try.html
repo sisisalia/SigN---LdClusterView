@@ -1,110 +1,99 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>UBS 2015 Q1 Results</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="resources/js/utilities/jquery.sprintf.js"></script>
-    <script type="text/javascript" src="resources/js/utilities/jquery.tablednd-v340.js"></script>
-    <script type="text/javascript" src="resources/js/utilities/d3.min.js"></script>
-    <script type="text/javascript" src="resources/js/utilities/d3-tip.js"></script>
-    <script type="text/javascript" src="resources/js/utilities/bootstrap.min.js"></script>
-    <script type="text/javascript" src="resources/js/utilities/bootstrap-toggle.min.js"></script>
-    <script type="text/javascript" src="resources/js/utilities/sankey.js"></script>
-</head>
-<style>
+function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
+if(newRow){
+insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
+$("#" + leftPlotId).empty();
+$("#" + rightPlotId).empty();
+$("#" + plotId).empty();
+}
 
+var html = "<svg class=\"plot\" id=\"" + plotId + "\"></svg>";
+$("#" + plotId + "_td").append(html);
 
+var start = data.startRuler - 100;
+var end = data.endRuler + 100;
+var height = newRow ? 200 : $("#" + plotId).closest('svg').attr("height");
+var width = $("#" + plotId).width();
 
+var svg = d3.select("#" + plotId).append("g").attr("id", plotId + "_sankey_plot");
 
-    .link {
-        fill: none;
-        /*stroke: #000;*/
-        stroke-opacity: .5;
-    }
+var sankey = d3.sankey()
+.nodeWidth(25) // was 15
+.nodePadding(20) // was 10
+.size([width, height]);
 
-    .link:hover {
-        stroke-opacity: .8;
-    }
-</style>
-<body>
-<p>UBS Operating Income by Region &amp; Business Group. Q1 2015. A Vertical Sankey Diagram.</p>
+var path = sankey.link();
 
-<p id="chart">
+d3.csv("resources/js/data/mqtls_one.csv", function(d){
 
-    <script>
-        var margin = {top: 1, right: 1, bottom: 6, left: 1},
-            width = 1000 - margin.left - margin.right, // was 960
-            //height = 1500 - margin.top - margin.bottom; // was 500
-            height = 650; // UBS Example
-        var formatNumber = d3.format(",.0f"),
-            format = function(d) { return formatNumber(d) + "m CHF"; },
-            color = d3.scale.category20();
-        var svg = d3.select("#chart").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        var sankey = d3.sankey()
-            .nodeWidth(25) // was 15
-            .nodePadding(20) // was 10
-            .size([width, height]);
-        var path = sankey.link();
-        d3.json("resources/js/data/energy.json", function(energy) {
-            sankey
-                .nodes(energy.nodes)
-                .links(energy.links)
-                .layout(32); // what is this? iterations
-            var link = svg.append("g").selectAll(".link")
-                .data(energy.links)
-                .enter().append("path")
-                .attr("class", "link")
-                .attr("d", path)
-                .style("stroke-width", function(d) { return Math.max(1, d.dy); })
-                .style("stroke", function(d) { return d.source.color = color(d.source.name.replace(/ .*/, "")); })
-                .sort(function(a, b) { return b.dy - a.dy; });
-            link.append("title")
-                .text(function(d) { return d.source.name + " → " + d.target.name + "\n" + format(d.value); });
-            // title is an SVG standard way of providing tooltips, up to the browser how to render this, so changing the style is tricky
+var mqtls = {
+"nodes": [],
+"links": []
+};
+var mqtls_name = [];
+// The reason to have 'p' and 's' is to differentiate probe and snp in case they have the same position
+for(var i = 0; i < d.length; i++){
+if(mqtls_name.indexOf('p' + d[i].probe_position) == -1){
+mqtls_name.push('p' + d[i].probe_position);
+mqtls['nodes'].push({ 'name' : 'p' + d[i].probe_position });
+}
+if(mqtls_name.indexOf('s' + d[i].snp_position) == -1){
+mqtls_name.push('s' + d[i].snp_position);
+mqtls['nodes'].push({ 'name' : 's' + d[i].snp_position });
+}
+}
+for(i = 0; i < d.length; i++){
+var source = 'p' + d[i].probe_position;
+var target = 's' + d[i].snp_position;
+source = mqtls_name.indexOf(source);
+target = mqtls_name.indexOf(target);
+mqtls.links.push({'source' : source, 'target' : target, 'value' : d[i].p_value});
+}
 
-            var node = svg.append("g").selectAll(".node")
-                .data(energy.nodes)
-                .enter().append("g")
-                .attr("class", "node")
-                .attr("transform", function(d) {
-                    return "translate(" + d.x + "," + d.y + ")";
-                })
-                .call(d3.behavior.drag()
-                    .origin(function(d) { return d; })
-                    .on("dragstart", function() { this.parentNode.appendChild(this); })
-                    .on("drag", dragmove));
-            node.append("rect")
-                .attr("height", sankey.nodeWidth())
-                .attr("width", function(d) { return d.dy; })
-                .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); })
-                .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
-                .append("title")
-                .text(function(d) { return d.name + "\n" + format(d.value); });
+sankey.nodes(mqtls.nodes)
+.links(mqtls.links)
+.layout(32);
 
-            node.append("text")
-                .attr("text-anchor", "middle")
-                .attr("x", function (d) { return d.dy / 2 })
-                .attr("y", sankey.nodeWidth() / 2)
-                .attr("dy", ".35em")
-                .text(function(d) { return d.name; })
-                .filter(function(d) { return d.x < width / 2; });
+var link = svg.append("g").selectAll(".link")
+.data(mqtls.links)
+.enter().append("path")
+.attr("class", function(d){
+// Manipulate link position
+var pos = parseInt(d.source.name.substring(1,d.source.name.length));
+d.source.x = (pos - start) / (end - start) * width;
+pos = parseInt(d.target.name.substring(1,d.target.name.length));
+d.target.x = (pos - start) / (end - start) * width;
+d.sy = 0;
+d.dy = 0;
+return 'link';
+})
+.style("stroke-width", function(d){
+var scale = d3.scale.linear().domain([0,50]).range([1,30]);
+var result = scale(-Math.log(d.value));
+return result;
+})
+.style("stroke", function(d) { return d.source.color = 'gray'})
+.attr("d", path);
 
-            function dragmove(d) {
-                //d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
-                d3.select(this).attr("transform", "translate(" + (d.x = Math.max(0, Math.min(width - d.dy, d3.event.x))) + "," + d.y + ")");
-                sankey.relayout();
-                link.attr("d", path);
-            }
-        });
-    </script>
+var node = svg.append("g").selectAll(".node")
+.data(mqtls.nodes)
+.enter().append("g")
+.attr("class", "node")
+.attr("transform", function(d) {
+var pos = parseInt(d.name.substring(1,d.name.length));
+var pos_x = (pos - start) / (end - start) * width;
+return "translate(" + pos_x + "," + d.y + ")";
+});
 
-    <div id="dataSourceFooter">
-<p>Data Source: <a target="_blank" href="http://www.ubs.com/global/en/about_ubs/investor_relations/quarterly_reporting/2015.html">http://www.ubs.com/global/en/about_ubs/investor_relations/quarterly_reporting/2015.html</a></p>
-</div>
-</body>
-</html>
+node.append("rect")
+.attr("height", sankey.nodeWidth())
+.attr("width", function(d) { return 1; });
+});
+
+var heightOfPlot = $("#" + plotId + "_sankey_plot").get(0).getBBox().height + 200;
+
+if(newRow){
+$("#" + leftPlotId).closest('svg').attr('height', heightOfPlot);
+$("#" + rightPlotId).closest('svg').attr('height', heightOfPlot);
+$("#" + plotId).closest('svg').attr('height', heightOfPlot);
+}
+}

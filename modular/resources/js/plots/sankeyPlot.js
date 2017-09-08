@@ -1,4 +1,4 @@
-function drawSankeyPlot(table, mqtls, newRow, plotId, leftPlotId, rightPlotId) {
+function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
     if(newRow){
         insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
         $("#" + leftPlotId).empty();
@@ -23,30 +23,28 @@ function drawSankeyPlot(table, mqtls, newRow, plotId, leftPlotId, rightPlotId) {
 
     var path = sankey.link();
 
-    d3.csv("resources/js/data/mqtls.csv", function(d){
-
         var mqtls = {
             "nodes": [],
             "links": []
         };
         var mqtls_name = [];
         // The reason to have 'p' and 's' is to differentiate probe and snp in case they have the same position
-        for(var i = 0; i < d.length; i++){
-            if(mqtls_name.indexOf('p' + d[i].probe_position) == -1){
-                mqtls_name.push('p' + d[i].probe_position);
-                mqtls['nodes'].push({ 'name' : 'p' + d[i].probe_position });
+        for(var i = 0; i < mqtls_raw.length; i++){
+            if(mqtls_name.indexOf('p' + mqtls_raw[i].probe_position) == -1){
+                mqtls_name.push('p' + mqtls_raw[i].probe_position);
+                mqtls['nodes'].push({ 'name' : 'p' + mqtls_raw[i].probe_position });
             }
-            if(mqtls_name.indexOf('s' + d[i].snp_position) == -1){
-                mqtls_name.push('s' + d[i].snp_position);
-                mqtls['nodes'].push({ 'name' : 's' + d[i].snp_position });
+            if(mqtls_name.indexOf('s' + mqtls_raw[i].snp_position) == -1){
+                mqtls_name.push('s' + mqtls_raw[i].snp_position);
+                mqtls['nodes'].push({ 'name' : 's' + mqtls_raw[i].snp_position });
             }
         }
-        for(i = 0; i < d.length; i++){
-            var source = 'p' + d[i].probe_position;
-            var target = 's' + d[i].snp_position;
+        for(i = 0; i < mqtls_raw.length; i++){
+            var source = 'p' + mqtls_raw[i].probe_position;
+            var target = 's' + mqtls_raw[i].snp_position;
             source = mqtls_name.indexOf(source);
             target = mqtls_name.indexOf(target);
-            mqtls.links.push({'source' : source, 'target' : target, 'value' : d[i].p_value});
+            mqtls.links.push({'source' : source, 'target' : target, 'value' : mqtls_raw[i].p_value});
         }
 
         sankey.nodes(mqtls.nodes)
@@ -67,7 +65,9 @@ function drawSankeyPlot(table, mqtls, newRow, plotId, leftPlotId, rightPlotId) {
                 return 'link';
             })
             .style("stroke-width", function(d){
-                console.log(d);
+                var scale = d3.scale.linear().domain([0,50]).range([1,30]);
+                var result = scale(-Math.log(d.value));
+                return result;
             })
             .style("stroke", function(d) { return d.source.color = 'gray'})
             .attr("d", path);
@@ -86,9 +86,7 @@ function drawSankeyPlot(table, mqtls, newRow, plotId, leftPlotId, rightPlotId) {
             .attr("height", sankey.nodeWidth())
             .attr("width", function(d) { return 1; });
 
-    });
-
-    var heightOfPlot = $("#" + plotId + "_sankey_plot").get(0).getBBox().height + 200;
+    var heightOfPlot = $("#" + plotId + "_sankey_plot").get(0).getBBox().height;
 
     if(newRow){
         $("#" + leftPlotId).closest('svg').attr('height', heightOfPlot);

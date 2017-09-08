@@ -80,6 +80,7 @@
         <script type="text/javascript" src="resources/js/plots/addEvents.js"></script>
         <script type="text/javascript" src="resources/js/data/data.js"></script>
         <script type="text/javascript" src="resources/js/data/snpData.js"></script>
+        <script type="text/javascript" src="resources/js/data/mqtls.js"></script>
         <script type="text/javascript" src="resources/js/data/genesData.js"></script>
         <script type="text/javascript" src="resources/js/data/manhattanData.js"></script>
         <script type="text/javascript" src="resources/js/data/methylationData.js"></script>
@@ -111,7 +112,7 @@
                     "show_mainGenes" : {"type": "genesPlot", "plotId": "mainGenes", "leftPlotId": "leftGenes", "rightPlotId": "rightGenes"},
                     "show_mainLeafNodes" : {"type": "leafNodesPlot", "plotId": "mainLeafNodes", "leftPlotId": "leftLeafNodes", "rightPlotId": "rightLeafNodes"},
                     "show_mainBar" : {"type": "barChartPlot", "plotId": "mainBarChart", "leftPlotId": "leftBarChart", "rightPlotId": "rightBarChart"},
-                    "show_mainSankeyPlot" : {"type" : "sankeyPlot", "plotId" : "mainSankeyPlot", "leftPlotId" : "leftSankeyPlot", "rightPlotId" : "rightSankeyPlot"},
+                    "show_mainSankeyPlot" : {"type" : "sankeyPlot", "plotId" : "mainSankeyPlot", "leftPlotId" : "leftSankeyPlot", "rightPlotId" : "rightSankeyPlot"}
                 };
                 renderEverything();
             });
@@ -169,7 +170,7 @@
                     else if(plot.type == 'barChartPlot')
                         drawBarChartPlot("table-1", methylation_data, true, plot.leftPlotId, plot.rightPlotId, plot.plotId, plot.data);
                     else if(plot.type == 'sankeyPlot')
-                        drawSankeyPlot("table-1", data, true, plot.plotId, plot.leftPlotId, plot.rightPlotId);
+                        drawSankeyPlot("table-1", true, plot.plotId, plot.leftPlotId, plot.rightPlotId);
                 }
                 // document.body.style.width = '700px';
                 sizeAndFunctions();
