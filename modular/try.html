@@ -1,99 +1,158 @@
-function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
-if(newRow){
+// draw the leaf nodes
+ld_distance = 0;
+function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId, leftPlotId, rightPlotId) {
+var textID = plotId + "_textRef";
+var refId = data.refSnp;
+
+if (newRow) {
 insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
 $("#" + leftPlotId).empty();
+var html = "<br>Reference SNP: <input id=\'" + textID + "\' type='text' value='" + data.refSnp + "' readonly></input>";
+html += '<br><br>';
+// LD cut off
+html += "<div style=\"float: left;\">LD threshold : <select id='cutoff_select' onChange='updateLD(); data = computeDistance(data); renderEverything();'>";
+    html += $.map([0, 0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], function(n, i) {
+    if(n == ld_distance){
+    return "<option selected=selected>" + n + "</option>";
+    }else{
+    return "<option>" + n + "</option>";
+    }
+    } ).join("");
+    html += "</select>";
+html += "<br><br><b>View:</b>";
+html += "<br><input type=\"radio\" class='view_choice' id=\"dendrogram\" name=\"viewLeaf_" + plotId + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> Dendrogram </input>";
+html += "<br><input type=\"radio\" class='view_choice' id=\"clutteredr2\" name=\"viewLeaf_" + plotId + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup> distance - Cluttered </input>";
+html += "<br><input type=\"radio\" class='view_choice' id=\"expandedr2\" name=\"viewLeaf_" + plotId + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup> distance - Expanded </input>";
+// html += "<br><input type=\"checkbox\" id=\"" + checkBoxID + "\"> Show by r2 distance from the ref SNP</input>";
+var initialHTML = $("#" + leftPlotId + "_td").html();
+$("#" + leftPlotId + "_td").html(initialHTML + html);
+}
+
 $("#" + rightPlotId).empty();
 $("#" + plotId).empty();
+
+var orderedPlot = !($("#dendrogram").prop('checked'));
+var clutteredPlot = $("#clutteredr2").prop('checked');
+
+var addDendrogram = orderedPlot ? false : true;
+// var orderedPlot = checkBoxID;
+
+var leaf_nodes = leaf_nodes_data;
+
+if (orderedPlot) {
+leaf_nodes = (allDistances.filter(function(d) {
+return d.nodes[0].refSnp.indexOf(refId) > -1;
+})).sort(function(a, b) {
+return b.ypos - a.ypos;
+});
+
+var distances = [];
+
+for (var i = 0; i < leaf_nodes.length; i++) {
+distances.push(leaf_nodes[i].ypos);
+}
+
+distances = distances.sort(function(a, b) {
+return b - a
+});
+
+var maxD = Math.max.apply(null, $.map(leaf_nodes, function(snp, i) {
+return snp.ypos;
+}));
+var minD = Math.min.apply(null, $.map(leaf_nodes, function(snp, i) {
+return snp.ypos;
+}));
+
 }
 
 var html = "<svg class=\"plot\" id=\"" + plotId + "\"></svg>";
-$("#" + plotId + "_td").append(html);
+$("#" + plotId + "_td").html(html);
 
 var start = data.startRuler - 100;
 var end = data.endRuler + 100;
-var height = newRow ? 200 : $("#" + plotId).closest('svg').attr("height");
+var height = leaf_nodes.length * 15;
 var width = $("#" + plotId).width();
 
-var svg = d3.select("#" + plotId).append("g").attr("id", plotId + "_sankey_plot");
+var target = d3.select("#" + plotId).append("g").attr("id", plotId + "_leafNodes_plot").attr("transform", "translate(0,30)");
+target.selectAll("line").data(leaf_nodes).enter()
+.append("line")
+.attr("x1", function(d) {
+return (Math.min.apply(null, $.map(d.nodes[0].snps, function(snp, i) {
+return data.snps[snp].pos
+})) - start) / (end - start) * width
+})
+.attr("x2", function(d) {
+return (Math.max.apply(null, $.map(d.nodes[0].snps, function(snp, i) {
+return data.snps[snp].pos
+})) - start) / (end - start) * width
+})
+.attr("y1", function(d) {
+return (orderedPlot ? (clutteredPlot ? (maxD - d.ypos)/(maxD - minD) : (leaf_nodes.indexOf(d) + 1) / leaf_nodes.length) : d.ypos) * height + 5
+})
+.attr("y2", function(d) {
+return (orderedPlot ? (clutteredPlot ? (maxD - d.ypos)/(maxD - minD) : (leaf_nodes.indexOf(d) + 1) / leaf_nodes.length) : d.ypos) * height + 5
+})
+.attr("stroke", "black")
+.attr("stroke-width", 1);
 
-var sankey = d3.sankey()
-.nodeWidth(25) // was 15
-.nodePadding(20) // was 10
-.size([width, height]);
-
-var path = sankey.link();
-
-d3.csv("resources/js/data/mqtls_one.csv", function(d){
-
-var mqtls = {
-"nodes": [],
-"links": []
+target.selectAll("rect").data(function() {
+return $.map(leaf_nodes, function(node, i) {
+return $.map(node.nodes[0].snps, function(snp, j) {
+data.snps[snp].plot_x = (data.snps[snp].pos - start) / (end - start) * width;
+return {
+snp: snp,
+xpos: data.snps[snp].pos,
+ypos: (orderedPlot ? (clutteredPlot ? (maxD - node.ypos)/(maxD - minD) : (leaf_nodes.indexOf(node) + 1) / leaf_nodes.length) : node.ypos),
+displayText: snp + (orderedPlot ? " (" + node.ypos + ")" : "")
 };
-var mqtls_name = [];
-// The reason to have 'p' and 's' is to differentiate probe and snp in case they have the same position
-for(var i = 0; i < d.length; i++){
-if(mqtls_name.indexOf('p' + d[i].probe_position) == -1){
-mqtls_name.push('p' + d[i].probe_position);
-mqtls['nodes'].push({ 'name' : 'p' + d[i].probe_position });
-}
-if(mqtls_name.indexOf('s' + d[i].snp_position) == -1){
-mqtls_name.push('s' + d[i].snp_position);
-mqtls['nodes'].push({ 'name' : 's' + d[i].snp_position });
-}
-}
-for(i = 0; i < d.length; i++){
-var source = 'p' + d[i].probe_position;
-var target = 's' + d[i].snp_position;
-source = mqtls_name.indexOf(source);
-target = mqtls_name.indexOf(target);
-mqtls.links.push({'source' : source, 'target' : target, 'value' : d[i].p_value});
-}
-
-sankey.nodes(mqtls.nodes)
-.links(mqtls.links)
-.layout(32);
-
-var link = svg.append("g").selectAll(".link")
-.data(mqtls.links)
-.enter().append("path")
-.attr("class", function(d){
-// Manipulate link position
-var pos = parseInt(d.source.name.substring(1,d.source.name.length));
-d.source.x = (pos - start) / (end - start) * width;
-pos = parseInt(d.target.name.substring(1,d.target.name.length));
-d.target.x = (pos - start) / (end - start) * width;
-d.sy = 0;
-d.dy = 0;
-return 'link';
-})
-.style("stroke-width", function(d){
-var scale = d3.scale.linear().domain([0,50]).range([1,30]);
-var result = scale(-Math.log(d.value));
-return result;
-})
-.style("stroke", function(d) { return d.source.color = 'gray'})
-.attr("d", path);
-
-var node = svg.append("g").selectAll(".node")
-.data(mqtls.nodes)
-.enter().append("g")
-.attr("class", "node")
-.attr("transform", function(d) {
-var pos = parseInt(d.name.substring(1,d.name.length));
-var pos_x = (pos - start) / (end - start) * width;
-return "translate(" + pos_x + "," + d.y + ")";
 });
-
-node.append("rect")
-.attr("height", sankey.nodeWidth())
-.attr("width", function(d) { return 1; });
 });
+}).enter()
+.append("rect")
+.attr("id", function(d) {
+return d.displayText;
+})
+.attr("x", function(d) {
+return (d.xpos - start) / (end - start) * width
+})
+.attr("width", 2)
+.attr("y", function(d) {
+return d.ypos * height
+})
+.attr("height", 10)
+.attr("fill", "black");
 
-var heightOfPlot = $("#" + plotId + "_sankey_plot").get(0).getBBox().height + 200;
+var heightOfPlot = height + 40;
 
-if(newRow){
+html = "<svg class=\"plot\" id=\"" + rightPlotId + "\"></svg>";
+$("#" + rightPlotId + "_td").html(html);
+
 $("#" + leftPlotId).closest('svg').attr('height', heightOfPlot);
 $("#" + rightPlotId).closest('svg').attr('height', heightOfPlot);
 $("#" + plotId).closest('svg').attr('height', heightOfPlot);
+
+if (orderedPlot) {
+var axis = d3.svg.axis().scale(d3.scale.linear().range([0, height]).domain([0, leaf_nodes.length - 1])).ticks(leaf_nodes.length - 1).tickFormat(function(d) {
+return distances[d];
+}).orient("right");
+if(clutteredPlot){
+axis = d3.svg.axis().scale(d3.scale.linear().range([0, height]).domain([maxD, minD])).ticks(leaf_nodes.length - 1).orient("right");
 }
+var rightWidth = $("#" + rightPlotId).width() - 30;
+d3.select("#" + rightPlotId).append("g").attr("id", "ordered_axis").attr("transform", "translate(0, 35)").call(axis);
+} else if (addDendrogram) {
+drawDendrogramPlot("table-1", data.dendrogram, false, rightPlotId, heightOfPlot);
+$("#" + plotId).closest('tr').attr("class", "dendrogram");
+}
+
+if (newRow) {
+$(function() {
+$("input[name=\"viewLeaf_" + plotId + "\"]").change(function() {
+drawLeafNodesPlot(table, data.leaf_nodes, data.allDistances, false, plotId, leftPlotId, rightPlotId);
+sizeAndFunctions([plotId]);
+})
+});
+
+}
+
 }

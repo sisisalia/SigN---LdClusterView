@@ -66,6 +66,7 @@ function addEvents(mainSVGid, plotType, plotId) {
     if (plotType.toLowerCase().startsWith("genes")) {
         if (geneClicked == undefined)
             var geneClicked = false;
+
         element = d3.select("#" + plotId + "_genes_plot");
         //console.log(element);
         element.selectAll("rect")
@@ -199,6 +200,64 @@ function addEvents(mainSVGid, plotType, plotId) {
                         return text;
                     });
 
+                //Show the tooltip
+                d3.select("#tooltip").classed("hidden", false);
+            })
+            .on("mouseout", function(d) {
+                d3.select("#tooltip").classed("hidden", true);
+            })
+            .on("click", function(d) {
+                // reorderClustersByReferenceSnp(d.snp);
+                //window.open("http://bioserver1.sign.a-star.edu.sg:9000/snp/" + d.snp);
+            });
+    }
+
+    // Sankey plot tooltip
+    // Bar chart tooltip
+    if (plotType.toLowerCase().startsWith("sankey")) {
+        element = d3.select("#" + plotId + "_sankey_plot");
+        element.selectAll("rect")
+            .on("mouseover", function(d) {
+                //Get this bar's x/y values, then augment for the tooltip
+                var xPosition = d3.event.x + $(window).scrollLeft();
+                var yPosition = d3.event.y + $(window).scrollTop();
+                var text = d3.select(this).attr("id");
+                //Update the tooltip position and value
+                d3.select("#tooltip")
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px")
+                    .style("width", "250px")
+                    .select("#value")
+                    .text(function(p) {
+                        return text;
+                    });
+
+                //Show the tooltip
+                d3.select("#tooltip").classed("hidden", false);
+            })
+            .on("mouseout", function(d) {
+                d3.select("#tooltip").classed("hidden", true);
+            })
+            .on("click", function(d) {
+                // reorderClustersByReferenceSnp(d.snp);
+                //window.open("http://bioserver1.sign.a-star.edu.sg:9000/snp/" + d.snp);
+            });
+
+        element.selectAll("path")
+            .on("mouseover", function(d) {
+                //Get this bar's x/y values, then augment for the tooltip
+                var xPosition = d3.event.x + $(window).scrollLeft();
+                var yPosition = d3.event.y + $(window).scrollTop();
+                var text = d3.select(this).attr("id");
+                //Update the tooltip position and value
+                d3.select("#tooltip")
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px")
+                    .style("width", "250px")
+                    .select("#value")
+                    .text(function(p) {
+                        return 'Value : ' + text;
+                    });
                 //Show the tooltip
                 d3.select("#tooltip").classed("hidden", false);
             })

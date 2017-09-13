@@ -1,3 +1,9 @@
+sankey_value_selection = 'p_value';
+sankey_links = {
+    'P-value' : 'p_value',
+    'FDR' : 'fdr',
+    'Beta' : 'beta'
+};
 function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
     if(newRow){
         insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
@@ -32,11 +38,11 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
         for(var i = 0; i < mqtls_raw.length; i++){
             if(mqtls_name.indexOf('p' + mqtls_raw[i].probe_position) == -1){
                 mqtls_name.push('p' + mqtls_raw[i].probe_position);
-                mqtls['nodes'].push({ 'name' : 'p' + mqtls_raw[i].probe_position });
+                mqtls['nodes'].push({ 'name' : 'p' + mqtls_raw[i].probe_position, 'id' : mqtls_raw[i].probe });
             }
             if(mqtls_name.indexOf('s' + mqtls_raw[i].snp_position) == -1){
                 mqtls_name.push('s' + mqtls_raw[i].snp_position);
-                mqtls['nodes'].push({ 'name' : 's' + mqtls_raw[i].snp_position });
+                mqtls['nodes'].push({ 'name' : 's' + mqtls_raw[i].snp_position, 'id' : mqtls_raw[i].snp });
             }
         }
         for(i = 0; i < mqtls_raw.length; i++){
@@ -44,7 +50,8 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
             var target = 's' + mqtls_raw[i].snp_position;
             source = mqtls_name.indexOf(source);
             target = mqtls_name.indexOf(target);
-            mqtls.links.push({'source' : source, 'target' : target, 'value' : mqtls_raw[i].p_value});
+
+            mqtls.links.push({'source' : source, 'target' : target, 'value' : mqtls_raw[i][sankey_value_selection]});
         }
 
         sankey.nodes(mqtls.nodes)
@@ -66,10 +73,35 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
             })
             .style("stroke-width", function(d){
                 var scale = d3.scale.linear().domain([0,50]).range([1,30]);
-                var result = scale(-Math.log(d.value));
-                return result;
+                if(sankey_value_selection == 'p_value'){
+                    var result = scale(-Math.log(d.value));
+                    return result;
+                }
+                if(sankey_value_selection == 'beta'){
+                    var result = scale(Math.pow(d.value,2));
+                    return result;
+                }
+                if(sankey_value_selection == 'fdr'){
+                    var result = scale(-Math.log(d.value));
+                    return result;
+                }
             })
             .style("stroke", function(d) { return d.source.color = 'gray'})
+            .attr('id', function(d){
+                var scale = d3.scale.linear().domain([0,50]).range([1,30]);
+                if(sankey_value_selection == 'p_value'){
+                    var result = scale(-Math.log(d.value));
+                    return result;
+                }
+                if(sankey_value_selection == 'beta'){
+                    var result = scale(Math.pow(d.value,2));
+                    return result;
+                }
+                if(sankey_value_selection == 'fdr'){
+                    var result = scale(-Math.log(d.value));
+                    return result;
+                }
+            })
             .attr("d", path);
 
         var node = svg.append("g").selectAll(".node")
@@ -83,6 +115,15 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
             });
 
         node.append("rect")
+            .attr('id', function(d){
+                if(d.name[0] == 'p'){
+                    var temp = 'Probe : ' + d.id + ' Position : ' + d.name.substring(1, d.name.length);
+                    return temp;
+                }else{
+                    var temp = 'SNP : ' + d.id + ' Position : ' + d.name.substring(1, d.name.length);
+                    return temp;
+                }
+            })
             .attr("height", sankey.nodeWidth())
             .attr("width", function(d) { return 1; });
 
@@ -93,4 +134,15 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
         $("#" + rightPlotId).closest('svg').attr('height', heightOfPlot);
         $("#" + plotId).closest('svg').attr('height', heightOfPlot);
     }
+
+    // html = "<br>Links : <select id='sankey_links' onChange='updateSL(); renderEverything();'><br><option>P-value</option> <br> <option>FDR</option> <br> <option>Beta</option> </select>";
+    html = "<br>Links : <br><input type='radio' name='sankey_links' value='p_value' onclick='updateSL(); renderEverything();'>P-value</input> <br> <input type='radio' name='sankey_links' value='fdr' onclick='updateSL(); renderEverything();'>FDR</input> <br> <input type='radio' name='sankey_links' value='beta' onclick='updateSL(); renderEverything();'>Beta</input>";
+
+    $("#" + leftPlotId + "_td").append(html);
+
+    $('input:radio[name="sankey_links"]').each(function(d){
+        if($(this).val() == sankey_value_selection){
+          $(this).attr('checked','checked');
+        }
+    })
 }

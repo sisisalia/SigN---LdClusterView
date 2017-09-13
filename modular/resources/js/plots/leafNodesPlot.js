@@ -1,7 +1,12 @@
 // draw the leaf nodes
 ld_distance = 0;
+view_choice = 'dendrogram';
+view_object = {
+    'Dendrogram' : 'dendrogram',
+    'distance - Cluttered' : 'clutteredr2',
+    'distance - Expanded' : 'expandedr2'
+};
 function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId, leftPlotId, rightPlotId) {
-    var checkBoxID = plotId + "_check";
     var textID = plotId + "_textRef";
     var refId = data.refSnp;
 
@@ -10,33 +15,58 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
         $("#" + leftPlotId).empty();
         var html = "<br>Reference SNP: <input id=\'" + textID + "\' type='text' value='" + data.refSnp + "' readonly></input>";
         html += '<br><br>';
-        // LD cut off
+// LD cut off
         html += "<div style=\"float: left;\">LD threshold : <select id='cutoff_select' onChange='updateLD(); data = computeDistance(data); renderEverything();'>";
         html += $.map([0, 0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], function(n, i) {
-          if(n == ld_distance){
-            return "<option selected=selected>" + n + "</option>";
-          }else{
-            return "<option>" + n + "</option>";
-          }
+            if(n == ld_distance){
+                return "<option selected=selected>" + n + "</option>";
+            }else{
+                return "<option>" + n + "</option>";
+            }
         } ).join("");
         html += "</select>";
-        html += "<br><br><b>View:</b>";
-        html += "<br><input type=\"radio\" id=\"" + checkBoxID + "_dendrogram\" name=\"viewLeaf_" + plotId + "\" checked style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> Dendrogram </input>";
-        html += "<br><input type=\"radio\" id=\"" + checkBoxID + "_clutteredr2\" name=\"viewLeaf_" + plotId + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup> distance - Cluttered </input>";
-        html += "<br><input type=\"radio\" id=\"" + checkBoxID + "_expandedr2\" name=\"viewLeaf_" + plotId + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup> distance - Expanded </input>";
-        // html += "<br><input type=\"checkbox\" id=\"" + checkBoxID + "\"> Show by r2 distance from the ref SNP</input>";
+        html += "<br><br><b>View: </b>";
+        // html += "<select id='view_choice' onChange='updateVC(); renderEverything();'> <option>Dendrogram</option><option>distance - Cluttered</option><option>distance - Expanded</option></select>";
+        html += "<br><input type=\"radio\" id=\"dendrogram\" value='dendrogram' onclick='updateVC();renderEverything();' name=\"viewLeaf" + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\">Dendrogram</input>";
+        html += "<br><input type=\"radio\" id=\"clutteredr2\" value='clutteredr2' onclick='updateVC();renderEverything();' name=\"viewLeaf" + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup>distance - Cluttered</input>";
+        html += "<br><input type=\"radio\" id=\"expandedr2\" value='expandedr2' onclick='updateVC();renderEverything();' name=\"viewLeaf" + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup>distance - Expanded</input>";
+// html += "<br><input type=\"checkbox\" id=\"" + checkBoxID + "\"> Show by r2 distance from the ref SNP</input>";
         var initialHTML = $("#" + leftPlotId + "_td").html();
         $("#" + leftPlotId + "_td").html(initialHTML + html);
     }
 
+    $('input:radio[name="viewLeaf"]').each(function(){
+        if($(this).val() == view_choice){
+            $(this).attr('checked','checked');
+        }
+    });
+
+    // $('#view_choice option').each(function(){
+    //     if(view_object[$(this).text()] == view_choice){
+    //         $(this).attr('selected','selected');
+    //     }
+    // });
+
     $("#" + rightPlotId).empty();
     $("#" + plotId).empty();
 
-    var orderedPlot = !($("#" + checkBoxID + "_dendrogram").prop('checked'));
-    var clutteredPlot = $("#" + checkBoxID + "_clutteredr2").prop('checked');
+    // if(view_object[$('#view_choice').val()] == 'dendrogram' ){
+    //     var orderedPlot = false;
+    // }else{
+    //     var orderedPlot = true;
+    // }
+    //
+    // if(view_object[$('#view_choice').val()] == 'clutteredr2' ){
+    //     var clutteredPlot = true;
+    // }else{
+    //     var clutteredPlot = false;
+    // }
+
+    var orderedPlot = !($("#dendrogram").prop('checked'));
+    var clutteredPlot = $("#clutteredr2").prop('checked');
 
     var addDendrogram = orderedPlot ? false : true;
-    // var orderedPlot = checkBoxID;
+// var orderedPlot = checkBoxID;
 
     var leaf_nodes = leaf_nodes_data;
 
@@ -97,18 +127,18 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
         .attr("stroke-width", 1);
 
     target.selectAll("rect").data(function() {
-            return $.map(leaf_nodes, function(node, i) {
-                return $.map(node.nodes[0].snps, function(snp, j) {
-                    data.snps[snp].plot_x = (data.snps[snp].pos - start) / (end - start) * width;
-                    return {
-                        snp: snp,
-                        xpos: data.snps[snp].pos,
-                        ypos: (orderedPlot ? (clutteredPlot ? (maxD - node.ypos)/(maxD - minD) : (leaf_nodes.indexOf(node) + 1) / leaf_nodes.length) : node.ypos),
-                        displayText: snp + (orderedPlot ? " (" + node.ypos + ")" : "")
-                    };
-                });
+        return $.map(leaf_nodes, function(node, i) {
+            return $.map(node.nodes[0].snps, function(snp, j) {
+                data.snps[snp].plot_x = (data.snps[snp].pos - start) / (end - start) * width;
+                return {
+                    snp: snp,
+                    xpos: data.snps[snp].pos,
+                    ypos: (orderedPlot ? (clutteredPlot ? (maxD - node.ypos)/(maxD - minD) : (leaf_nodes.indexOf(node) + 1) / leaf_nodes.length) : node.ypos),
+                    displayText: snp + (orderedPlot ? " (" + node.ypos + ")" : "")
+                };
             });
-        }).enter()
+        });
+    }).enter()
         .append("rect")
         .attr("id", function(d) {
             return d.displayText;

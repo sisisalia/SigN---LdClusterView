@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/style.css">
     <body>
         <p id="extraDetails"></p>
-        <div  style='position: relative;'>
+        <div id="chartId" style='position: relative;'>
             <table id="table-1" class="tableDemo" height="0"></table>
             <svg id="mainSVG" width="100%">
             </svg>
@@ -28,15 +28,15 @@
                         <div class="col col-lg-6">
                             Available
                         <ul id="visible" class="connectedSortable" style="border:1px solid black">
-                            <li class="show_mainSankeyPlot">Sankey Plot</li>
+                            <li class="show_mainLeafNodes">Leaf Nodes Plot</li>
                         </ul>
                         </div>
 
                         <div class="col col-lg-6">
                         Not available
                         <ul id="invisible" class="connectedSortable" style="border:1px solid black">
+                            <li class="show_mainSankeyPlot">Sankey Plot</li>
                             <li class="show_mainGenes">Genes Plot</li>
-                            <li class="show_mainLeafNodes">Leaf Nodes Plot</li>
                         </ul>
                         </div>
                     </div>
@@ -57,6 +57,8 @@
                 </div>
             </div>
         </div>
+
+        <div id="pngcon"></div>
 
         <script type="text/javascript" src="resources/js/utilities/jquery-ui-1.12.4.js"></script>
         <script type="text/javascript" src="resources/js/utilities/jquery-ui.js"></script>
@@ -126,6 +128,14 @@
                 $('#visible').html(visible);
             }
 
+            function updateSL(){
+                sankey_value_selection = $("input[name='sankey_links']:checked").val();;
+            }
+
+            function updateVC(){
+                view_choice = $('input:radio[name="viewLeaf"]:checked').val();
+            }
+
             function renderEverything(){
                 $("#table-1").empty();
 
@@ -182,6 +192,7 @@
 
             function updateLD(){
               ld_distance = parseFloat($("#cutoff_select").val());
+              view_choice = 'dendrogram';
             }
 
             function dataFunctions(){
