@@ -17,14 +17,26 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                         <h5><b>Configure Plots</b></h5>
                     </div>
                     <div class="modal-body">
                         <p> <i>Choose plots to display</i>
+                            <svg width="500" height="12">
+                                <rect x='0' y='0' width="10" height="10" style="fill:#afeeee;border:none;" />
+                                <text x="12" y="10">Manhattan Plot</text>
+                                <rect x='100' y='0' width="10" height="10" style="fill:#FF9999;border:none;" />
+                                <text x="112" y="10">Genes Plot</text>
+                                <rect x='180' y='0' width="10" height="10" style="fill:#89DA49;border:none;" />
+                                <text x="192" y="10">Leaf Nodes Plot</text>
+                                <rect x='285' y='0' width="10" height="10" style="fill:#E1B16A;border:none;" />
+                                <text x="297" y="10">Sankey Plot</text>
+                                <rect x='370' y='0' width="10" height="10" style="fill:#FFFF99;border:none;" />
+                                <text x="382" y="10">Bar Chart Plot</text>
+                            </svg>
                             <br>
 
-                        <div class="row">
+                        <div class="row" style="margin-top:-15px;">
                         <div class="col col-lg-6">
                             Available
                         <ul id="visible" class="connectedSortable" style="border:1px solid black">
@@ -99,9 +111,10 @@
                 getData();
                 dataFunctions();
                 var selected_study;
+                window_size = 1600;
                 data = computeDistance(data);
                 html = $.map(eqtl_study_order, function(n, i) {
-                    return $.sprintf("<li class='show_mainMan' id='%s'>%s (P=%0.3E)</li>", n, n, eqtl_studies[n][0].p);
+                    return $.sprintf("<li class='show_mainMan'  id='%s'>%s (P=%0.3E)</li>", n, n, eqtl_studies[n][0].p);
                 });
                 $('#invisible').append(html);
                 bar_chart_choices = [];
@@ -116,6 +129,13 @@
                     "show_mainBar" : {"type": "barChartPlot", "plotId": "mainBarChart", "leftPlotId": "leftBarChart", "rightPlotId": "rightBarChart"},
                     "show_mainSankeyPlot" : {"type" : "sankeyPlot", "plotId" : "mainSankeyPlot", "leftPlotId" : "leftSankeyPlot", "rightPlotId" : "rightSankeyPlot"}
                 };
+                plot_color = {
+                    'show_mainMan' : '#AFEEEE',
+                    'show_mainGenes' : '#FF9999',
+                    'show_mainLeafNodes' : '#89DA49',
+                    'show_mainSankeyPlot' : '#E1B16A',
+                    'show_mainBar' : '#FFFF99',
+                };
                 renderEverything();
             });
 
@@ -126,6 +146,24 @@
             function configureList(){
                 $('#invisible').html(invisible);
                 $('#visible').html(visible);
+                $('#invisible li').each(function(d){
+                    var temp = $(this).attr('class');
+                    temp = $.trim(temp);
+                    var space = temp.indexOf(' ');
+                    if(space != -1){
+                       temp = temp.substring(0,space);
+                    }
+                    $(this).css('background',plot_color[temp]);
+                })
+                $('#visible li').each(function(d){
+                    var temp = $(this).attr('class');
+                    temp = $.trim(temp);
+                    var space = temp.indexOf(' ');
+                    if(space != -1){
+                        temp = temp.substring(0,space);
+                    }
+                    $(this).css('background',plot_color[temp]);
+                })
             }
 
             function updateSL(){
@@ -138,6 +176,8 @@
 
             function renderEverything(){
                 $("#table-1").empty();
+
+                $('#window_size_select').val(window_size);
 
                 plotOrder = [];
                 $("#visible").children().each(function(d){
@@ -160,10 +200,12 @@
                 deleted_track = [];
 
                 var size = 0;
-                if($("#window_size_select").val() == "Full Screen")
+                if(window_size == "Full Screen"){
                     size = screen.width;
-                else
-                    size = parseFloat($("#window_size_select").val());
+                }
+                else{
+                    size = parseFloat(window_size);
+                }
                 $("#table-1").attr('width', size);
 
                 dataFunctions();
@@ -187,6 +229,7 @@
             }
 
             function changeSize(){
+                window_size = $('#window_size_select').val();
                renderEverything();
             }
 
@@ -258,6 +301,7 @@
                     var temp = visible.substring(index1, index2 + 5);
                     visible = visible.replace(temp, '');
                     invisible += temp;
+                    configureList();
                     this.closest('tr').remove();
                     $("#mainSVG").attr("x", $("#table-1").offset().left);
                     $("#mainSVG").attr("y", $("#table-1").offset().top);
