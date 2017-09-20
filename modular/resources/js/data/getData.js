@@ -147,7 +147,7 @@ function getData() {
 	var html = "<div id='plot_menu' style='position: relative;'>";
 	// window size
 			html += " Window size : <select id='window_size_select' onChange='changeSize();'>";
-			html += $.map([600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, "Full Screen"], function(n, i) { return "<option>" + n + "</option>"; } ).join("");
+			html += $.map([600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, "Full Screen"], function(n, i) { return "<option value="+ n +">" + n + "</option>"; } ).join("");
 			html += "</select>";
 	// // selected study
 	// html += " | Study : <select id='selected_study'>";
@@ -156,11 +156,11 @@ function getData() {
 	// });
 	// html += "</select>";
 	html += " | <input type=\"checkbox\" id=\"showHover\"> Show Hover </input>";
-	html += " | <button type=\"button\" onclick=\"configureList();\" data-toggle=\"modal\" data-target=\"#configureModal\"> Configure Plots </button></div>"
+	html += " | <button type=\"button\" onclick=\"configureList();\" data-toggle=\"modal\" data-target=\"#configureModal\"> Configure Plots </button>"
 	// html += "<div class=\"dropdown\" style=\"float: left;\"> | <button type=\"button\" data-toggle=\"modal\" data-target=\"#configureModal\"> Configure Plots </button></div>"
-	html += "<div class=\"dropdown\" style=\"float: left;\"> | <button type=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"> Save Plot <span class=\"caret\"></span></button><ul class=\"dropdown-menu\"> <li><a href=\"#\">HTML</a></li><li><a href=\"#\">CSS</a></li><li><a href=\"#\">JavaScript</a></li></ul></div>"
+	html += " | <button type=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"> Save Plot <span class=\"caret\"></span></button><div class=\"dropdown-menu\"> <button onclick='exportPNG()' style='cursor:auto;width:150px;margin:5px;text-align:center;'>PNG</button></div></div>"
 	// html += " | <button type=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true" aria-expanded="false"> Action </button> <div class="dropdown-menu"> <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a> <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Separated link</a> </div>";
-	html += "</p><br><br><br>";
+	html += "</p>";
 	html += "<center>";
 	html += "<input type='text' id='studyDataText' value='" + data.gene.chr + ": " + data.startRuler + " - " + data.endRuler + "' readonly class=\"ruler-point\" size=" + size + "></input>";
 	// html += "<input type='text' value='" + data.startRuler + "' readonly class=\"ruler-point\"></input> <b> - </b> ";

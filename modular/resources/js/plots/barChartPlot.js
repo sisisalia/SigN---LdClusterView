@@ -5,17 +5,18 @@ function drawBarChartPlot(table, methyl_data, newRow, leftPlotId, rightPlotId, p
       $("#" + rightPlotId).empty();
       $("#" + plotId).empty();
   }
-
-  var html = '<div class="mainBar_title" style="text-align:center; border:1px solid black;">'+ selected_probe +'</div>';
-  $("#" + plotId + "_td").append(html);
+  // $("#" + plotId + "_td").append(html);
 
   var html = "<svg class=\"plot\" id=\"" + plotId + "\"></svg>";
   $("#" + plotId + "_td").append(html);
 
   var start = data.startRuler - 100;
   var end = data.endRuler + 100;
-  var height = newRow ? 200 : $("#" + plotId).closest('svg').attr("height");
+  var height = newRow ? 250 : $("#" + plotId).closest('svg').attr("height");
   var width = $("#" + plotId).width();
+
+  d3.select('#'+ plotId).append('text').attr('x', width/2).attr('y', 20).attr('text-anchor','middle').attr('font-family','Verdana').attr('font-size','12px').text(selected_probe);
+  d3.select('#'+ plotId).append('rect').attr('x', 0).attr('y',5).attr('width',width).attr('height',20).style('fill','transparent').style('stroke','black').style('stroke-width','1px');
 
   var target = d3.select("#" + plotId).append("g").attr("id", plotId + "_barchart_plot");
 
@@ -30,13 +31,13 @@ function drawBarChartPlot(table, methyl_data, newRow, leftPlotId, rightPlotId, p
           return (probe.position - start) / (end - start) * width;
         })
         .attr("y", function(d){
-          return (1-probe.average_beta) * (height - 60) + 8;
+          return (1-probe.average_beta) * (height - 60) + 26;
         })
         .attr("width", function(d){
           return 1;
         })
         .attr("height", function(d){
-          return probe.average_beta * (height - 70);
+          return probe.average_beta * (height - 77);
         })
         .attr('id', function(d){
           var text = 'Probe:' + Object.keys(probes)[i] + ' Position:' + probe.position + ' Average beta:' + probe.average_beta;
@@ -61,7 +62,13 @@ function drawBarChartPlot(table, methyl_data, newRow, leftPlotId, rightPlotId, p
       .attr("stroke", "#000000")
       .attr("stroke-width", 1.5);
 
-  var heightOfPlot = $("#" + plotId + "_barchart_plot").get(0).getBBox().height + 10;
+  var heightOfPlot = $("#" + plotId + "_barchart_plot").get(0).getBBox().height + 30;
+
+    if(newRow){
+        $("#" + leftPlotId).closest('svg').attr('height', heightOfPlot);
+        $("#" + rightPlotId).closest('svg').attr('height', heightOfPlot);
+        $("#" + plotId).closest('svg').attr('height', heightOfPlot);
+    }
 
   var start = 1;
   var end = 0;
@@ -69,7 +76,8 @@ function drawBarChartPlot(table, methyl_data, newRow, leftPlotId, rightPlotId, p
   html = "<svg class=\"plot\" id=\"" + rightPlotId + "\"></svg>";
   $("#" + rightPlotId + "_td").html(html);
 
-  var axis = d3.svg.axis().scale(d3.scale.linear().range([0, height-70]).domain([start, end]).nice()).orient("right");
-  d3.select("#" + rightPlotId).append("g").attr("id",  rightPlotId + "_axis").attr("transform", "translate(0, 10)").call(axis);
+  var axis = d3.svg.axis().scale(d3.scale.linear().range([0, height-90]).domain([start, end]).nice()).orient("right");
+  d3.select("#" + rightPlotId).append("g").attr("id",  rightPlotId + "_axis").attr("transform", "translate(0, 13)").call(axis);
   d3.select("#" + rightPlotId).attr("transform", "translate(0,16.5)");
+  d3.select("#" + rightPlotId).attr('height',heightOfPlot);
 }

@@ -27,6 +27,7 @@ body {
 
 .plot{
     width: 100%;
+    font-family:'Lucida Grande', Verdana, Arial, Sans-Serif;
 }
 
 .tableDemo th {
@@ -214,4 +215,8 @@ li{
 
 .link:hover {
     stroke-opacity: .8;
+}
+
+.dropdown-menu{
+    margin-left : 295px;
 }

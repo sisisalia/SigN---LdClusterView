@@ -161,9 +161,19 @@ function addEvents(mainSVGid, plotType, plotId) {
 
                 //Show the tooltip
                 d3.select("#tooltip").classed("hidden", false);
+                //Show a horizontal line
+                var disp = parseFloat($(this).attr('y')) + 5;
+                element.append("svg:line")
+                    .attr("x1", 0)
+                    .attr("x2", 1000)
+                    .attr("y1", disp)
+                    .attr("y2", disp)
+                    .attr('class','leaf_ruler')
+                    .style("stroke", "rgb(189, 189, 189)");
             })
             .on("mouseout", function(d) {
                 d3.select("#tooltip").classed("hidden", true);
+                $('.leaf_ruler').remove();
             })
             .on("click", function(d) {
                 // console.log(d3.mouse(d3.select("#" + mainSVGid)));

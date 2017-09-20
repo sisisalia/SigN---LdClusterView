@@ -7,16 +7,16 @@ function drawManhattanPlot(table, eqtls, newRow, plotId, leftPlotId, rightPlotId
         $("#" + plotId).empty();
     }
 
-    var html = '<div class="mainMan_title" style="text-align:center; border:1px solid black;">'+ selected_study +'</div>';
-    $("#" + plotId + "_td").append(html);
-
     var html = "<svg class=\"plot\" id=\"" + plotId + "\"></svg>";
     $("#" + plotId + "_td").append(html);
 
     var start = data.startRuler - 100;
     var end = data.endRuler + 100;
-    var height = newRow ? 200 : $("#" + plotId).closest('svg').attr("height");
+    var height = newRow ? 255 : $("#" + plotId).closest('svg').attr("height");
     var width = $("#" + plotId).width();
+
+    d3.select('#'+ plotId).append('text').attr('x', width/2).attr('y', 20).attr('text-anchor','middle').attr('font-family','Verdana').attr('font-size','12px').text(selected_study);
+    d3.select('#'+ plotId).append('rect').attr('x', 0).attr('y',5).attr('width',width).attr('height',20).style('fill','transparent').style('stroke','black').style('stroke-width','1px');
 
     var target = d3.select("#" + plotId).append("g").attr("id", plotId + "_manhattan_plot");
     // alert(eqtls);
@@ -31,7 +31,7 @@ function drawManhattanPlot(table, eqtls, newRow, plotId, leftPlotId, rightPlotId
         .attr("r", function(d) {
             return 4
         })
-        .attr("transform", "translate(0, 10)")
+        .attr("transform", "translate(0, 35)")
         .attr("fill", function(d) {
             return "black"
         })
@@ -53,7 +53,7 @@ function drawManhattanPlot(table, eqtls, newRow, plotId, leftPlotId, rightPlotId
         .attr("y2", function(d){
             return height
         })
-        .attr("transform", "translate(0, 10)")
+        .attr("transform", "translate(0, 35)")
         .attr("stroke", "#E0E0E0")
         .attr("stroke-width", 1.5)
         ;
@@ -87,9 +87,9 @@ function drawManhattanPlot(table, eqtls, newRow, plotId, leftPlotId, rightPlotId
     html = "<svg class=\"plot\" id=\"" + rightPlotId + "\"></svg>";
     $("#" + rightPlotId + "_td").html(html);
 
-    var axis = d3.svg.axis().scale(d3.scale.linear().range([0, height-2]).domain([start, end]).nice()).tickFormat(d3.format(".1e")).orient("right");
+    var axis = d3.svg.axis().scale(d3.scale.linear().range([0, height-24]).domain([start, end]).nice()).tickFormat(d3.format(".1e")).orient("right");
     var rightWidth = $("#" + rightPlotId).width() - 30;
-    d3.select("#" + rightPlotId).append("g").attr("id",  rightPlotId + "_axis").attr("transform", "translate(0, 10)").call(axis);
+    d3.select("#" + rightPlotId).append("g").attr("id",  rightPlotId + "_axis").attr("transform", "translate(0, 15)").call(axis);
     d3.select("#" + rightPlotId + "_axis").selectAll("text").attr("transform", "translate(0,-4)");
     d3.select("#" + rightPlotId).attr("transform", "translate(0,17)");
 

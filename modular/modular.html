@@ -40,15 +40,15 @@
                         <div class="col col-lg-6">
                             Available
                         <ul id="visible" class="connectedSortable" style="border:1px solid black">
-                            <li class="show_mainLeafNodes">Leaf Nodes Plot</li>
+                            <li class="show_mainGenes">Genes Plot</li>
+                            <li class="show_mainSankeyPlot">Sankey Plot</li>
                         </ul>
                         </div>
 
                         <div class="col col-lg-6">
                         Not available
                         <ul id="invisible" class="connectedSortable" style="border:1px solid black">
-                            <li class="show_mainSankeyPlot">Sankey Plot</li>
-                            <li class="show_mainGenes">Genes Plot</li>
+                            <li class="show_mainLeafNodes">Leaf Nodes Plot</li>
                         </ul>
                         </div>
                     </div>
@@ -69,8 +69,6 @@
                 </div>
             </div>
         </div>
-
-        <div id="pngcon"></div>
 
         <script type="text/javascript" src="resources/js/utilities/jquery-ui-1.12.4.js"></script>
         <script type="text/javascript" src="resources/js/utilities/jquery-ui.js"></script>
@@ -116,7 +114,7 @@
                 html = $.map(eqtl_study_order, function(n, i) {
                     return $.sprintf("<li class='show_mainMan'  id='%s'>%s (P=%0.3E)</li>", n, n, eqtl_studies[n][0].p);
                 });
-                $('#invisible').append(html);
+                $('#visible').prepend(html);
                 bar_chart_choices = [];
                 for(var i=0; i < Object.keys(methylation_data).length; i++){
                     bar_chart_choices.push(Object.keys(methylation_data)[i]);
@@ -137,7 +135,117 @@
                     'show_mainBar' : '#FFFF99',
                 };
                 renderEverything();
+
             });
+
+            function exportPNG(){
+                $("#window_size_select").val("Full").change();
+                $('body').append('<svg width="1000" height="1000" id="print_svg" style="background:white;"></svg>');
+                var height = 10;
+                var total_width = 0;
+                var width = $('#genomic_axis').width();
+                $('.mainContent .plot').each(function(d){
+                    $(this).clone().attr('y', height).attr('x',10).appendTo($('#print_svg'));
+                    var parent_id = '#' + $(this).parent().parent().attr('id');
+                    $(parent_id + ' .rightSpace .plot').each(function(d){
+                        if(parent_id.substring(1,14) == 'mainLeafNodes'){
+                            total_width = 1000;
+                        }
+                        $(this).clone().attr('y', height + 15).attr('x', width + 20).appendTo($('#print_svg'));
+                    });
+                    height = height + parseFloat($(this).attr('height')) + 10;
+                });
+                if(total_width == 0){
+                    total_width = width + 80;
+                }
+                $('#print_svg').attr('height',height + 20);
+                $('#print_svg').attr('width', total_width);
+                console.log(width);
+
+                var styleDefs = "";
+                var svgDomElement = document.getElementById('print_svg');
+                var sheets = document.styleSheets;
+                for (var i = 0; i < sheets.length; i++) {
+                    var rules = sheets[i].cssRules;
+                    for (var j = 0; j < rules.length; j++) {
+                        var rule = rules[j];
+                        if (rule.style) {
+                            var selectorText = rule.selectorText;
+                            var elems = svgDomElement.querySelectorAll(selectorText);
+
+                            if (elems.length) {
+                                styleDefs += selectorText + " { " + rule.style.cssText + " }\n";
+                            }
+                        }
+                    }
+                }
+
+                var s = document.createElement('style');
+                s.setAttribute('type', 'text/css');
+                s.innerHTML = styleDefs;
+
+                var defs = document.createElement('defs');
+                defs.appendChild(s);
+                svgDomElement.insertBefore(defs, svgDomElement.firstChild);
+
+                var svg = document.querySelector( "#print_svg" );
+                var svgData = new XMLSerializer().serializeToString( svg );
+
+                var canvas = document.createElement( "canvas" );
+                canvas.width = 1000;
+                canvas.height = d3.select("#print_svg").attr("height");
+                var ctx = canvas.getContext( "2d" );
+
+                var dataUri = '';
+                try {
+                    dataUri = 'data:image/svg+xml;base64,' + btoa(svgData);
+                } catch (ex) {
+                    // For browsers that don't have a btoa() method, send the text off to a webservice for encoding
+                    /* Uncomment if needed (requires jQuery)
+                    $.ajax({
+                        url: "http://www.mysite.com/webservice/encodeString",
+                        data: { svg: svgData },
+                        type: "POST",
+                        async: false,
+                        success: function(encodedSVG) {
+                            dataUri = 'data:image/svg+xml;base64,' + encodedSVG;
+                        }
+                    })
+                    */
+                }
+
+                var img = document.createElement( "img" );
+
+                img.onload = function() {
+                    ctx.drawImage( img, 0, 0 );
+
+                    try {
+
+                        // Try to initiate a download of the image
+                        var a = document.createElement("a");
+                        a.download = "LdCLusterView.png";
+                        a.href = canvas.toDataURL("image/png");
+                        document.querySelector("body").appendChild(a);
+                        a.click();
+                        document.querySelector("body").removeChild(a);
+
+                    } catch (ex) {
+
+                        // If downloading not possible (as in IE due to canvas.toDataURL() security issue)
+                        // then display image for saving via right-click
+
+                        var imgPreview = document.createElement("div");
+                        imgPreview.appendChild(img);
+                        document.querySelector("body").appendChild(imgPreview);
+
+                    }
+                };
+
+                img.src = dataUri;
+
+                $('#print_svg').remove();
+
+            }
 
             $(window).resize(function() {
               renderEverything();
