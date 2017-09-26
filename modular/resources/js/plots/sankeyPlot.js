@@ -45,12 +45,29 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
                 mqtls['nodes'].push({ 'name' : 's' + mqtls_raw[i].snp_position, 'id' : mqtls_raw[i].snp });
             }
         }
+
+        var max = -1;
+        var min = 9999;
         for(i = 0; i < mqtls_raw.length; i++){
             var source = 'p' + mqtls_raw[i].probe_position;
             var target = 's' + mqtls_raw[i].snp_position;
             source = mqtls_name.indexOf(source);
             target = mqtls_name.indexOf(target);
-
+            if(sankey_value_selection == 'p_value'){
+                var result = (-Math.log(mqtls_raw[i][sankey_value_selection]));
+            }
+            if(sankey_value_selection == 'beta'){
+                var result = (Math.pow(mqtls_raw[i][sankey_value_selection],2));
+            }
+            if(sankey_value_selection == 'fdr'){
+                var result = (-Math.log(mqtls_raw[i][sankey_value_selection]));
+            }
+            if(result > max){
+                max = result;
+            }
+            if(result < min){
+                min = result;
+            }
             mqtls.links.push({'source' : source, 'target' : target, 'value' : mqtls_raw[i][sankey_value_selection]});
         }
 
@@ -72,7 +89,11 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
                 return 'link';
             })
             .style("stroke-width", function(d){
-                var scale = d3.scale.linear().domain([0,50]).range([1,30]);
+                if (sankey_value_selection == 'beta'){
+                    var scale = d3.scale.linear().domain([min,max]).range([2,10]);
+                }else{
+                    var scale = d3.scale.linear().domain([min,max]).range([2,10]);
+                }
                 if(sankey_value_selection == 'p_value'){
                     var result = scale(-Math.log(d.value));
                     return result;
@@ -88,17 +109,16 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
             })
             .style("stroke", function(d) { return d.source.color = 'gray'})
             .attr('id', function(d){
-                var scale = d3.scale.linear().domain([0,50]).range([1,30]);
                 if(sankey_value_selection == 'p_value'){
-                    var result = scale(-Math.log(d.value));
+                    var result = (-Math.log(d.value));
                     return result;
                 }
                 if(sankey_value_selection == 'beta'){
-                    var result = scale(Math.pow(d.value,2));
+                    var result = (Math.pow(d.value,2));
                     return result;
                 }
                 if(sankey_value_selection == 'fdr'){
-                    var result = scale(-Math.log(d.value));
+                    var result = (-Math.log(d.value));
                     return result;
                 }
             })

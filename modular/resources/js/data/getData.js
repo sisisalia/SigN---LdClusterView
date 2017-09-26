@@ -158,7 +158,7 @@ function getData() {
 	html += " | <input type=\"checkbox\" id=\"showHover\"> Show Hover </input>";
 	html += " | <button type=\"button\" onclick=\"configureList();\" data-toggle=\"modal\" data-target=\"#configureModal\"> Configure Plots </button>"
 	// html += "<div class=\"dropdown\" style=\"float: left;\"> | <button type=\"button\" data-toggle=\"modal\" data-target=\"#configureModal\"> Configure Plots </button></div>"
-	html += " | <button type=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"> Save Plot <span class=\"caret\"></span></button><div class=\"dropdown-menu\"> <button onclick='exportPNG()' style='cursor:auto;width:150px;margin:5px;text-align:center;'>PNG</button></div></div>"
+	html += " | <button type=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"> Save Plot <span class=\"caret\"></span></button><div class=\"dropdown-menu\"> <button onclick='exportFile($(this).text())' style='cursor:auto;width:150px;margin:5px;text-align:center;'>PNG</button><br><button onclick='exportFile($(this).text())' style='cursor:auto;width:150px;margin:5px;text-align:center;'>PDF</button><br><button onclick='exportFile($(this).text())' style='cursor:auto;width:150px;margin:5px;text-align:center;'>SVG</button></div></div>"
 	// html += " | <button type=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true" aria-expanded="false"> Action </button> <div class="dropdown-menu"> <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a> <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Separated link</a> </div>";
 	html += "</p>";
 	html += "<center>";

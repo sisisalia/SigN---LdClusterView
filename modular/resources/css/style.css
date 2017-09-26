@@ -220,3 +220,7 @@ li{
 .dropdown-menu{
     margin-left : 295px;
 }
+
+.leaf_lines{
+    pointer-events: all;
+}

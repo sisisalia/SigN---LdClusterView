@@ -40,7 +40,6 @@
                         <div class="col col-lg-6">
                             Available
                         <ul id="visible" class="connectedSortable" style="border:1px solid black">
-                            <li class="show_mainGenes">Genes Plot</li>
                             <li class="show_mainSankeyPlot">Sankey Plot</li>
                         </ul>
                         </div>
@@ -49,6 +48,7 @@
                         Not available
                         <ul id="invisible" class="connectedSortable" style="border:1px solid black">
                             <li class="show_mainLeafNodes">Leaf Nodes Plot</li>
+                            <li class="show_mainGenes">Genes Plot</li>
                         </ul>
                         </div>
                     </div>
@@ -81,6 +81,9 @@
         <script type="text/javascript" src="resources/js/utilities/bootstrap.min.js"></script>
         <script type="text/javascript" src="resources/js/utilities/bootstrap-toggle.min.js"></script>
         <script type="text/javascript" src="resources/js/utilities/sankey.js"></script>
+        <script type="text/javascript" src="resources/js/utilities/blob.js"></script>
+        <!--<script type="text/javascript" src="resources/js/utilities/jspdf.js"></script>-->
+        <script type="text/javascript" src="resources/js/utilities/jspdf.debug.js"></script>
         <script type="text/javascript" src="resources/js/plots/hierarchicalClustering.js"></script>
         <script type="text/javascript" src="resources/js/plots/insertRow.js"></script>
         <script type="text/javascript" src="resources/js/plots/ruler.js"></script>
@@ -114,7 +117,7 @@
                 html = $.map(eqtl_study_order, function(n, i) {
                     return $.sprintf("<li class='show_mainMan'  id='%s'>%s (P=%0.3E)</li>", n, n, eqtl_studies[n][0].p);
                 });
-                $('#visible').prepend(html);
+                $('#invisible').prepend(html);
                 bar_chart_choices = [];
                 for(var i=0; i < Object.keys(methylation_data).length; i++){
                     bar_chart_choices.push(Object.keys(methylation_data)[i]);
@@ -138,8 +141,7 @@
 
             });
 
-            function exportPNG(){
-                $("#window_size_select").val("Full").change();
+            function exportFile(text){
                 $('body').append('<svg width="1000" height="1000" id="print_svg" style="background:white;"></svg>');
                 var height = 10;
                 var total_width = 0;
@@ -149,9 +151,11 @@
                     var parent_id = '#' + $(this).parent().parent().attr('id');
                     $(parent_id + ' .rightSpace .plot').each(function(d){
                         if(parent_id.substring(1,14) == 'mainLeafNodes'){
-                            total_width = 1000;
+                            total_width = width + parseFloat($(this).width()) + 30;
+                            $(this).clone().attr('y', height).attr('x', width + 20).appendTo($('#print_svg'));
+                        }else{
+                            $(this).clone().attr('y', height + 23).attr('x', width + 20).appendTo($('#print_svg'));
                         }
-                        $(this).clone().attr('y', height + 15).attr('x', width + 20).appendTo($('#print_svg'));
                     });
                     height = height + parseFloat($(this).attr('height')) + 10;
                 });
@@ -160,7 +164,6 @@
                 }
                 $('#print_svg').attr('height',height + 20);
                 $('#print_svg').attr('width', total_width);
-                console.log(width);
 
                 var styleDefs = "";
                 var svgDomElement = document.getElementById('print_svg');
@@ -192,59 +195,79 @@
                 var svgData = new XMLSerializer().serializeToString( svg );
 
                 var canvas = document.createElement( "canvas" );
-                canvas.width = 1000;
+                canvas.width = total_width;
                 canvas.height = d3.select("#print_svg").attr("height");
                 var ctx = canvas.getContext( "2d" );
 
-                var dataUri = '';
-                try {
+                if(text == 'PNG' || text == 'PDF'){
+                    var dataUri = '';
                     dataUri = 'data:image/svg+xml;base64,' + btoa(svgData);
-                } catch (ex) {
-                    // For browsers that don't have a btoa() method, send the text off to a webservice for encoding
-                    /* Uncomment if needed (requires jQuery)
-                    $.ajax({
-                        url: "http://www.mysite.com/webservice/encodeString",
-                        data: { svg: svgData },
-                        type: "POST",
-                        async: false,
-                        success: function(encodedSVG) {
-                            dataUri = 'data:image/svg+xml;base64,' + encodedSVG;
+
+                    var img = document.createElement( "img" );
+
+                    img.onload = function() {
+                        ctx.drawImage( img, 0, 0 );
+
+                        try {
+                            if(text == 'PNG'){
+                                // Try to initiate a download of the image
+                                var a = document.createElement("a");
+                                a.download = "LdCLusterView.png";
+                                a.href = canvas.toDataURL("image/png");
+                                document.querySelector("body").appendChild(a);
+                                a.click();
+                                document.querySelector("body").removeChild(a);
+                            }
+
+                            if(text == 'PDF'){
+                                var imgData = canvas.toDataURL("image/png");
+
+                                var imgWidth = 210;
+                                var pageHeight = 295;
+                                var imgHeight = canvas.height * imgWidth / canvas.width;
+                                var heightLeft = imgHeight;
+
+                                var doc = new jsPDF('p', 'mm');
+                                var position = 0;
+
+                                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                                heightLeft -= pageHeight;
+
+                                while (heightLeft >= 0) {
+                                    position = heightLeft - imgHeight;
+                                    doc.addPage();
+                                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                                    heightLeft -= pageHeight;
+                                }
+                                doc.save('LdClusterView.pdf');
+                            }
+
+                        } catch (ex) {
+
+                            // If downloading not possible (as in IE due to canvas.toDataURL() security issue)
+                            // then display image for saving via right-click
+
+                            var imgPreview = document.createElement("div");
+                            imgPreview.appendChild(img);
+                            document.querySelector("body").appendChild(imgPreview);
+
                         }
-                    })
-                    */
+                    };
+
+                    img.src = dataUri;
                 }
 
-                var img = document.createElement( "img" );
-
-                img.onload = function() {
-                    ctx.drawImage( img, 0, 0 );
-
-                    try {
-
-                        // Try to initiate a download of the image
-                        var a = document.createElement("a");
-                        a.download = "LdCLusterView.png";
-                        a.href = canvas.toDataURL("image/png");
-                        document.querySelector("body").appendChild(a);
-                        a.click();
-                        document.querySelector("body").removeChild(a);
-
-                    } catch (ex) {
-
-                        // If downloading not possible (as in IE due to canvas.toDataURL() security issue)
-                        // then display image for saving via right-click
-
-                        var imgPreview = document.createElement("div");
-                        imgPreview.appendChild(img);
-                        document.querySelector("body").appendChild(imgPreview);
-
-                    }
-                };
-
-                img.src = dataUri;
+                if(text == 'SVG') {
+                    var svg = document.querySelector("#print_svg");
+                    var svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
+                    var svgUrl = URL.createObjectURL(svgBlob);
+                    var downloadLink = document.createElement("a");
+                    downloadLink.href = svgUrl;
+                    downloadLink.download = "LdCLusterView.svg";
+                    downloadLink.click();
+                }
 
                 $('#print_svg').remove();
-
             }
 
             $(window).resize(function() {
@@ -308,8 +331,8 @@
                 deleted_track = [];
 
                 var size = 0;
-                if(window_size == "Full Screen"){
-                    size = screen.width;
+                if(window_size == "Full"){
+                    size = $(window).width();
                 }
                 else{
                     size = parseFloat(window_size);

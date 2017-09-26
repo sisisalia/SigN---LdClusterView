@@ -19,7 +19,7 @@ eqtls = $.map(eqtls, function(e, i) {
   else {
     e.neglog10p = -Math.log10(e.p);
   }
-  //e.neglog10p_unit = 1 - (e.neglog10p / -Math.log10(min_p));
+  e.neglog10p_unit = 1 - (e.neglog10p / -Math.log10(min_p));
   e.displayText = e.snp + " " + e.dataset + " " + e.description + " P=" + e.p + " FDR=" + e.fdr;
   var studyName = e.dataset + " " + e.description;
   if (!eqtl_studies.hasOwnProperty(studyName)) {
