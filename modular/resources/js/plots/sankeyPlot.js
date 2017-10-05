@@ -110,16 +110,13 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
             .style("stroke", function(d) { return d.source.color = 'gray'})
             .attr('id', function(d){
                 if(sankey_value_selection == 'p_value'){
-                    var result = (-Math.log(d.value));
-                    return result;
+                    return d.value;
                 }
                 if(sankey_value_selection == 'beta'){
-                    var result = (Math.pow(d.value,2));
-                    return result;
+                    return d.value;
                 }
                 if(sankey_value_selection == 'fdr'){
-                    var result = (-Math.log(d.value));
-                    return result;
+                    return d.value;
                 }
             })
             .attr("d", path);

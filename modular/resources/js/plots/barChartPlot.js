@@ -80,4 +80,5 @@ function drawBarChartPlot(table, methyl_data, newRow, leftPlotId, rightPlotId, p
   d3.select("#" + rightPlotId).append("g").attr("id",  rightPlotId + "_axis").attr("transform", "translate(0, 13)").call(axis);
   d3.select("#" + rightPlotId).attr("transform", "translate(0,16.5)");
   d3.select("#" + rightPlotId).attr('height',heightOfPlot);
+  d3.select("#" + rightPlotId).append('text').attr('x', 35).attr('y', heightOfPlot - 17).text('average beta').style('font-style', 'italic');
 }

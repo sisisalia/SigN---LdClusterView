@@ -121,7 +121,7 @@
                 bar_chart_choices = [];
                 for(var i=0; i < Object.keys(methylation_data).length; i++){
                     bar_chart_choices.push(Object.keys(methylation_data)[i]);
-                    $('#invisible').append($.sprintf("<li class='show_mainBar' id='%s'>%s</li>",Object.keys(methylation_data)[i], Object.keys(methylation_data)[i]));
+                    $('#visible').append($.sprintf("<li class='show_mainBar' id='%s'>%s</li>",Object.keys(methylation_data)[i], Object.keys(methylation_data)[i]));
                 };
                 plotObjects = {
                     "show_mainMan" : {"type": "manhattanPlot", "plotId": "mainMan", "leftPlotId": "leftMan", "rightPlotId": "rightMan"},
@@ -160,7 +160,7 @@
                     height = height + parseFloat($(this).attr('height')) + 10;
                 });
                 if(total_width == 0){
-                    total_width = width + 80;
+                    total_width = width + 170;
                 }
                 $('#print_svg').attr('height',height + 20);
                 $('#print_svg').attr('width', total_width);
@@ -220,25 +220,23 @@
                             }
 
                             if(text == 'PDF'){
+
                                 var imgData = canvas.toDataURL("image/png");
 
                                 var imgWidth = 210;
                                 var pageHeight = 295;
                                 var imgHeight = canvas.height * imgWidth / canvas.width;
-                                var heightLeft = imgHeight;
 
                                 var doc = new jsPDF('p', 'mm');
-                                var position = 0;
 
-                                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                                heightLeft -= pageHeight;
-
-                                while (heightLeft >= 0) {
-                                    position = heightLeft - imgHeight;
-                                    doc.addPage();
-                                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                                    heightLeft -= pageHeight;
+                                if(imgHeight > pageHeight){
+                                    var width = doc.internal.pageSize.width;
+                                    var height = doc.internal.pageSize.height;
+                                    doc.addImage(imgData, 'PNG', 0, 0, width, height);
+                                }else{
+                                    doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
                                 }
+
                                 doc.save('LdClusterView.pdf');
                             }
 
