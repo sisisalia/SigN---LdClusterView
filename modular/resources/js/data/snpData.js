@@ -13,46 +13,46 @@
 //     data.gene = jQuery.extend({}, data.original_gene);
 // }
 
-// will be back to here later
-// called when the ruler move
-// if on max or min alr
-// if(data.startRuler < data.minFetched || data.endRuler > data.maxFetched){
-//   // ajax calls
-//   data.minFetched = data.snps[snp_order[0]].pos;
-//   data.maxFetched = data.snps[snp_order[snp_order.length - 1]].pos;
-//   data.startRuler = data.snps[snp_order[0]].pos;
-//   data.endRuler = data.snps[snp_order[snp_order.length - 1]].pos;
-//   alert("fetching");
-// }
-// if its not on max or min
-// else if(data.startRuler != data.minFetched || data.endRuler != data.maxFetched){
-//   // must be in between ruler
-//   // look okay without this though
-//   // data.eqtls = data.original_eqtls.filter(function(d){
-//   //   return d.bp >= data.startRuler && d.bp <= data.endRuler;
-//   // });
-//
-//   // data.gene = data.gene.filter(function(d){
-//   // 	return d.start >= start && d.end <= end;
-//   // })
-//
-//   var tempSnps = {};
-//
-//   for(var obj in data.original_snps){
-//     if(data.original_snps[obj].pos >= data.startRuler && data.original_snps[obj].pos <= data.endRuler)
-//       tempSnps[obj] = data.original_snps[obj];
-//   }
-//
-//   data.snps = tempSnps;
-//
-//   // data.snps = data.snps.filter(function(d){
-//   // 	return d.bp >= data.startRuler && d.bp <= data.endRuler;
-//   // })
-//
-//   data.ld = data.ld.filter(function(d){
-//     return (d[0] in data.snps) && (d[1] in data.snps);
-//   })
-// }
+//will be back to here later
+//called when the ruler move
+//if on max or min alr
+if(data.startRuler < data.minFetched || data.endRuler > data.maxFetched){
+  // ajax calls
+  data.minFetched = data.snps[snp_order[0]].pos;
+  data.maxFetched = data.snps[snp_order[snp_order.length - 1]].pos;
+  data.startRuler = data.snps[snp_order[0]].pos;
+  data.endRuler = data.snps[snp_order[snp_order.length - 1]].pos;
+  console.log("fetching");
+}
+//if its not on max or min
+else if(data.startRuler != data.minFetched || data.endRuler != data.maxFetched){
+  // must be in between ruler
+  // look okay without this though
+  data.eqtls = data.original_eqtls.filter(function(d){
+    return d.bp >= data.startRuler && d.bp <= data.endRuler;
+  });
+
+  // data.gene = data.gene.filter(function(d){
+  // 	return d.start >= start && d.end <= end;
+  // })
+
+  var tempSnps = {};
+
+  for(var obj in data.original_snps){
+    if(data.original_snps[obj].pos >= data.startRuler && data.original_snps[obj].pos <= data.endRuler)
+      tempSnps[obj] = data.original_snps[obj];
+  }
+
+  data.snps = tempSnps;
+
+  // data.snps = data.snps.filter(function(d){
+  // 	return d.bp >= data.startRuler && d.bp <= data.endRuler;
+  // })
+
+  data.ld = data.ld.filter(function(d){
+    return (d[0] in data.snps) && (d[1] in data.snps);
+  })
+}
 
 // else if(data.)
 snp_r2 = {};

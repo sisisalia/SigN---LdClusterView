@@ -8,7 +8,7 @@ function addEvents(mainSVGid, plotType, plotId) {
         .on("drag", dragmove)
         .on("dragend", function() {
             if (data.startDrag != data.startRuler) {
-                getData();
+                // getData();
                 renderEverything();
             }
         });
@@ -200,7 +200,11 @@ function addEvents(mainSVGid, plotType, plotId) {
                 //Get this bar's x/y values, then augment for the tooltip
                 var xPosition = d3.event.x + $(window).scrollLeft();
                 var yPosition = d3.event.y + $(window).scrollTop();
-                var text = d3.select(this).attr("id");
+                var text = d3.select(this).attr("class");
+                if(text=='block') return;
+                else{
+                    text = d3.select(this).attr("id");
+                }
                 //Update the tooltip position and value
                 d3.select("#tooltip")
                     .style("left", xPosition + "px")
@@ -282,8 +286,10 @@ function addEvents(mainSVGid, plotType, plotId) {
     }
 }
 
+// both for zoom and scaling
 function zoomed(zoomLevel) {
     var scaleVal = zoomLevel == undefined ? (d3.event.scale) : zoomLevel;
+    // for zooming
     if (scaleVal == 0.5 || scaleVal == 2) {
         scaleVal = Math.round(zoomLevel == undefined ? (d3.event.scale) : zoomLevel);
         var differenceRuler = data.endRuler - data.startRuler;
@@ -292,27 +298,161 @@ function zoomed(zoomLevel) {
             data.startRuler += change;
             data.endRuler -= change;
             $("#studyDataText").attr("value", data.gene.chr + ": " + data.startRuler + " - " + data.endRuler);
-            getData();
-            if (data.eqtls.length > 0 && Object.keys(data.snps).length > 0 && data.ld.length > 0) {
+            if(zoomLevel == 0.5){
+                getData(1);
                 renderEverything();
-            } else {
-                alert("Maximum zoom level reached");
-                zoomed(0.5);
+            }else{
+                renderEverything();
             }
+            // console.log(data.eqtls.length);
+            // if (data.eqtls.length > 0 && Object.keys(data.snps).length > 0 && data.ld.length > 0) {
+            //     renderEverything();
+            // }
+            // else {
+            //     alert("Maximum zoom level reached");
+            //     zoomed(0.5);
+            // }
         } else
-            alert("Maximum zoom level reached");
+            console.log("Maximum zoom level reached");
     }
 }
 
-function dragSVG(direction){
-    var sign = 1;
-    if(direction == "left"){
-        sign = -1;
+// function dragSVG(direction){
+//     var sign = 1;
+//     if(direction == "left"){
+//         sign = -1;
+//     }
+//     var shift = Math.round((data.endRuler - data.startRuler) / 5);
+//     data.startRuler += sign*shift;
+//     data.endRuler += sign*shift;
+//     $("#studyDataText").attr("value", data.gene.chr + ": " + data.startRuler + " - " + data.endRuler);
+//     // getData();
+//     renderEverything();
+// }
+
+function exportFile(text){
+    $('body').append('<svg width="1000" height="1000" id="print_svg" style="background:white;"></svg>');
+    var height = 10;
+    var total_width = 0;
+    var width = $('#genomic_axis').width();
+    $('.mainContent .plot').each(function(d){
+        $(this).clone().attr('y', height).attr('x',10).appendTo($('#print_svg'));
+        var parent_id = '#' + $(this).parent().parent().attr('id');
+        $(parent_id + ' .rightSpace .plot').each(function(d){
+            if(parent_id.substring(1,14) == 'mainLeafNodes'){
+                total_width = width + parseFloat($(this).width()) + 30;
+                $(this).clone().attr('y', height).attr('x', width + 20).appendTo($('#print_svg'));
+            }else{
+                $(this).clone().attr('y', height + 23).attr('x', width + 20).appendTo($('#print_svg'));
+            }
+        });
+        height = height + parseFloat($(this).attr('height')) + 10;
+    });
+    if(total_width == 0){
+        total_width = width + 170;
     }
-    var shift = Math.round((data.endRuler - data.startRuler) / 5);
-    data.startRuler += sign*shift;
-    data.endRuler += sign*shift;
-    $("#studyDataText").attr("value", data.gene.chr + ": " + data.startRuler + " - " + data.endRuler);
-    getData();
-    renderEverything();
+    $('#print_svg').attr('height',height + 20);
+    $('#print_svg').attr('width', total_width);
+
+    var styleDefs = "";
+    var svgDomElement = document.getElementById('print_svg');
+    var sheets = document.styleSheets;
+    for (var i = 0; i < sheets.length; i++) {
+        var rules = sheets[i].cssRules;
+        for (var j = 0; j < rules.length; j++) {
+            var rule = rules[j];
+            if (rule.style) {
+                var selectorText = rule.selectorText;
+                var elems = svgDomElement.querySelectorAll(selectorText);
+
+                if (elems.length) {
+                    styleDefs += selectorText + " { " + rule.style.cssText + " }\n";
+                }
+            }
+        }
+    }
+
+    var s = document.createElement('style');
+    s.setAttribute('type', 'text/css');
+    s.innerHTML = styleDefs;
+
+    var defs = document.createElement('defs');
+    defs.appendChild(s);
+    svgDomElement.insertBefore(defs, svgDomElement.firstChild);
+
+    var svg = document.querySelector( "#print_svg" );
+    var svgData = new XMLSerializer().serializeToString( svg );
+
+    var canvas = document.createElement( "canvas" );
+    canvas.width = total_width;
+    canvas.height = d3.select("#print_svg").attr("height");
+    var ctx = canvas.getContext( "2d" );
+
+    if(text == 'PNG' || text == 'PDF'){
+        var dataUri = '';
+        dataUri = 'data:image/svg+xml;base64,' + btoa(svgData);
+
+        var img = document.createElement( "img" );
+
+        img.onload = function() {
+            ctx.drawImage( img, 0, 0 );
+
+            try {
+                if(text == 'PNG'){
+                    // Try to initiate a download of the image
+                    var a = document.createElement("a");
+                    a.download = "LdCLusterView.png";
+                    a.href = canvas.toDataURL("image/png");
+                    document.querySelector("body").appendChild(a);
+                    a.click();
+                    document.querySelector("body").removeChild(a);
+                }
+
+                if(text == 'PDF'){
+
+                    var imgData = canvas.toDataURL("image/png");
+
+                    var imgWidth = 210;
+                    var pageHeight = 295;
+                    var imgHeight = canvas.height * imgWidth / canvas.width;
+
+                    var doc = new jsPDF('p', 'mm');
+
+                    if(imgHeight > pageHeight){
+                        var width = doc.internal.pageSize.width;
+                        var height = doc.internal.pageSize.height;
+                        doc.addImage(imgData, 'PNG', 0, 0, width, height);
+                    }else{
+                        doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                    }
+
+                    doc.save('LdClusterView.pdf');
+                }
+
+            } catch (ex) {
+
+                // If downloading not possible (as in IE due to canvas.toDataURL() security issue)
+                // then display image for saving via right-click
+
+                var imgPreview = document.createElement("div");
+                imgPreview.appendChild(img);
+                document.querySelector("body").appendChild(imgPreview);
+
+            }
+        };
+
+        img.src = dataUri;
+    }
+
+    if(text == 'SVG') {
+        var svg = document.querySelector("#print_svg");
+        var svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
+        var svgUrl = URL.createObjectURL(svgBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.href = svgUrl;
+        downloadLink.download = "LdCLusterView.svg";
+        downloadLink.click();
+    }
+
+    $('#print_svg').remove();
 }

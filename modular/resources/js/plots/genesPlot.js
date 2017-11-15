@@ -32,7 +32,7 @@ function drawGenesPlot(table, transcripts, newRow, plotId, leftPlotId, rightPlot
             var y = d.ypos * height + 5;
             var startPos = (d.start - start) / (end - start) * width;
             var endPos = (d.end - start) / (end - start) * width;
-            var val = "M0," + y;
+            var val = "M" + startPos + ',' + y;
             for(var i = startPos + 30; i <= endPos; i += 30){
                 val += "H" + i;
             }

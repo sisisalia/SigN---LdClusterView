@@ -40,15 +40,15 @@
                         <div class="col col-lg-6">
                             Available
                         <ul id="visible" class="connectedSortable" style="border:1px solid black">
-                            <li class="show_mainSankeyPlot">Sankey Plot</li>
+                            <li class="show_mainGenes">Genes Plot</li>
                         </ul>
                         </div>
 
                         <div class="col col-lg-6">
                         Not available
                         <ul id="invisible" class="connectedSortable" style="border:1px solid black">
+                            <!--<li class="show_mainSankeyPlot">Sankey Plot</li>-->
                             <li class="show_mainLeafNodes">Leaf Nodes Plot</li>
-                            <li class="show_mainGenes">Genes Plot</li>
                         </ul>
                         </div>
                     </div>
@@ -72,6 +72,7 @@
 
         <script type="text/javascript" src="resources/js/utilities/jquery-ui-1.12.4.js"></script>
         <script type="text/javascript" src="resources/js/utilities/jquery-ui.js"></script>
+        <script type="text/javascript" src="ajaxCall.js"></script>
         <!--<script type="text/javascript" src="resources/js/utilities/jquery-v340.js"></script>-->
         <!--<script type="text/javascript" src="resources/js/utilities/jquery-ui-v340.js"></script>-->
         <script type="text/javascript" src="resources/js/utilities/jquery.sprintf.js"></script>
@@ -98,9 +99,7 @@
         <script type="text/javascript" src="resources/js/data/mqtls.js"></script>
         <script type="text/javascript" src="resources/js/data/genesData.js"></script>
         <script type="text/javascript" src="resources/js/data/manhattanData.js"></script>
-        <script type="text/javascript" src="resources/js/data/methylationData.js"></script>
         <script type="text/javascript" src="resources/js/data/getData.js"></script>
-        <script type="text/javascript" src="resources/js/data/setmqtls.js"></script>
         <script type="text/javascript" src="resources/js/plots/hoverLine.js"></script>
         <script type="text/javascript" src="resources/js/plots/barChartPlot.js"></script>
         <script type="text/javascript" src="resources/js/plots/sankeyPlot.js"></script>
@@ -120,9 +119,23 @@
                 $('#invisible').prepend(html);
                 bar_chart_choices = [];
                 for(var i=0; i < Object.keys(methylation_data).length; i++){
+                    if(Object.keys(methylation_data['PBMC 112 samples'].probes).length == 0){
+                        break;
+                    }
                     bar_chart_choices.push(Object.keys(methylation_data)[i]);
-                    $('#visible').append($.sprintf("<li class='show_mainBar' id='%s'>%s</li>",Object.keys(methylation_data)[i], Object.keys(methylation_data)[i]));
+                    $('#invisible').append($.sprintf("<li class='show_mainBar' id='%s'>%s</li>",Object.keys(methylation_data)[i], Object.keys(methylation_data)[i]));
                 };
+                //exclude out sankey plot if it is not in the range
+                //currently because data is not from database yet
+                var probe_inside = 0;
+                for(var i = 0; i < mqtls_raw.length; i++){
+                    if((mqtls_raw[i].probe_position <= endRuler)&&(mqtls_raw[i].probe_position >= startRuler)){
+                        probe_inside = 1;
+                    }
+                }
+                if((probe_inside != 0) && ($('.show_mainSankeyPlot').length == 0)){
+                    $('#invisible').append('<li class="show_mainSankeyPlot">Sankey Plot</li>');
+                }
                 plotObjects = {
                     "show_mainMan" : {"type": "manhattanPlot", "plotId": "mainMan", "leftPlotId": "leftMan", "rightPlotId": "rightMan"},
                     "show_mainGenes" : {"type": "genesPlot", "plotId": "mainGenes", "leftPlotId": "leftGenes", "rightPlotId": "rightGenes"},
@@ -138,135 +151,7 @@
                     'show_mainBar' : '#FFFF99',
                 };
                 renderEverything();
-
             });
-
-            function exportFile(text){
-                $('body').append('<svg width="1000" height="1000" id="print_svg" style="background:white;"></svg>');
-                var height = 10;
-                var total_width = 0;
-                var width = $('#genomic_axis').width();
-                $('.mainContent .plot').each(function(d){
-                    $(this).clone().attr('y', height).attr('x',10).appendTo($('#print_svg'));
-                    var parent_id = '#' + $(this).parent().parent().attr('id');
-                    $(parent_id + ' .rightSpace .plot').each(function(d){
-                        if(parent_id.substring(1,14) == 'mainLeafNodes'){
-                            total_width = width + parseFloat($(this).width()) + 30;
-                            $(this).clone().attr('y', height).attr('x', width + 20).appendTo($('#print_svg'));
-                        }else{
-                            $(this).clone().attr('y', height + 23).attr('x', width + 20).appendTo($('#print_svg'));
-                        }
-                    });
-                    height = height + parseFloat($(this).attr('height')) + 10;
-                });
-                if(total_width == 0){
-                    total_width = width + 170;
-                }
-                $('#print_svg').attr('height',height + 20);
-                $('#print_svg').attr('width', total_width);
-
-                var styleDefs = "";
-                var svgDomElement = document.getElementById('print_svg');
-                var sheets = document.styleSheets;
-                for (var i = 0; i < sheets.length; i++) {
-                    var rules = sheets[i].cssRules;
-                    for (var j = 0; j < rules.length; j++) {
-                        var rule = rules[j];
-                        if (rule.style) {
-                            var selectorText = rule.selectorText;
-                            var elems = svgDomElement.querySelectorAll(selectorText);
-
-                            if (elems.length) {
-                                styleDefs += selectorText + " { " + rule.style.cssText + " }\n";
-                            }
-                        }
-                    }
-                }
-
-                var s = document.createElement('style');
-                s.setAttribute('type', 'text/css');
-                s.innerHTML = styleDefs;
-
-                var defs = document.createElement('defs');
-                defs.appendChild(s);
-                svgDomElement.insertBefore(defs, svgDomElement.firstChild);
-
-                var svg = document.querySelector( "#print_svg" );
-                var svgData = new XMLSerializer().serializeToString( svg );
-
-                var canvas = document.createElement( "canvas" );
-                canvas.width = total_width;
-                canvas.height = d3.select("#print_svg").attr("height");
-                var ctx = canvas.getContext( "2d" );
-
-                if(text == 'PNG' || text == 'PDF'){
-                    var dataUri = '';
-                    dataUri = 'data:image/svg+xml;base64,' + btoa(svgData);
-
-                    var img = document.createElement( "img" );
-
-                    img.onload = function() {
-                        ctx.drawImage( img, 0, 0 );
-
-                        try {
-                            if(text == 'PNG'){
-                                // Try to initiate a download of the image
-                                var a = document.createElement("a");
-                                a.download = "LdCLusterView.png";
-                                a.href = canvas.toDataURL("image/png");
-                                document.querySelector("body").appendChild(a);
-                                a.click();
-                                document.querySelector("body").removeChild(a);
-                            }
-
-                            if(text == 'PDF'){
-
-                                var imgData = canvas.toDataURL("image/png");
-
-                                var imgWidth = 210;
-                                var pageHeight = 295;
-                                var imgHeight = canvas.height * imgWidth / canvas.width;
-
-                                var doc = new jsPDF('p', 'mm');
-
-                                if(imgHeight > pageHeight){
-                                    var width = doc.internal.pageSize.width;
-                                    var height = doc.internal.pageSize.height;
-                                    doc.addImage(imgData, 'PNG', 0, 0, width, height);
-                                }else{
-                                    doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                                }
-
-                                doc.save('LdClusterView.pdf');
-                            }
-
-                        } catch (ex) {
-
-                            // If downloading not possible (as in IE due to canvas.toDataURL() security issue)
-                            // then display image for saving via right-click
-
-                            var imgPreview = document.createElement("div");
-                            imgPreview.appendChild(img);
-                            document.querySelector("body").appendChild(imgPreview);
-
-                        }
-                    };
-
-                    img.src = dataUri;
-                }
-
-                if(text == 'SVG') {
-                    var svg = document.querySelector("#print_svg");
-                    var svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
-                    var svgUrl = URL.createObjectURL(svgBlob);
-                    var downloadLink = document.createElement("a");
-                    downloadLink.href = svgUrl;
-                    downloadLink.download = "LdCLusterView.svg";
-                    downloadLink.click();
-                }
-
-                $('#print_svg').remove();
-            }
 
             $(window).resize(function() {
               renderEverything();
@@ -406,14 +291,14 @@
                     }
                 });
                 // dont know what is this for
-                $("#table-1 .dragHandle").hover(function() {
-                    $(this).addClass('showDragHandle');
-                    $(this).closest('tr').addClass('myDragClass');
-
-                }, function() {
-                  $(this).removeClass('showDragHandle');
-                  $(this).closest('tr').removeClass('myDragClass');
-                });
+//                $("#table-1 .dragHandle").hover(function() {
+//                    $(this).addClass('showDragHandle');
+//                    $(this).closest('tr').addClass('myDragClass');
+//
+//                }, function() {
+//                  $(this).removeClass('showDragHandle');
+//                  $(this).closest('tr').removeClass('myDragClass');
+//                });
 
                 $(".close-plot").on("click", function(d){
                     var plotId = $(this.closest('tr')).attr("id");
