@@ -93,7 +93,6 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
                     var scale = d3.scale.linear().domain([min,max]).range([2,10]);
                 }else{
                     var scale = d3.scale.linear().domain([min,max]).range([2,10]);
-                }
                 if(sankey_value_selection == 'p_value'){
                     var result = scale(-Math.log(d.value));
                     return result;

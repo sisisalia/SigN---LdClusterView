@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/stats.js"></script>
+    <!--<script src="resources/js/statistics/z-table.js"></script>-->
+    <script src="js/shapiro-wilk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+</head>
+<style>
+    body {
+        padding-left : 10%;
+        padding-above : 5%;
+    }
+</style>
+<body>
+<p>Paste/Drag and drop excel data here or here:</p>
+<p> X : </p>
+<textarea name="x" style="width:250px;height:150px;" placeholder="null"></textarea><br>
+<p> Y : </p>
+<textarea name="y" style="width:250px;height:150px;" placeholder="null"></textarea><br>
+<input type="button" onclick="javascript:getData()" value="Compute"/>
+<br><br>
+<hr>
+<div id="excel_table"></div></body>
+<script type="text/javascript">
+    function getData() {
+        data_x = $('textarea[name=x]').val();
+        data_y = $('textarea[name=y]').val();
+
+        rows_x = data_x.split("\n");
+        rows_y = data_y.split("\n");
+
+        if(data_x != null){
+            name_x = rows_x[0];
+            rows_x.splice(0,1);
+            if(rows_x[rows_x.length - 1] == ''){
+                rows_x.splice(rows_x.length - 1,1);
+            }
+        }
+
+        if(data_y != null){
+            name_y = rows_y[0];
+            rows_y.splice(0,1);
+            if(rows_y[rows_y.length - 1] == ''){
+                rows_y.splice(rows_y.length - 1,1);
+            }
+        }
+        result = (corrSpearman(rows_x,rows_y));
+        console.log(result);
+    }
+</script>
+</html>

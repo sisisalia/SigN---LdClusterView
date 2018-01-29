@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics Main Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xls/0.7.4-a/xls.core.min.js"></script>
+</head>
+<style>
+    body {
+        padding-left : 10%;
+        padding-top : 2%;
+    }
+</style>
+<body>
+<h1>Input Data</h1>
+<p>Choose an excel file:</p>
+<input type="file" id="excelfile" />
+<p id="sheets_choice_text" style="visibility: hidden">Select one sheet from the excel file submitted:</p>
+<select name="sheets_choice" style="visibility: hidden"></select>
+<br/>
+<input type="button" id="viewfile" value="Submit File" onclick="SubmitFile();" />
+<br />
+<hr />
+<p>Or copy and paste/drag and drop table here:</p>
+<textarea name="textbox" style="width:250px;height:150px;" placeholder="null"></textarea><br>
+<input type="button" onclick="javascript:getData();" value="Submit Table"/>
+<br><br>
+</body>
+<script type="text/javascript">
+    var json_data = {};
+    var data_titles = [];
+    function SubmitFile() {
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xlsx|.xls)$/;
+        /*Checks whether the file is a valid excel file*/
+        if (regex.test($("#excelfile").val().toLowerCase())) {
+            var xlsxflag = false; /*Flag for checking whether excel is .xls format or .xlsx format*/
+            if ($("#excelfile").val().toLowerCase().indexOf(".xlsx") > 0) {
+                xlsxflag = true;
+            }
+            /*Checks whether the browser supports HTML5*/
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var data = e.target.result;
+                    /*Converts the excel data in to object*/
+                    if (xlsxflag) {
+                        var workbook = XLSX.read(data, {type: 'binary'});
+                    }
+                    else {
+                        var workbook = XLS.read(data, {type: 'binary'});
+                    }
+                    /*Gets all the sheetnames of excel in to a variable*/
+                    var sheet_name_list = workbook.SheetNames;
+                    if(sheet_name_list.length == 1){
+                        $('#sheets_choice_text').css('visibility','hidden');
+                        $("select[name='sheets_choice']").css('visibility','hidden');
+                    }
+                    if (sheet_name_list.length > 1 && $("select[name='sheets_choice']").css('visibility') == 'hidden') {
+                        $('#sheets_choice_text').css('visibility','visible');
+                        $("select[name='sheets_choice']").css('visibility','visible');
+                        $("select[name='sheets_choice']").empty();
+                        for (var i = 0; i < sheet_name_list.length; i++) {
+                            $("select[name='sheets_choice']").append('<option value="' + sheet_name_list[i] + '">' + sheet_name_list[i] + '</option>')
+                        }
+                        return;
+                    }
+                    var val = $("select[name='sheets_choice']").val();
+                    var index = sheet_name_list.indexOf(val);
+                    if (sheet_name_list.length == 1 || val != '' || val != null) {
+                        if (sheet_name_list.length == 1) {
+                            var y = sheet_name_list[0];
+                        } else {
+                            var y = sheet_name_list[index];
+                        }
+                        val = null;
+                        /*Convert the cell value to Json*/
+                        if (xlsxflag) {
+                            var exceljson = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
+                        }
+                        else {
+                            var exceljson = XLS.utils.sheet_to_row_object_array(workbook.Sheets[y]);
+                        }
+                        if (exceljson.length == 0) {
+                            alert('No data found on excel file');
+                            return;
+                        }
+                        // Getting titles of table
+                        var titles = Object.keys(exceljson[0]);
+                        for (var i = 0; i < exceljson.length; i++) {
+                            if(titles.length < Object.keys(exceljson[i]).length){
+                                titles = Object.keys(exceljson[i]);
+                            }
+                        }
+                        // Create json object with titles as key
+                        var obj = {};
+                        for (var i = 0; i < titles.length; i++) {
+                            obj[titles[i]] = [];
+                        }
+                        // Pushing the value onto the json object
+                        for (var i = 0; i < exceljson.length; i++) {
+                            var no_keys = Object.keys(exceljson[i]).length;
+                            for (var j = 0; j < no_keys; j++) {
+                                var key = Object.keys(exceljson[i])[j];
+                                var value = exceljson[i][key];
+                                obj[key].push(exceljson[i][key]);
+                            }
+                            if(no_keys != titles.length){
+                                var keys = Object.keys(exceljson[i]);
+                                for(var k = 0; k < titles.length; k++){
+                                    if(keys.indexOf(titles[k]) == -1){
+                                        obj[titles[k]].push("");
+                                    }
+                                }
+                            }
+                        }
+                        json_data = obj;
+                        data_titles = titles;
+                        sendValue();
+                        }
+                    }
+                    if (xlsxflag) {/*If excel file is .xlsx extension than creates a Array Buffer from excel*/
+                        reader.readAsArrayBuffer($("#excelfile")[0].files[0]);
+                    }
+                    else {
+                        reader.readAsBinaryString($("#excelfile")[0].files[0]);
+                    }
+            }
+            else {
+                alert("Sorry! Your browser does not support HTML5!");
+            }
+        }
+        else {
+            alert("Please upload a valid Excel file!");
+        }
+    }
+
+    function getData() {
+        var data = $('textarea[name=textbox]').val();
+
+        if(!data){
+            alert('Please input a table!');
+            return;
+        }
+
+        var rows = data.split("\n");
+
+        var table = $('<table />');
+
+        data_titles = rows[0].split("\t");
+
+        for(var i = 0; i < data_titles.length; i++){
+            json_data[data_titles[i]] = [];
+        }
+
+        for(var i = 1; i < rows.length; i++){
+            var cells = rows[i].split("\t");
+            for(var j = 0; j < data_titles.length; j++){
+                json_data[data_titles[j]].push(cells[j]);
+            }
+        }
+
+        sendValue();
+    }
+
+    function sendValue(){
+        if(Object.keys(json_data).length > 0) {
+            sessionStorage.setItem('json_data', JSON.stringify(json_data));
+            window.location.href = "statsTableResult.html";
+        }
+    }
+
+</script>
+</html>

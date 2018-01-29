@@ -8,7 +8,7 @@ function addEvents(mainSVGid, plotType, plotId) {
         .on("drag", dragmove)
         .on("dragend", function() {
             if (data.startDrag != data.startRuler) {
-                // getData();
+                getData(1);
                 renderEverything();
             }
         });
@@ -317,18 +317,18 @@ function zoomed(zoomLevel) {
     }
 }
 
-// function dragSVG(direction){
-//     var sign = 1;
-//     if(direction == "left"){
-//         sign = -1;
-//     }
-//     var shift = Math.round((data.endRuler - data.startRuler) / 5);
-//     data.startRuler += sign*shift;
-//     data.endRuler += sign*shift;
-//     $("#studyDataText").attr("value", data.gene.chr + ": " + data.startRuler + " - " + data.endRuler);
-//     // getData();
-//     renderEverything();
-// }
+function dragSVG(direction){
+    var sign = 1;
+    if(direction == "left"){
+        sign = -1;
+    }
+    var shift = Math.round((data.endRuler - data.startRuler) / 5);
+    data.startRuler += sign*shift;
+    data.endRuler += sign*shift;
+    $("#studyDataText").attr("value", data.gene.chr + ": " + data.startRuler + " - " + data.endRuler);
+    getData(1);
+    renderEverything();
+}
 
 function exportFile(text){
     $('body').append('<svg width="1000" height="1000" id="print_svg" style="background:white;"></svg>');

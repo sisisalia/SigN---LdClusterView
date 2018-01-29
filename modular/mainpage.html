@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LdClusterViewer</title>
+    <title>LdClusterViewer - Form</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -10,7 +10,7 @@
 </head>
 <body>
 <p></p>
-<h2>LdClusterViewer</h2>
+<h2>LdClusterView Form</h2>
 <div class="container">
     <form action="modular.html">
         <div class="form-group row">
@@ -32,17 +32,21 @@
 </div>
 </body>
 <script type="text/javascript">
-    //Get population id
+    //Get population id from the database and display the ids as suggestions on the population text box
     var population_choices = ajaxCall('/ldcluster2/getpopulationid');
     for(i = 0; i < population_choices.length ; i++){
         $('#population_choice').append('<option>'+ population_choices[i] +'</option>')
     }
-
+    // Similarly get the genes symbol from the database and display as suggestions on the gene text box
     var gene_choices = ajaxCall('/ldcluster2/getgenesymbol');
     for(i = 0; i < gene_choices.length ; i++){
         $('#gene_choice').append('<option>' + gene_choices[i] + '</option>')
     }
 
+    // If there is changes made in gene text box
+    // check to see if the gene has more than one sub-gene(?)
+    // if there is more than one sub-gene, ask the user to only choose one
+    // if only got one gene, hence nothing changes
     function changeInput(){
         var value = $('#gene_box').val().toUpperCase();
         var gene = ajaxCall('/gene/symbol/hg19_gencode24/' + value);
@@ -58,6 +62,8 @@
         }
     }
 
+    // Activate when the form is submitted
+    // Some validations are made
     $("form").submit(function(e){
         sendValue();
         pop = $('#pop_box').val().toUpperCase();
@@ -76,6 +82,7 @@
         }
     });
 
+    // Send value to the visualization side by using session storage
     function sendValue(){
         sessionStorage.setItem('population_choice', $('#pop_box').val().toUpperCase());
         sessionStorage.setItem('gene_choice', $('#gene_box').val().toUpperCase());

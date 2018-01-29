@@ -4,7 +4,6 @@ port = '9001';
 function ajaxCall(url){
     $.ajax({
         'async' : false,
-        'global' : false,
         'url' : 'http://' + ip_address + ':' + port + url,
         'dataType' : 'json',
         'success' : function(data){
