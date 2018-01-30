@@ -175,6 +175,72 @@ function runChisquareTest(x,y){
     return result;
 }
 
+function getChiOETable(x,y){
+    removeNA(x,y);
+    var result = [];
+    // transform the categorical value to count data table
+    var obj = {};
+    obj = transfromToCountData(x,y);
+    // find row total and column total
+    var row_total = [];
+    var column_total = [];
+    var all_total = 0;
+    // row total
+    for(var i = 0; i < Object.keys(obj).length; i++){
+        var key_x = Object.keys(obj)[i];
+        var total = 0;
+        for(var j = 0; j < Object.keys(obj[key_x]).length; j++){
+            var key_y = Object.keys(obj[key_x])[j];
+            total += obj[key_x][key_y];
+        }
+        all_total += total;
+        row_total.push(total);
+    }
+    // column total
+    var column_titles = [];
+    for(var i = 0; i < Object.keys(obj).length; i++){
+        var key_x = Object.keys(obj)[i];
+        column_titles = Object.keys(obj[key_x]);
+        break;
+    }
+    for(var i = 0; i < column_titles.length; i++){
+        var total = 0;
+        var key_y = column_titles[i];
+        for(var j = 0; j < Object.keys(obj).length; j++){
+            var key_x = Object.keys(obj)[j];
+            total += obj[key_x][key_y];
+        }
+        column_total.push(total);
+    }
+    // count the expected frequency count
+    var exp = jQuery.extend(true, {}, obj);
+    // using same data structure as obj
+    for(var i = 0; i < Object.keys(exp).length; i++){
+        var key_x = Object.keys(exp)[i];
+        for(var j = 0; j < Object.keys(exp[key_x]).length; j++){
+            var key_y = Object.keys(exp[key_x])[j];
+            exp[key_x][key_y] = row_total[i] * column_total[j] / all_total;
+        }
+    }
+    for(var i = 0; i < Object.keys(obj).length; i++){
+        var key = Object.keys(obj)[i];
+        var temp = {};
+        temp['xxx'] = key;
+        for(var j = 0; j < Object.keys(obj[key]).length; j++){
+            var key2 = Object.keys(obj[key])[j];
+            var observed = obj[key][key2];
+            var expected = exp[key][key2];
+            var oe = observed/expected;
+            observed = observed.toPrecision(4);
+            expected = expected.toPrecision(4);
+            oe = oe.toPrecision(4);
+            temp[key2] = observed + '/' + expected + '(' + oe + ')';
+        }
+        result.push(temp);
+    }
+    return result;
+}
+
 function transfromToCountData(x,y){
     var group_x = [];
     var group_y = [];

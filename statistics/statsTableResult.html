@@ -11,6 +11,7 @@
     <script src="js/d3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
     <script src="plots/scatterPlot.js"></script>
+    <link rel="stylesheet" href="css/plots.css">
 </head>
 <style>
     body {
@@ -33,7 +34,15 @@
 
     tr:hover {background-color: #ddd;}
 
-    th {
+    th{
+        padding-top: 8px;
+        padding-bottom: 8px;
+        text-align: left;
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .chi-label{
         padding-top: 8px;
         padding-bottom: 8px;
         text-align: left;
@@ -70,14 +79,6 @@
 </div>
 <br />
 <br/>
-<button type="button" id='dunn_button' class="btn btn-info" data-toggle="collapse" data-target="#dunn">Kruskal Wallis Dunn</button>
-<div id="dunn" class="collapse">
-    <hr />
-    <table id="dunn_table"></table>
-    <hr />
-</div>
-<br />
-<br/>
 <button type="button" id='chi_button' class="btn btn-info" data-toggle="collapse" data-target="#chi">Chi Square</button>
 <div id="chi" class="collapse">
     <hr />
@@ -85,17 +86,69 @@
     <hr />
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+<div id="tooltip-container"></div>
+
+<!-- Modal for spearman-->
+<div class="modal fade" id="modal-spearman" tabindex="-1" role="dialog" aria-labelledby="ModalLabelSpearman" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabel">Graph</h5>
+                <h5 class="modal-title" id="ModalLabelSpearman">Spearman Scatter Plot</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="spearman-body" width="auto" height="auto">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Kruskal-->
+<div class="modal fade" id="modal-kruskal" tabindex="-1" role="dialog" aria-labelledby="ModalLabelKruskal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabelKruskal">Kruskal Wallis</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" width="auto" height="auto">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#kruskal-graph">Kruskal Wallis Scatter Plot</a></li>
+                        <li><a data-toggle="tab" href="#kruskal-dunn">Kruskal Wallis Post Hoc Dunn Test</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="kruskal-graph" class="tab-pane fade in active">
+                        </div>
+                        <div id="kruskal-dunn" class="tab-pane fade">
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for chi-->
+<div class="modal fade" id="modal-chi" tabindex="-1" role="dialog" aria-labelledby="ModalLabelChi" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabelChi">Chi Observed/Expected(Result) Table</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" width="auto" height="auto">
+                <table id="chi-oe-table"></table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -201,36 +254,6 @@
         $('#kruskal').remove();
     }
 
-//    // Testing Categorical and Numerical
-//    var dunn = [];
-//
-//    // x should be categorical
-//    if(use_category.length > 0 && use_numerical.length > 0) {
-//        for(var i = 0; i < use_category.length; i++){
-//            var x = use_category[i];
-//            for(var j = 0; j < use_numerical.length; j++){
-//                var y = use_numerical[j];
-//                var json_data = jQuery.extend(true, {}, data);
-//                // result for this is an array
-//                var result = runKruskalWallisDunnPostHocTest(json_data[x],json_data[y]);
-//                for(var k = 0; k < result.length; k++){
-//                    var obj = {};
-//                    obj.x = x;
-//                    obj.y = y;
-//                    obj = combineJsonData(obj,result[k]);
-//                    dunn.push(obj);
-//                }
-//            }
-//        }
-//    }
-//
-//    if(dunn.length != 0){
-//        BindTable(dunn, '#dunn_table');
-//    }else{
-//        $('#dunn_button').remove();
-//        $('#dunn').remove();
-//    }
-
     var chi = [];
 
     // Testing categorical and categorical
@@ -264,14 +287,60 @@
         var y_name = $(this).children()[1].innerHTML;
         var json_data = jQuery.extend(true, {}, data);
         if(type == 'spearman'){
-            $('#ModalLabel').html('Spearman Scatter Plot');
+            $('#spearman-body').empty();
             removeNA(json_data[x_name], json_data[y_name]);
             for(var i=0; i < spearman.length; i++){
                 if(spearman[i].x == x_name && spearman[i].y == y_name){
                     break;
                 }
             }
-            scatterPlot(spearman[i],json_data[x_name],json_data[y_name],x_name, y_name);
+            scatterPlotNumerical(spearman[i],json_data[x_name],json_data[y_name],x_name, y_name);
+            return;
+        }
+        if(type == 'kruskal'){
+            $('#kruskal-graph').empty();
+            $('#kruskal-dunn').empty();
+            removeNA(json_data[x_name], json_data[y_name]);
+            for(var i=0; i < kruskal.length; i++){
+                if(kruskal[i].x == x_name && kruskal[i].y == y_name){
+                    break;
+                }
+            }
+            scatterPlotCategorical(kruskal[i],json_data[x_name],json_data[y_name],x_name, y_name);
+
+            $('#kruskal-dunn').html('<div id="dunn">\n' +
+                '    <hr />\n' +
+                '    <table id="dunn_table"></table>\n' +
+                '    <hr />\n' +
+                '</div>\n');
+
+            // Testing Categorical and Numerical
+            var dunn = runKruskalWallisDunnPostHocTest(json_data[x_name],json_data[y_name]);
+            BindTable(dunn, '#dunn_table');
+            return;
+        }
+        if(type == 'chi'){
+            $('#chi-oe-table').empty();
+            var chi_oe_result = getChiOETable(json_data[x_name],json_data[y_name]);
+            BindTable(chi_oe_result, '#chi-oe-table');
+            // Making the header as first column and style it
+            // find which row is the header
+            var counter = 0;
+            $('#chi-oe-table tr th').each(function(d,i){
+                if($(this).html() == 'xxx'){
+                    return false;
+                }
+                counter++;
+            });
+            $('#chi-oe-table tr').each(function(d,i){
+                var value = ($(this).children().eq(counter).html());
+                $(this).children().eq(counter).remove();
+                if(value == 'xxx'){
+                    $(this).prepend('<td></td>');
+                }else {
+                    $(this).prepend('<td class="chi-label">' + value + '</td>');
+                }
+            });
         }
     });
 
@@ -289,8 +358,21 @@
         for (var i = 0; i < jsondata.length; i++) {
             if(tableid == '#summary_table'){
                 var row$ = $('<tr/>');
-            }else {
-                var row$ = $('<tr data-toggle="modal" data-target="#modal"/>');
+            }
+            if(tableid == '#dunn_table'){
+                var row$ = $('<tr/>');
+            }
+            if(tableid == '#kruskal_table'){
+                var row$ = $('<tr data-toggle="modal" data-target="#modal-kruskal"/>');
+            }
+            if(tableid == '#spearman_table'){
+                var row$ = $('<tr data-toggle="modal" data-target="#modal-spearman"/>');
+            }
+            if(tableid == '#chi_table') {
+                var row$ = $('<tr data-toggle="modal" data-target="#modal-chi"/>');
+            }
+            if(tableid == '#chi-oe-table') {
+                var row$ = $('<tr>');
             }
             for (var colIndex = 0; colIndex < columns.length; colIndex++) {
                 var cellValue = jsondata[i][columns[colIndex]];
