@@ -2,157 +2,173 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Statistic Table</title>
+    <title>Statistical Table</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--For statistical computation-->
     <script src="js/stats.js"></script>
     <script src="js/shapiro-wilk.js"></script>
-    <script src="js/d3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
-    <script src="plots/scatterPlot.js"></script>
+    <!--For visualization-->
+    <script src="js/d3.min.js"></script>
+    <script src="plots/tableResultPlots.js"></script>
+    <script src="plots/MST.js"></script>
     <link rel="stylesheet" href="css/plots.css">
+    <!--For sortable, rows-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.css" rel="stylesheet">
+    <!--For sorttable, column-->
+    <script src="js/sorttable.js"></script>
+    <!--For filtering and sorting ascending, descending-->
+    <script src="js/excel-bootstrap-table-filter-bundle.js"></script>
+    <link rel="stylesheet" href="css/excel-bootstrap-table-filter-style.css">
 </head>
-<style>
-    body {
-        padding-top : 5px;
-        padding-left : 10px;
-        padding-right : 10px;
-    }
-    table {
-        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        font-size : 12px;
-    }
-
-    td, th {
-        border: 1px solid #ddd;
-        padding: 5px;
-    }
-
-    tr:nth-child(even){background-color: #f2f2f2;}
-
-    tr:hover {background-color: #ddd;}
-
-    th{
-        padding-top: 8px;
-        padding-bottom: 8px;
-        text-align: left;
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .chi-label{
-        padding-top: 8px;
-        padding-bottom: 8px;
-        text-align: left;
-        background-color: #4CAF50;
-        color: white;
-    }
-</style>
 <body>
+<!--Back to main page-->
 <div>
     <a href="statsMainpage.html" style="float : right;">Main page</a>
-    <h1>Result</h1>
 </div>
-<button type="button" id="summary_button" class="btn btn-info" data-toggle="collapse" data-target="#summary">Summary Statistic</button>
-<div id="summary" class="collapse">
-    <hr />
-    <table id="summary_table"></table>
-    <hr />
-</div>
-<br />
-<br/>
-<button type="button" id='spearman_button' class="btn btn-info" data-toggle="collapse" data-target="#spearman">Spearman Rank Correlation</button>
-<div id="spearman" class="collapse">
-    <hr />
-    <table id="spearman_table"></table>
-    <hr />
-</div>
-<br />
-<br/>
-<button type="button" id='kruskal_button' class="btn btn-info" data-toggle="collapse" data-target="#kruskal">Kruskal Wallis Test</button>
-<div id="kruskal" class="collapse">
-    <hr />
-    <table id="kruskal_table"></table>
-    <hr />
-</div>
-<br />
-<br/>
-<button type="button" id='chi_button' class="btn btn-info" data-toggle="collapse" data-target="#chi">Chi Square</button>
-<div id="chi" class="collapse">
-    <hr />
-    <table id="chi_table"></table>
-    <hr />
-</div>
-
-<div id="tooltip-container"></div>
-
-<!-- Modal for spearman-->
-<div class="modal fade" id="modal-spearman" tabindex="-1" role="dialog" aria-labelledby="ModalLabelSpearman" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabelSpearman">Spearman Scatter Plot</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="spearman-body" width="auto" height="auto">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+<!--Tabs of tables and MST-->
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#table-result">Tables</a></li>
+    <li><a data-toggle="tab" href="#mst-graph">MST Graph</a></li>
+</ul>
+<!--Tabs' content-->
+<div class="tab-content">
+    <!--Tab content of result tables-->
+    <div id="table-result" class="tab-pane fade in active">
+        <br />
+        <!--Button and table for Summary Statistics-->
+        <button type="button" id="summary_button" class="btn btn-info" data-toggle="collapse" data-target="#summary">Summary Statistic</button>
+        <div id="summary" class="collapse">
+            <hr />
+            <table id="summary_table"></table>
+            <hr />
         </div>
-    </div>
-</div>
+        <br />
+        <br/>
+        <!--Button and table for Spearman result-->
+        <button type="button" id='spearman_button' class="btn btn-info" data-toggle="collapse" data-target="#spearman">Spearman Rank Correlation</button>
+        <div id="spearman" class="collapse">
+            <hr />
+            <table id="spearman_table"></table>
+            <hr />
+        </div>
+        <br />
+        <br/>
+        <!--Button and table for Kruskal result-->
+        <button type="button" id='kruskal_button' class="btn btn-info" data-toggle="collapse" data-target="#kruskal">Kruskal Wallis Test</button>
+        <div id="kruskal" class="collapse">
+            <hr />
+            <table id="kruskal_table"></table>
+            <hr />
+        </div>
+        <br />
+        <br/>
+        <!--Button and table for Chi result-->
+        <button type="button" id='chi_button' class="btn btn-info" data-toggle="collapse" data-target="#chi">Chi Square</button>
+        <div id="chi" class="collapse">
+            <hr />
+            <table id="chi_table"></table>
+            <hr />
+        </div>
 
-<!-- Modal for Kruskal-->
-<div class="modal fade" id="modal-kruskal" tabindex="-1" role="dialog" aria-labelledby="ModalLabelKruskal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabelKruskal">Kruskal Wallis</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" width="auto" height="auto">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#kruskal-graph">Kruskal Wallis Scatter Plot</a></li>
-                        <li><a data-toggle="tab" href="#kruskal-dunn">Kruskal Wallis Post Hoc Dunn Test</a></li>
-                    </ul>
+        <!--Tooltip container-->
+        <div id="tooltip-container"></div>
 
-                    <div class="tab-content">
-                        <div id="kruskal-graph" class="tab-pane fade in active">
-                        </div>
-                        <div id="kruskal-dunn" class="tab-pane fade">
-                        </div>
+        <!-- Modal for spearman-->
+        <div class="modal fade" id="modal-spearman" tabindex="-1" role="dialog" aria-labelledby="ModalLabelSpearman" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabelSpearman">Spearman Scatter Plot</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <div class="modal-body" id="spearman-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+
+        <!-- Modal for Kruskal-->
+        <div class="modal fade" id="modal-kruskal" tabindex="-1" role="dialog" aria-labelledby="ModalLabelKruskal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabelKruskal">Kruskal Wallis</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#kruskal-graph">Kruskal Wallis Scatter Plot</a></li>
+                                <li><a data-toggle="tab" href="#kruskal-dunn">Kruskal Wallis Post Hoc Dunn Test</a></li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div id="kruskal-graph" class="tab-pane fade in active">
+                                </div>
+                                <div id="kruskal-dunn" class="tab-pane fade">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for chi-->
+        <div class="modal fade" id="modal-chi" tabindex="-1" role="dialog" aria-labelledby="ModalLabelChi" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabelChi">Chi Observed/Expected(Result) Table</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="chi-oe-table"></table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal for chi-->
-<div class="modal fade" id="modal-chi" tabindex="-1" role="dialog" aria-labelledby="ModalLabelChi" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabelChi">Chi Observed/Expected(Result) Table</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" width="auto" height="auto">
-                <table id="chi-oe-table"></table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+    <!--Tab content for MST graph-->
+    <div id="mst-graph" class="tab-pane fade">
+        <br/>
+        <!--Select Node Button and its menu-->
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#select_nodes">Select Nodes</button>
+        <div id="select_nodes" class="collapse">
+        </div>
+        <br />
+        <br/>
+        <!--Setting and its menu-->
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#mst_setting">Setting</button>
+        <div id="mst_setting" class="collapse">
+            Label upon double click : <br/>
+            <input type="checkbox" name="mst_setting" id='nodes_label' checked><span>Nodes Label</span><br/>
+            <input type="checkbox" name="mst_setting" id="paths_label" checked><span>Links Label</span><br/>
+            Link distance : <br/>
+            <input id='link_distance' style="width:120px;" type="range" min="0" max="1" step="any" value="0.5">
+            Link charge : <br/>
+            <input id='link_charge' style="width:120px;" type="range" min="0" max="1" step="any" value="0.5">
+            <p></p>
+            <button type="button" id="mst_setting_reset">Reset setting</button>
         </div>
     </div>
 </div>
@@ -162,8 +178,10 @@
     data = JSON.parse(sessionStorage.getItem('json_data'));
     data_titles = Object.keys(data);
 
+    // copy data to prevent any alteration on the original data
     var json_data = jQuery.extend(true, {}, data);
 
+    // Logic for computing summary statistic
     var summary = [];
 
     for(var i = 0; i < data_titles.length; i++){
@@ -181,6 +199,7 @@
         $('#summary').remove();
     }
 
+    // Save the name of the object by used_as_categorical and used_as_numerical attributes
     var use_category = [];
     var use_numerical = [];
 
@@ -194,14 +213,15 @@
         }
     }
 
+    // Remove 'No' attribute
     var index1 = use_numerical.indexOf('No.');
     var index2 = use_numerical.indexOf('No');
     if(index1 != -1) use_numerical.splice(index1,1);
     if(index2 != -1) use_numerical.splice(index2,1);
 
+    // Testing numerical and numerical
     var spearman = [];
 
-    // Testing numerical and numerical
     if(use_numerical.length > 1){
         for(var i = 0; i < use_numerical.length; i++){
             var x = use_numerical[i];
@@ -218,7 +238,7 @@
         }
     }
 
-//    spearman = addAdjPvalue(spearman);
+    spearman = addAdjPvalue(spearman);
 
     if(spearman.length != 0){
         BindTable(spearman, '#spearman_table');
@@ -238,6 +258,7 @@
                 var y = use_numerical[j];
                 var json_data = jQuery.extend(true, {}, data);
                 var result = runKruskalWallisTest(json_data[x],json_data[y]);
+                if(result == -1) continue;
                 var obj = {};
                 obj.x = x;
                 obj.y = y;
@@ -246,6 +267,8 @@
             }
         }
     }
+
+    kruskal = addAdjPvalue(kruskal);
 
     if(kruskal.length != 0){
         BindTable(kruskal, '#kruskal_table');
@@ -264,6 +287,7 @@
                 var y = use_category[j];
                 var json_data = jQuery.extend(true, {}, data);
                 var result = runChisquareTest(json_data[x],json_data[y]);
+                if(result == -1) continue;
                 var obj = {};
                 obj.x = x;
                 obj.y = y;
@@ -273,6 +297,8 @@
         }
     }
 
+    chi = addAdjPvalue(chi,1);
+
     if(chi.length != 0){
         BindTable(chi, '#chi_table');
     }else{
@@ -280,13 +306,14 @@
         $('#chi').remove();
     }
 
+    // Modal appears according to which table's row is clicked
     $('tr').click(function(){
         var type = $(this).parent().parent().attr('id');
-        if(type == 'summary') return;
+        if(type == 'summary_table') return;
         var x_name = $(this).children()[0].innerHTML;
         var y_name = $(this).children()[1].innerHTML;
         var json_data = jQuery.extend(true, {}, data);
-        if(type == 'spearman'){
+        if(type == 'spearman_table'){
             $('#spearman-body').empty();
             removeNA(json_data[x_name], json_data[y_name]);
             for(var i=0; i < spearman.length; i++){
@@ -297,7 +324,7 @@
             scatterPlotNumerical(spearman[i],json_data[x_name],json_data[y_name],x_name, y_name);
             return;
         }
-        if(type == 'kruskal'){
+        if(type == 'kruskal_table'){
             $('#kruskal-graph').empty();
             $('#kruskal-dunn').empty();
             removeNA(json_data[x_name], json_data[y_name]);
@@ -307,19 +334,18 @@
                 }
             }
             scatterPlotCategorical(kruskal[i],json_data[x_name],json_data[y_name],x_name, y_name);
-
             $('#kruskal-dunn').html('<div id="dunn">\n' +
                 '    <hr />\n' +
                 '    <table id="dunn_table"></table>\n' +
                 '    <hr />\n' +
                 '</div>\n');
-
             // Testing Categorical and Numerical
             var dunn = runKruskalWallisDunnPostHocTest(json_data[x_name],json_data[y_name]);
+            dunn = addAdjPvalue(dunn);
             BindTable(dunn, '#dunn_table');
             return;
         }
-        if(type == 'chi'){
+        if(type == 'chi_table'){
             $('#chi-oe-table').empty();
             var chi_oe_result = getChiOETable(json_data[x_name],json_data[y_name]);
             BindTable(chi_oe_result, '#chi-oe-table');
@@ -341,9 +367,103 @@
                     $(this).prepend('<td class="chi-label">' + value + '</td>');
                 }
             });
+
+            // Find maximum for < 1 and > 1
+            var min_lt = 999999;
+            var max_lt = -99999;
+            var max_mt = -99999;
+            var min_mt = 999999;
+
+            $('#chi-oe-table tr td').each(function(d,i){
+                var value = ($(this).html());
+                var index1 = value.indexOf('(');
+                var index2 = value.indexOf(')');
+                if(index1 != -1){
+                    value = Number(value.substring(index1+1,index2));
+                    if(value < 1){
+                        if(value < min_lt) min_lt = value;
+                        if(value > max_lt) max_lt = value;
+                    }
+                    if(value > 1){
+                        if(value < min_mt) min_mt = value;
+                        if(value > max_mt) max_mt = value;
+                    }
+                }
+            });
+
+            // Using d3 to scale the colour
+            var red_color = d3.scale.linear().clamp(true)
+                .domain([Number(min_mt), Number((max_mt/2)), Number(max_mt)])
+                .range(['yellow', 'orange', 'red']);
+
+            var blue_color = d3.scale.linear().clamp(true)
+                .domain([Number(min_lt), Number((max_lt/2)), Number(max_lt)])
+                .range(['PaleTurquoise', 'LightSkyBlue', 'RoyalBlue']);
+
+            // Coloring of the cell
+            $('#chi-oe-table tr td').each(function(d,i){
+                var value = ($(this).html());
+                var index1 = value.indexOf('(');
+                var index2 = value.indexOf(')');
+                if(index1 != -1){
+                    value = Number(value.substring(index1+1,index2));
+                    if(value == 1){
+                        $(this).css('background-color','white');
+                    }
+                    if(value < 1){
+                        $(this).css('background-color',blue_color(value));
+                    }
+                    if(value > 1){
+                        $(this).css('background-color', red_color(value));
+                    }
+                }
+            });
         }
     });
 
+    // 'nosort' class is added to not allow moving 'x' and 'y' column, this could mess up the code where getting x and y name during computing result
+    // filter class is added to allow for filtering and sorting
+    $('th').each(function(d){
+//        if($(this).html() == 'x' || $(this).html() == 'y'){
+//            $(this).attr('class','filter nosort');
+//        }else{
+            $(this).attr('class','filter nosort');
+//        }
+
+    });
+
+    // wrap the heading with thead to allow filtering and sorting
+    $('table').each(function(d){
+        $(this).children().eq(0).wrap( "<thead></thead>" );
+    });
+
+    // write over the excel style file
+    $('td').css('padding','5px');
+    $('th').css('padding','5px');
+
+    // Allow filtering of the table
+    $('#summary_table').excelTableFilter();
+    $('#spearman_table').excelTableFilter();
+    $('#kruskal_table').excelTableFilter();
+    $('#chi_table').excelTableFilter();
+
+    // Remove the arrow down at the headings, provided by exceltablefilter
+    $('.glyphicon').each(function(d){
+        $(this).removeClass('glyphicon-arrow-down');
+    })
+
+    // Allow sortable of rows and columns
+    // nosort is added so that nosort class will not be able to sorted by column
+    $('tbody').sortable();
+    $('#summary_table').sorttable({items: '>:not(.nosort)'}).disableSelection();
+    $('#spearman_table').sorttable({items: '>:not(.nosort)'}).disableSelection();
+    $('#kruskal_table').sorttable({items: '>:not(.nosort)'}).disableSelection();
+    $('#chi_table').sorttable({items: '>:not(.nosort)'}).disableSelection();
+
+    // Called for MST graph and its functions
+    MST(spearman, kruskal, chi);
+
+    //Combining two json data, used to add adjusted p value
     function combineJsonData(obj1,obj2){
         var obj = obj1;
         for(var j = 0; j < Object.keys(obj2).length; j++){
@@ -353,8 +473,10 @@
         return obj;
     }
 
+    // Bind jsondata into table
     function BindTable(jsondata, tableid) {/*Function used to convert the JSON array to Html Table*/
         var columns = BindTableHeader(jsondata, tableid); /*Gets all the column headings of Excel*/
+        $(tableid).append('<tbody>');
         for (var i = 0; i < jsondata.length; i++) {
             if(tableid == '#summary_table'){
                 var row$ = $('<tr/>');
@@ -382,6 +504,7 @@
             }
             $(tableid).append(row$);
         }
+        $(tableid).append('</tbody>');
     }
 
     function BindTableHeader(jsondata, tableid) {/*Function used to get all column names from JSON and bind the html table header*/
@@ -401,7 +524,6 @@
         $(tableid).append(headerTr$);
         return columnSet;
     }
-
 </script>
 </body>
 </html>

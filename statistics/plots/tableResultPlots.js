@@ -1,6 +1,8 @@
+// Scatter plot for spearman
+// x_data and y_data should already removed NA
 function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name) {
-    var margin = {top: 20, right: 40, bottom: 30, left: 40},
-        width = 600 - margin.left - margin.right,
+    var margin = {top: 20, right: 70, bottom: 30, left: 50},
+        width = 700 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
     // find minimum of x and y, cannot assume start from 0
@@ -69,15 +71,15 @@ function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name) {
         .text(x_name);
 
     svg.append("g")
-            .attr("class", "y axis")
-            .call(yAxis)
-            .append("text")
-            .attr("class", "label")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .style("text-anchor", "end")
-            .text(y_name);
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text(y_name);
 
     // Add tooltip
     var tooltip = d3.select("#tooltip-container").append("div")
@@ -120,11 +122,15 @@ function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name) {
         .on("mouseover", tipMouseover)
         .on("mouseout", tipMouseout);
 
-    var x_median = median(x_data);
-    var y_median = median(y_data);
-    var c = y_median - (spearman_result.rho * x_median);
-    var y1 = c;
-    var y2 = spearman_result.rho * max_x + c;
+    var regression_data = regression(x_data,y_data);
+
+    var line = d3.svg.line()
+        .x(function(d) {
+            return x(d.x);
+        })
+        .y(function(d) {
+            return y(d.yhat);
+        });
 
     // tooltip mouseover event handler
     var lineMouseOver = function(d) {
@@ -139,46 +145,75 @@ function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name) {
 
     };
 
-    svg.append("line")
-        .attr('class','spearman_corr_line')
+    svg.append("path")
+        .datum(regression_data)
+        .attr("class", "spearman_corr_line")
         .style("stroke", "black")
-        .attr("x1", x(0))
-        .attr("y1", y(y1))
-        .attr("x2", x(max_x))
-        .attr("y2", y(y2))
         .on("mouseover", lineMouseOver)
-        .on("mouseout", tipMouseout);
+        .on("mouseout", tipMouseout)
+        .attr("d", line);
 
     svg.append("text")
-        .attr("x", width/6)
+        .attr("x", 150)
         .attr("y", -15)
         .attr("dy", ".35em")
         .attr('font-weight', 'bold')
         .text('p-value : ' + spearman_result.pvalue);
+
+    svg.append("text")
+        .attr("x", 350)
+        .attr("y", -15)
+        .attr("dy", ".35em")
+        .attr('font-weight', 'bold')
+        .text('adj-pvalue : ' + spearman_result.pvalue_adj);
 }
 
-function median(x){
-    var sort_x = x.slice(0);
-    sort_x.sort(function(a, b){return a-b});
-    for(var i = 0; i < sort_x.length; i++){
-        if(sort_x[i] == null || sort_x[i] == ''){
-            sort_x.splice(i,1);
-        }
+// Regression function
+function regression(x_data,y_data) {
+    var x = x_data;
+    var y = y_data;
+    var n = x_data.length;
+    var x_mean = 0;
+    var y_mean = 0;
+    var term1 = 0;
+    var term2 = 0;
+    // calculate mean x and y
+    x_mean /= n;
+    y_mean /= n;
+    // calculate coefficients
+    var xr = 0;
+    var yr = 0;
+    for (i = 0; i < x.length; i++) {
+        xr = x[i] - x_mean;
+        yr = y[i] - y_mean;
+        term1 += xr * yr;
+        term2 += xr * xr;
+
     }
-    var val = x.length/2;
-    if(x.length % 2 == 1){
-        val = Math.floor(val);
-        return sort_x[val];
-    }else{
-        var val1 = sort_x[val];
-        var val2 = sort_x[val - 1];
-        return (Number(val1) + Number(val2))/2;
+    var b1 = term1 / term2;
+    var b0 = y_mean - (b1 * x_mean);
+    // perform regression
+    yhat = [];
+    // fit line using coeffs
+    for (i = 0; i < x.length; i++) {
+        yhat.push(b0 + (x[i] * b1));
     }
+    var data = [];
+    for (i = 0; i < y.length; i++) {
+        data.push({
+            "yhat": yhat[i],
+            "y": y[i],
+            "x": x[i]
+        })
+    }
+    return (data);
 }
 
+// Scatter plot for kruskal wallis
+// x_data and y_data has been cleaned from NA
 function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
-    var margin = {top: 50, right: 40, bottom: 30, left: 40},
-        width = 600 - margin.left - margin.right,
+    var margin = {top: 50, right: 70, bottom: 30, left: 50},
+        width = 900 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
     // find minimum of x and y, cannot assume start from 0
@@ -220,12 +255,31 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
         .scale(y)
         .orient("left");
 
+    var store_count = [];
     var data = [];
     for(var i = 0; i < x_data.length; i++){
+        var temp = 0;
         var obj = {};
-        obj.x = x_data[i];
+        obj.x = x(x_data[i]);
+        obj.x_name = x_data[i];
         obj.y = y_data[i];
         data.push(obj);
+        for(var j = 0; j < store_count.length; j++){
+            if(store_count[j].x == x_data[i]){
+                if(store_count[j].y == y_data[i]){
+                    store_count[j].count++;
+                    obj.x = x(x_data[i]) + store_count[j].count * 5;
+                    temp = 1;
+                }
+            }
+        }
+        if(temp == 0) {
+            var temp_obj = {};
+            temp_obj.x = x_data[i];
+            temp_obj.y = y_data[i];
+            temp_obj.count = 0;
+            store_count.push(temp_obj);
+        }
     }
 
     y.domain([min_y,max_y]);
@@ -247,16 +301,16 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
         .style("text-anchor", "end")
         .text(x_name);
 
-     svg.append("g")
-            .attr("class", "y axis")
-            .call(yAxis)
-            .append("text")
-            .attr("class", "label")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .style("text-anchor", "end")
-            .text(y_name);
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text(y_name);
 
     // Add tooltip
     var tooltip = d3.select("#tooltip-container").append("div")
@@ -265,7 +319,7 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
 
     // tooltip mouseover event handler
     var tipMouseover = function(d) {
-        var html  = '<span>x : </span>' + d.x + '<br/><span>y : </span>' + d.y;
+        var html  = '<span>x : </span>' + d.x_name + '<br/><span>y : </span>' + d.y;
 
         tooltip.html(html)
             .style("left", (d3.event.pageX + 15) + "px")
@@ -288,7 +342,7 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
         .attr("class", "dot")
         .attr("r", 3.5)
         .attr("cx", function (d) {
-            return x(d.x);
+            return d.x;
         })
         .attr("cy", function (d) {
             return y(d.y);
@@ -338,10 +392,86 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
             .on("mouseout", tipMouseout);
 
         svg.append("text")
-            .attr("x", width/6)
+            .attr("x", 250)
             .attr("y", -15)
             .attr("dy", ".35em")
             .attr('font-weight', 'bold')
             .text('p-value : ' + kruskal_result.pvalue);
+
+        svg.append("text")
+            .attr("x", 450)
+            .attr("y", -15)
+            .attr("dy", ".35em")
+            .attr('font-weight', 'bold')
+            .text('adj-pvalue : ' + kruskal_result.pvalue_adj);
     }
+}
+
+// Input : Two arrays of x and y
+// Output : An object with keys : observed, expected
+// To get observed and expected value to plot the table when rows in chi table is clicked
+function getChiOETable(x,y){
+    removeNA(x,y);
+    var result = [];
+    // transform the categorical value to count data table
+    var obj = {};
+    obj = transfromToCountData(x,y);
+    // find row total and column total
+    var row_total = [];
+    var column_total = [];
+    var all_total = 0;
+    // row total
+    for(var i = 0; i < Object.keys(obj).length; i++){
+        var key_x = Object.keys(obj)[i];
+        var total = 0;
+        for(var j = 0; j < Object.keys(obj[key_x]).length; j++){
+            var key_y = Object.keys(obj[key_x])[j];
+            total += obj[key_x][key_y];
+        }
+        all_total += total;
+        row_total.push(total);
+    }
+    // column total
+    var column_titles = [];
+    for(var i = 0; i < Object.keys(obj).length; i++){
+        var key_x = Object.keys(obj)[i];
+        column_titles = Object.keys(obj[key_x]);
+        break;
+    }
+    for(var i = 0; i < column_titles.length; i++){
+        var total = 0;
+        var key_y = column_titles[i];
+        for(var j = 0; j < Object.keys(obj).length; j++){
+            var key_x = Object.keys(obj)[j];
+            total += obj[key_x][key_y];
+        }
+        column_total.push(total);
+    }
+    // count the expected frequency count
+    var exp = jQuery.extend(true, {}, obj);
+    // using same data structure as obj
+    for(var i = 0; i < Object.keys(exp).length; i++){
+        var key_x = Object.keys(exp)[i];
+        for(var j = 0; j < Object.keys(exp[key_x]).length; j++){
+            var key_y = Object.keys(exp[key_x])[j];
+            exp[key_x][key_y] = row_total[i] * column_total[j] / all_total;
+        }
+    }
+    for(var i = 0; i < Object.keys(obj).length; i++){
+        var key = Object.keys(obj)[i];
+        var temp = {};
+        temp['xxx'] = key;
+        for(var j = 0; j < Object.keys(obj[key]).length; j++){
+            var key2 = Object.keys(obj[key])[j];
+            var observed = obj[key][key2];
+            var expected = exp[key][key2];
+            var oe = observed/expected;
+            observed = observed.toPrecision(4);
+            expected = expected.toPrecision(4);
+            oe = oe.toPrecision(4);
+            temp[key2] = observed + '/' + expected + '(' + oe + ')';
+        }
+        result.push(temp);
+    }
+    return result;
 }

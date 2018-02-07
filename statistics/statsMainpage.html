@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--A Plugin to get data from an excel file after uploaded the data -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xls/0.7.4-a/xls.core.min.js"></script>
 </head>
@@ -16,23 +17,25 @@
     }
 </style>
 <body>
-<h1>Input Data</h1>
-<p>Choose an excel file:</p>
-<input type="file" id="excelfile" />
-<p id="sheets_choice_text" style="visibility: hidden">Select one sheet from the excel file submitted:</p>
-<select name="sheets_choice" style="visibility: hidden"></select>
-<br/>
-<input type="button" id="viewfile" value="Submit File" onclick="SubmitFile();" />
-<br />
-<hr />
-<p>Or copy and paste/drag and drop table here:</p>
-<textarea name="textbox" style="width:250px;height:150px;" placeholder="null"></textarea><br>
-<input type="button" onclick="javascript:getData();" value="Submit Table"/>
-<br><br>
+    <h1>Input Data</h1>
+    <p>Choose an excel file:</p>
+    <input type="file" id="excelfile" />
+    <p id="sheets_choice_text" style="visibility: hidden">Select one sheet from the excel file submitted:</p>
+    <select name="sheets_choice" style="visibility: hidden"></select>
+    <br/>
+    <input type="button" id="viewfile" value="Submit File" onclick="SubmitFile();" />
+    <br />
+    <hr />
+    <p>Or copy and paste/drag and drop table here:</p>
+    <textarea name="textbox" style="width:250px;height:150px;" placeholder="null"></textarea><br>
+    <input type="button" onclick="javascript:getData();" value="Submit Table"/>
+    <br><br>
 </body>
 <script type="text/javascript">
     var json_data = {};
     var data_titles = [];
+
+    // When the user load excel file
     function SubmitFile() {
         var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xlsx|.xls)$/;
         /*Checks whether the file is a valid excel file*/
@@ -138,34 +141,29 @@
         }
     }
 
+    // When the user copy paste excel table
     function getData() {
         var data = $('textarea[name=textbox]').val();
-
         if(!data){
             alert('Please input a table!');
             return;
         }
-
         var rows = data.split("\n");
-
         var table = $('<table />');
-
         data_titles = rows[0].split("\t");
-
         for(var i = 0; i < data_titles.length; i++){
             json_data[data_titles[i]] = [];
         }
-
         for(var i = 1; i < rows.length; i++){
             var cells = rows[i].split("\t");
             for(var j = 0; j < data_titles.length; j++){
                 json_data[data_titles[j]].push(cells[j]);
             }
         }
-
         sendValue();
     }
 
+    // Storing the value in session storage for next html
     function sendValue(){
         if(Object.keys(json_data).length > 0) {
             sessionStorage.setItem('json_data', JSON.stringify(json_data));

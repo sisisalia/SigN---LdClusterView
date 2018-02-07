@@ -17,8 +17,8 @@
       <file leaf-file-name="statsMainpage.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/statsMainpage.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="106" column="68" lean-forward="true" selection-start-line="106" selection-start-column="68" selection-end-line="106" selection-end-column="68" />
+            <state relative-caret-position="434">
+              <caret line="163" column="5" lean-forward="true" selection-start-line="163" selection-start-column="5" selection-end-line="163" selection-end-column="5" />
               <folding>
                 <element signature="n#style#0;n#p#1;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#select#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -28,22 +28,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="stats.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
+      <file leaf-file-name="keep.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/plots/keep.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="227" column="26" lean-forward="true" selection-start-line="227" selection-start-column="26" selection-end-line="227" selection-end-column="26" />
+            <state relative-caret-position="12775">
+              <caret line="511" column="1" lean-forward="false" selection-start-line="511" selection-start-column="1" selection-end-line="511" selection-end-column="1" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="scatterPlot.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/plots/scatterPlot.js">
+      <file leaf-file-name="tableResultPlots.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/plots/tableResultPlots.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="53" column="39" lean-forward="false" selection-start-line="53" selection-start-column="39" selection-end-line="53" selection-end-column="39" />
-              <folding />
+            <state relative-caret-position="11875">
+              <caret line="476" column="1" lean-forward="false" selection-start-line="476" selection-start-column="1" selection-end-line="476" selection-end-column="1" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -51,13 +53,26 @@
       <file leaf-file-name="statsTableResult.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/statistics/statsTableResult.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="534">
-              <caret line="146" column="21" lean-forward="false" selection-start-line="146" selection-start-column="21" selection-end-line="146" selection-end-column="21" />
+            <state relative-caret-position="-1037">
+              <caret line="429" column="47" lean-forward="false" selection-start-line="429" selection-start-column="47" selection-end-line="429" selection-end-column="47" />
               <folding>
-                <element signature="e#3108#3115#1" expanded="true" />
-                <element signature="e#3958#3965#1" expanded="true" />
-                <element signature="e#5389#5396#1" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="e#4040#4047#1" expanded="true" />
+                <element signature="e#5007#5014#1" expanded="true" />
+                <element signature="e#6635#6642#1" expanded="true" />
+                <element signature="n#style#0;n#input#2;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#3;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="shapiro-wilk.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/js/shapiro-wilk.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="3" column="30" lean-forward="false" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="30" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -65,8 +80,52 @@
       <file leaf-file-name="plots.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/css/plots.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="750">
-              <caret line="30" column="22" lean-forward="false" selection-start-line="30" selection-start-column="22" selection-end-line="30" selection-end-column="22" />
+            <state relative-caret-position="3475">
+              <caret line="139" column="11" lean-forward="false" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sorttable.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/js/sorttable.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2909">
+              <caret line="233" column="11" lean-forward="false" selection-start-line="233" selection-start-column="11" selection-end-line="233" selection-end-column="11" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="try.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/try.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1225">
+              <caret line="49" column="19" lean-forward="false" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="stats.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="263">
+              <caret line="540" column="24" lean-forward="true" selection-start-line="540" selection-start-column="24" selection-end-line="540" selection-end-column="24" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MST.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/plots/MST.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="659">
+              <caret line="588" column="5" lean-forward="true" selection-start-line="588" selection-start-column="5" selection-end-line="588" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -77,36 +136,15 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="HTML File" />
+        <option value="tsconfig.json" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>summar</find>
-      <find>runsp</find>
-      <find>console.log</find>
-      <find>spearm</find>
-      <find>kruskal</find>
-      <find>spearman</find>
-      <find>krusk</find>
-      <find>getdf</find>
-      <find>cdf</find>
-      <find>ci</find>
-      <find>get</find>
-      <find>trans</find>
-      <find>.sort</find>
-      <find>min</find>
-      <find>kruska</find>
-      <find>sort</find>
-      <find>confiu</find>
-      <find>54545515</find>
-      <find>cg01718139</find>
-      <find>configure</find>
-      <find>configuration</find>
-      <find>drag</find>
       <find>connectedSortable</find>
       <find>missingf</find>
       <find>countca</find>
@@ -114,7 +152,29 @@
       <find>line</find>
       <find>medi</find>
       <find>console</find>
+      <find>type</find>
+      <find>svg</find>
+      <find>disjoin</find>
+      <find>setContaining</find>
+      <find>start_pt</find>
+      <find>opacity</find>
+      <find>stroke</find>
+      <find>toe</find>
+      <find>toExponential(4)</find>
       <find>chi</find>
+      <find>kruska</find>
+      <find>bord</find>
+      <find>toolti</find>
+      <find>remove</find>
+      <find>red</find>
+      <find>krusk</find>
+      <find>value</find>
+      <find>10</find>
+      <find>checkbox</find>
+      <find>nodes_label</find>
+      <find>td</find>
+      <find>mst</find>
+      <find>titles</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -140,7 +200,6 @@
         <option value="$PROJECT_DIR$/modular/resources/js/data/getData.js" />
         <option value="$PROJECT_DIR$/modular/try.html" />
         <option value="$PROJECT_DIR$/modular/statsMainpage.html" />
-        <option value="$PROJECT_DIR$/statistics/statsMainpage.html" />
         <option value="$PROJECT_DIR$/statistics/shapiro-wilk2.js" />
         <option value="$PROJECT_DIR$/statistics/shapiro-wilk.js" />
         <option value="$PROJECT_DIR$/modular/ajaxCall.js" />
@@ -152,10 +211,20 @@
         <option value="$PROJECT_DIR$/modular/mainpage.html" />
         <option value="$PROJECT_DIR$/statistics/stats.js" />
         <option value="$PROJECT_DIR$/statistics/js.js" />
-        <option value="$PROJECT_DIR$/statistics/try.html" />
-        <option value="$PROJECT_DIR$/statistics/css/plots.css" />
+        <option value="$PROJECT_DIR$/statistics/js/sortable.js" />
+        <option value="$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/dist/example.html" />
+        <option value="$PROJECT_DIR$/statistics/js/sorttable.js" />
         <option value="$PROJECT_DIR$/statistics/plots/scatterPlot.js" />
+        <option value="$PROJECT_DIR$/statistics/statsMainpage.html" />
+        <option value="$PROJECT_DIR$/statistics/tsconfig.json" />
+        <option value="$PROJECT_DIR$/statistics/try1.html" />
+        <option value="$PROJECT_DIR$/statistics/try.html" />
         <option value="$PROJECT_DIR$/statistics/js/stats.js" />
+        <option value="$PROJECT_DIR$/statistics/plots/keep.js" />
+        <option value="$PROJECT_DIR$/statistics/css/excel-bootstrap-table-filter-style.css" />
+        <option value="$PROJECT_DIR$/statistics/css/plots.css" />
+        <option value="$PROJECT_DIR$/statistics/plots/tableResultPlots.js" />
+        <option value="$PROJECT_DIR$/statistics/plots/MST.js" />
         <option value="$PROJECT_DIR$/statistics/statsTableResult.html" />
       </list>
     </option>
@@ -167,8 +236,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-289" />
-    <option name="y" value="43" />
+    <option name="x" value="628" />
+    <option name="y" value="15" />
     <option name="width" value="1477" />
     <option name="height" value="989" />
   </component>
@@ -188,54 +257,13 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="FYP" type="b2602c69:ProjectViewProjectNode" />
               <item name="FYP" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FYP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FYP" type="462c0819:PsiDirectoryNode" />
-              <item name="modular" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FYP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FYP" type="462c0819:PsiDirectoryNode" />
-              <item name="modular" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FYP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FYP" type="462c0819:PsiDirectoryNode" />
-              <item name="modular" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FYP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FYP" type="462c0819:PsiDirectoryNode" />
-              <item name="modular" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FYP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FYP" type="462c0819:PsiDirectoryNode" />
-              <item name="modular" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-              <item name="plots" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FYP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FYP" type="462c0819:PsiDirectoryNode" />
-              <item name="modular" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-              <item name="utilities" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="FYP" type="b2602c69:ProjectViewProjectNode" />
@@ -264,7 +292,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -275,15 +302,15 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\FYP folder\FYP\statistics\js" />
-      <recent name="D:\FYP folder\SigN---LdClusterViewer-master\modular" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\FYP folder\FYP\statistics\js" />
       <recent name="D:\FYP folder\FYP\statistics" />
       <recent name="D:\FYP folder\FYP" />
       <recent name="D:\FYP folder\FYP\modular\resources\js\statistics" />
+      <recent name="D:\FYP folder\SigN---LdClusterViewer-master\modular" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\FYP folder\FYP\statistics\js" />
       <recent name="D:\FYP folder\SigN---LdClusterViewer-master\modular" />
     </key>
   </component>
@@ -351,20 +378,26 @@
       <workItem from="1516928039816" duration="18960000" />
       <workItem from="1517152412595" duration="684000" />
       <workItem from="1517193505087" duration="4665000" />
-      <workItem from="1517210034247" duration="27605000" />
+      <workItem from="1517210034247" duration="28473000" />
+      <workItem from="1517299781236" duration="14144000" />
+      <workItem from="1517377431270" duration="2286000" />
+      <workItem from="1517572629624" duration="20105000" />
+      <workItem from="1517633310722" duration="23804000" />
+      <workItem from="1517919513313" duration="45703000" />
+      <workItem from="1518012034790" duration="257000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="338611000" />
+    <option name="totallyTimeSpent" value="445778000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17552084" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1953125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1149033" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1149033" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -375,6 +408,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32992035" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -406,27 +440,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="5" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/jerzy.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/test/normality.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/index.html" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/package.json" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/shapiro-wilk-p-value.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/distributions.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/matrix.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/nonparametric.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/normality.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/numeric.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/power.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/regression.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/browser.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/vector.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/t.js" />
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/misc.js" />
     <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/factor.js" />
     <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/confidence.js" />
     <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/anova.js" />
@@ -461,13 +479,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/shapiro-wilk2.js" />
-    <entry file="file://$PROJECT_DIR$/statistics/js/shapiro-wilk.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="3" column="30" lean-forward="false" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modular/ajaxCall.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="350">
@@ -589,42 +600,102 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/js/sortable.js" />
+    <entry file="file://$PROJECT_DIR$/statistics/js/jquery.dragtable.js" />
+    <entry file="file://$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/package.json" />
+    <entry file="file://$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/rollup.config.js" />
+    <entry file="file://$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/README.adoc" />
+    <entry file="file://$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/dist/example.html" />
+    <entry file="file://$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/src/FilterCollection.ts" />
+    <entry file="file://$PROJECT_DIR$/statistics/js/excel-bootstrap-table-filter-bundle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2400">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/js/jquery-ui-1.12.4.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/plots/scatterPlot.js" />
+    <entry file="file://$PROJECT_DIR$/statistics/tsconfig.json" />
+    <entry file="file://$PROJECT_DIR$/statistics/try1.html" />
+    <entry file="file://$PROJECT_DIR$/statistics/css/excel-bootstrap-table-filter-style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="1" column="23" lean-forward="false" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/js/shapiro-wilk.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="3" column="30" lean-forward="false" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/plots/keep.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12775">
+          <caret line="511" column="1" lean-forward="false" selection-start-line="511" selection-start-column="1" selection-end-line="511" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/try.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="52" column="44" lean-forward="false" selection-start-line="52" selection-start-column="44" selection-end-line="52" selection-end-column="44" />
+        <state relative-caret-position="1225">
+          <caret line="49" column="19" lean-forward="false" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/css/plots.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="750">
-          <caret line="30" column="22" lean-forward="false" selection-start-line="30" selection-start-column="22" selection-end-line="30" selection-end-column="22" />
+        <state relative-caret-position="3475">
+          <caret line="139" column="11" lean-forward="false" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/plots/scatterPlot.js">
+    <entry file="file://$PROJECT_DIR$/statistics/plots/tableResultPlots.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="53" column="39" lean-forward="false" selection-start-line="53" selection-start-column="39" selection-end-line="53" selection-end-column="39" />
+        <state relative-caret-position="11875">
+          <caret line="476" column="1" lean-forward="false" selection-start-line="476" selection-start-column="1" selection-end-line="476" selection-end-column="1" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/plots/MST.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="659">
+          <caret line="588" column="5" lean-forward="true" selection-start-line="588" selection-start-column="5" selection-end-line="588" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="227" column="26" lean-forward="true" selection-start-line="227" selection-start-column="26" selection-end-line="227" selection-end-column="26" />
-          <folding />
+        <state relative-caret-position="263">
+          <caret line="540" column="24" lean-forward="true" selection-start-line="540" selection-start-column="24" selection-end-line="540" selection-end-column="24" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/statsMainpage.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="106" column="68" lean-forward="true" selection-start-line="106" selection-start-column="68" selection-end-line="106" selection-end-column="68" />
+        <state relative-caret-position="434">
+          <caret line="163" column="5" lean-forward="true" selection-start-line="163" selection-start-column="5" selection-end-line="163" selection-end-column="5" />
           <folding>
             <element signature="n#style#0;n#p#1;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#select#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -633,14 +704,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/js/sorttable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2909">
+          <caret line="233" column="11" lean-forward="false" selection-start-line="233" selection-start-column="11" selection-end-line="233" selection-end-column="11" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/statsTableResult.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="146" column="21" lean-forward="false" selection-start-line="146" selection-start-column="21" selection-end-line="146" selection-end-column="21" />
+        <state relative-caret-position="-1037">
+          <caret line="429" column="47" lean-forward="false" selection-start-line="429" selection-start-column="47" selection-end-line="429" selection-end-column="47" />
           <folding>
-            <element signature="e#3108#3115#1" expanded="true" />
-            <element signature="e#3958#3965#1" expanded="true" />
-            <element signature="e#5389#5396#1" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#4040#4047#1" expanded="true" />
+            <element signature="e#5007#5014#1" expanded="true" />
+            <element signature="e#6635#6642#1" expanded="true" />
+            <element signature="n#style#0;n#input#2;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#3;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

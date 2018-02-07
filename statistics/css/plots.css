@@ -1,3 +1,44 @@
+body {
+    padding-top : 5px;
+    padding-left : 10px;
+    padding-right : 10px;
+}
+
+/*Result table plot*/
+table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    font-size : 12px;
+}
+
+#chi-oe-table td, #dunn_table td{
+    padding: 8px;
+}
+
+td, th {
+    border: 1px solid #ddd;
+    margin : 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:hover {background-color: #ddd;}
+
+#chi-oe-table th, #dunn_table th, th{
+    padding: 8px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.chi-label{
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
 .axis path,
 .axis line {
     fill: none;
@@ -7,6 +48,11 @@
 
 .dot {
     stroke: #000;
+}
+
+.modal-body{
+    width : auto;
+    height: auto;
 }
 
 .modal-dialog{
@@ -30,4 +76,74 @@
     padding-left : 8px;
     padding-right : 8px;
     border-radius: 12px;
+}
+
+path {
+    fill: #ddd;
+    fill-opacity: .8;
+    stroke: #fff;
+    stroke-width: 1px;
+}
+circle {
+    stroke-width: 1px;
+    stroke: #444;
+}
+line {
+    stroke: #999;
+}
+line.notused {
+    stroke-dasharray: 5,5;
+}
+line.checking {
+    stroke: black;
+    stroke-width: 2px;
+}
+line.selected {
+    stroke-width: 2px;
+}
+
+/*MST*/
+#select_nodes{
+    position : relative;
+    z-index: 1;
+    width: fit-content;
+    height: fit-content;
+    font-size : 12px;
+    opacity: 0.9;
+    background : whitesmoke;
+    border-radius: 10px;
+    padding : 10px;
+    padding-top : 5px;
+    padding-bottom : 5px;
+    margin-top : 10px;
+}
+
+#mst_setting{
+    position : relative;
+    z-index: 1;
+    width: fit-content;
+    height: fit-content;
+    font-size : 12px;
+    opacity: 0.9;
+    background : whitesmoke;
+    border-radius: 10px;
+    padding : 10px;
+    padding-top : 5px;
+    padding-bottom : 5px;
+    margin-top : 10px;
+}
+
+.select_nodes_label {
+    padding-left : 5px;
+}
+
+#mst-graph svg {
+    position: absolute;
+    left: 120px;
+    top: 70px;
+    z-index: 2;
+}
+
+.node_text{
+    font-size : 12px;
 }
