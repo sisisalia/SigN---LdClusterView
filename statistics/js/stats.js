@@ -2,20 +2,19 @@
 // Output : an object with keys : type, unique_n, n, missing_fraction, mean, median, min, max, sd, shapiro_wilk_normal_pvalue, use_as_numeric, use_as_categorical, num_min_count_group
 function computeSummaryStatistics(x){
     var obj = {};
-    if(!x.some(isNaN)) obj.type = 'numerical';
+    if(!x.some(isNaN)) obj.type ='numerical';
     else obj.type = 'categorical';
-    obj.unique_n = isUnique_n(x);
     obj.missing_fraction = (missingFraction(x)).toPrecision(3);
     obj.n = Math.round(x.length - obj.missing_fraction * x.length);
-    // yes if the unique value is >= 10
-    if(obj.unique_n < 10){
+    obj.unique_n = isUnique_n(x);
+    if(obj.unique_n <= 10) {
         obj.used_as_categorical = 'yes';
         obj.used_as_numerical = 'no';
     }else{
         obj.used_as_categorical = 'no';
         obj.used_as_numerical = 'yes';
     }
-    if(obj.type == 'categorical'){
+    if(obj.used_as_categorical == 'yes'){
         obj.mean = 'NA';
         obj.median = 'NA';
         obj.min = 'NA';
@@ -23,10 +22,6 @@ function computeSummaryStatistics(x){
         obj.sd = 'NA';
         obj.shapiro_wilk_normal_pvalue = "NA";
         obj.num_min_count_group = countCategoricalGroup(x);
-        if(obj.num_min_count_group < 2){
-            obj.used_as_categorical = 'no';
-            obj.used_as_numerical = 'no';
-        }
         return obj;
     }else{
         obj.mean = mean(x).toPrecision(3);
@@ -34,6 +29,8 @@ function computeSummaryStatistics(x){
         obj.min = min(x);
         obj.max = max(x);
         obj.sd = standardDeviation(x).toPrecision(3);
+        obj.used_as_categorical = 'no';
+        obj.used_as_numerical = 'yes';
         // Shapiro walk -> for sample size 3 - 2000
         // Check if the sample size is btwn 3 and 2000
         if(x.length < 3 && x.length > 2000){
@@ -88,7 +85,7 @@ function corrSpearman(x,y){
 function runKruskalWallisTest(x,y){
     // remove NA
     removeNA(x,y);
-    var df = getDF(x,y);
+    var df = getDF(x);
     if(df == 0) return -1;
     var obj = transformToCategory(x,y);
     var array = y.slice(0);
@@ -330,23 +327,30 @@ function runChisquareTest(x,y){
 // This function will count how many groups which has more than 3 samples
 // Only apply for categorical type
 function countCategoricalGroup(x){
+    var result = 0;
     var counter = 0;
     var groups = [];
     for(var i = 0; i < x.length; i++){
         if(x[i] == '' || x[i] == null) continue;
-        if(!window[x[i]]){
-            window[x[i]] = 1;
+        var index = groups.indexOf(x[i]);
+        if(index == -1){
             groups.push(x[i]);
-        }else{
-            window[x[i]]++;
         }
     }
     for(var i = 0; i < groups.length; i++){
-        if(window[groups[i]] >= 3){
-            counter++;
+        for(var j = 0; j < x.length; j++){
+            if(x[j] == '' || x[j] == null) continue;
+            if(x[j] == groups[i]){
+                counter++;
+            }
+            if(counter >= 3){
+                result++;
+                break;
+            }
         }
+        counter = 0;
     }
-    return counter;
+    return result;
 }
 
 // Input : An array
@@ -366,20 +370,15 @@ function missingFraction(x){
 // Output : A number
 // return a number to see how many items in array are unique
 function isUnique_n(x){
-    var counter = 0;
-    var copy = x.slice(0);
-    while(copy.length != 0){
-        var temp = copy[0];
-        copy.splice(0,1);
-        if(temp == null || temp == '') continue;
-        var index = copy.indexOf(temp);
-        counter++;
-        while(index != -1){
-            copy.splice(index,1);
-            index = copy.indexOf(temp);
+    var groups = [];
+    for(var i = 0; i < x.length; i++){
+        if(x[i] == '' || x[i] == null) continue;
+        var index = groups.indexOf(x[i]);
+        if(index == -1){
+            groups.push(x[i]);
         }
     }
-    return counter;
+    return groups.length;
 }
 
 // Input : Two arrays of x and y
@@ -540,6 +539,7 @@ function getDF(x,y){
 // Remove NA, it is directly remove the arrays passed on the parameter
 function removeNA(x,y) {
     //remove 'NA' record
+    if(!x || !y) return;
     for(var i = 0; i < x.length; i++){
         if(x[i] == null || x[i] == ''){
             x.splice(i,1);
@@ -557,35 +557,61 @@ function removeNA(x,y) {
     return;
 }
 
-// rank the p value individually
-// formula = individual rank/ number of test * percentage of error
-// there x need to accept an array of json object
+// following R logic of adjusted p value
 // return the json object with added adj p value
 function addAdjPvalue(x,chi){
-    // extract the unique p value
-    var array_pvalue = [];
+    var n = x.length;
+    var result = Array(n);
+    var temp_p_value = [];
+    var array_p_value = [];
     for(var i = 0; i < x.length; i++){
         if(chi == 1){
-            var pvalue = x[i].chisq_pvalue;
+            // console.log('CHI');
+            var p_value = x[i].chisq_pvalue;
         }else{
-            var pvalue = x[i].pvalue;
+            var p_value = x[i].pvalue;
         }
-        var index = array_pvalue.indexOf(pvalue);
-        if(index == -1){
-            array_pvalue.push(pvalue);
-        }
+        array_p_value.push(p_value);
+        // var index = temp_p_value.indexOf(p_value);
+        // if(index == -1){
+            temp_p_value.push(p_value);
+        // }
     }
-    // sort the p value accordingly
-    array_pvalue.sort(function(a, b){return a-b});
-    var no_tests = x.length;
-    var percentage_error = 0.25;
+    // descending order
+    temp_p_value.sort(function(a, b){return Number(b)-Number(a)});
+    var o = [];
+    for(var i = 0; i < temp_p_value.length; i++){
+        var index = array_p_value.indexOf(temp_p_value[i]);
+        // Prevent having same index, hence if same p value, it will increment
+        while(o.indexOf(index) != -1){
+            index++;
+        }
+        o.push(index);
+    }
+    var last_min;
     for(var i = 0; i < x.length; i++){
         if(chi == 1){
-            var rank = array_pvalue.indexOf(x[i].chisq_pvalue);
+            var res = x.length/(x.length - i) * x[o[i]].chisq_pvalue;
         }else{
-            var rank = array_pvalue.indexOf(x[i].pvalue);
+            var res = x.length/(x.length - i) * x[o[i]].pvalue;
         }
-        x[i].pvalue_adj = ((rank + 1)/no_tests * percentage_error).toExponential(5);
+        if(res > 1){
+            res = 1;
+        }
+        if(!last_min) last_min = res;
+        if(res > last_min){
+            res = last_min;
+        }
+        result[o[i]] = res;
     }
+    // console.log(x.length);
+    // console.log(result);
+    for(var i = 0; i < result.length; i++){
+        if(!result[i] && result[i] != 0) console.log('result undefined');
+    }
+    for(var i = 0; i < x.length; i++){
+        x[i].pvalue_adj = result[i];
+    }
+    // console.log(x);
     return x;
 }

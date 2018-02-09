@@ -204,20 +204,20 @@
     var use_numerical = [];
 
     for(var i = 0; i < summary.length; i++){
+        if(summary[i].name == 'No.' || summary[i].name == 'subject_id') continue;
+        // subject id and no
         if(summary[i].used_as_categorical == 'yes'){
+            // if categorical value has less than min group count of 2, do not test
+            if(summary[i].num_min_count_group < 2) continue;
             use_category.push(summary[i].name);
             continue;
         }
         if(summary[i].used_as_numerical == 'yes'){
+            // if numerical value has less than 10 unique value, do not test
+            if(summary[i].unique_n < 10) continue;
             use_numerical.push(summary[i].name);
         }
     }
-
-    // Remove 'No' attribute
-    var index1 = use_numerical.indexOf('No.');
-    var index2 = use_numerical.indexOf('No');
-    if(index1 != -1) use_numerical.splice(index1,1);
-    if(index2 != -1) use_numerical.splice(index2,1);
 
     // Testing numerical and numerical
     var spearman = [];
@@ -310,8 +310,9 @@
     $('tr').click(function(){
         var type = $(this).parent().parent().attr('id');
         if(type == 'summary_table') return;
-        var x_name = $(this).children()[0].innerHTML;
-        var y_name = $(this).children()[1].innerHTML;
+        // '>' will appear as &gt; hence need to replace
+        var x_name = $(this).children()[0].innerHTML.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+        var y_name = $(this).children()[1].innerHTML.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
         var json_data = jQuery.extend(true, {}, data);
         if(type == 'spearman_table'){
             $('#spearman-body').empty();
@@ -392,13 +393,8 @@
             });
 
             // Using d3 to scale the colour
-            var red_color = d3.scale.linear().clamp(true)
-                .domain([Number(min_mt), Number((max_mt/2)), Number(max_mt)])
-                .range(['yellow', 'orange', 'red']);
-
-            var blue_color = d3.scale.linear().clamp(true)
-                .domain([Number(min_lt), Number((max_lt/2)), Number(max_lt)])
-                .range(['PaleTurquoise', 'LightSkyBlue', 'RoyalBlue']);
+            var red_color = d3.scale.linear().domain([Math.log(Number(min_mt)),Math.log(Number(max_mt))]).range([0.1,1]);
+            var blue_color = d3.scale.linear().domain([(Number(min_lt)),(Number(max_lt))]).range([0.1,0.8]);
 
             // Coloring of the cell
             $('#chi-oe-table tr td').each(function(d,i){
@@ -411,10 +407,12 @@
                         $(this).css('background-color','white');
                     }
                     if(value < 1){
-                        $(this).css('background-color',blue_color(value));
+                        var color = blue_color((value));
+                        $(this).css('background-color','rgba(0,0,255,'+ color +')');
                     }
                     if(value > 1){
-                        $(this).css('background-color', red_color(value));
+                        var color = red_color(Math.log(value));
+                        $(this).css('background-color', 'rgba(255,0,0,'+ color +')');
                     }
                 }
             });

@@ -17,8 +17,8 @@
       <file leaf-file-name="statsMainpage.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/statsMainpage.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="434">
-              <caret line="163" column="5" lean-forward="true" selection-start-line="163" selection-start-column="5" selection-end-line="163" selection-end-column="5" />
+            <state relative-caret-position="1150">
+              <caret line="46" column="39" lean-forward="false" selection-start-line="46" selection-start-column="39" selection-end-line="46" selection-end-column="39" />
               <folding>
                 <element signature="n#style#0;n#p#1;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#select#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -31,8 +31,8 @@
       <file leaf-file-name="keep.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/plots/keep.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12775">
-              <caret line="511" column="1" lean-forward="false" selection-start-line="511" selection-start-column="1" selection-end-line="511" selection-end-column="1" />
+            <state relative-caret-position="109">
+              <caret line="493" column="45" lean-forward="true" selection-start-line="493" selection-start-column="45" selection-end-line="493" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -41,8 +41,8 @@
       <file leaf-file-name="tableResultPlots.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/plots/tableResultPlots.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11875">
-              <caret line="476" column="1" lean-forward="false" selection-start-line="476" selection-start-column="1" selection-end-line="476" selection-end-column="1" />
+            <state relative-caret-position="221">
+              <caret line="412" column="28" lean-forward="false" selection-start-line="412" selection-start-column="28" selection-end-line="412" selection-end-column="28" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -50,11 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="statsTableResult.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="statsTableResult.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/statsTableResult.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1037">
-              <caret line="429" column="47" lean-forward="false" selection-start-line="429" selection-start-column="47" selection-end-line="429" selection-end-column="47" />
+            <state relative-caret-position="321">
+              <caret line="350" column="0" lean-forward="false" selection-start-line="350" selection-start-column="0" selection-end-line="350" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#a#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="e#4040#4047#1" expanded="true" />
@@ -70,8 +70,8 @@
       <file leaf-file-name="shapiro-wilk.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/js/shapiro-wilk.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="3" column="30" lean-forward="false" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="30" />
+            <state relative-caret-position="0">
+              <caret line="0" column="2" lean-forward="true" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -90,7 +90,7 @@
       <file leaf-file-name="sorttable.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/js/sorttable.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2909">
+            <state relative-caret-position="5450">
               <caret line="233" column="11" lean-forward="false" selection-start-line="233" selection-start-column="11" selection-end-line="233" selection-end-column="11" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -102,18 +102,18 @@
       <file leaf-file-name="try.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/try.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1225">
-              <caret line="49" column="19" lean-forward="false" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
+            <state relative-caret-position="359">
+              <caret line="48" column="48" lean-forward="true" selection-start-line="48" selection-start-column="48" selection-end-line="48" selection-end-column="48" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="stats.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="stats.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="540" column="24" lean-forward="true" selection-start-line="540" selection-start-column="24" selection-end-line="540" selection-end-column="24" />
+            <state relative-caret-position="493">
+              <caret line="617" column="0" lean-forward="true" selection-start-line="617" selection-start-column="0" selection-end-line="617" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -124,7 +124,7 @@
       <file leaf-file-name="MST.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/plots/MST.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="659">
+            <state relative-caret-position="14700">
               <caret line="588" column="5" lean-forward="true" selection-start-line="588" selection-start-column="5" selection-end-line="588" selection-end-column="5" />
               <folding />
             </state>
@@ -145,18 +145,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>connectedSortable</find>
-      <find>missingf</find>
-      <find>countca</find>
-      <find>unique</find>
-      <find>line</find>
-      <find>medi</find>
-      <find>console</find>
-      <find>type</find>
-      <find>svg</find>
-      <find>disjoin</find>
-      <find>setContaining</find>
-      <find>start_pt</find>
       <find>opacity</find>
       <find>stroke</find>
       <find>toe</find>
@@ -175,6 +163,18 @@
       <find>td</find>
       <find>mst</find>
       <find>titles</find>
+      <find>minimum</find>
+      <find>mini</find>
+      <find>count</find>
+      <find>countCa</find>
+      <find>No</find>
+      <find>No.</find>
+      <find>linear</find>
+      <find>getDf</find>
+      <find>runk</find>
+      <find>getchioetable</find>
+      <find>getdf</find>
+      <find>kruskal</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -218,14 +218,14 @@
         <option value="$PROJECT_DIR$/statistics/statsMainpage.html" />
         <option value="$PROJECT_DIR$/statistics/tsconfig.json" />
         <option value="$PROJECT_DIR$/statistics/try1.html" />
-        <option value="$PROJECT_DIR$/statistics/try.html" />
-        <option value="$PROJECT_DIR$/statistics/js/stats.js" />
         <option value="$PROJECT_DIR$/statistics/plots/keep.js" />
         <option value="$PROJECT_DIR$/statistics/css/excel-bootstrap-table-filter-style.css" />
         <option value="$PROJECT_DIR$/statistics/css/plots.css" />
-        <option value="$PROJECT_DIR$/statistics/plots/tableResultPlots.js" />
         <option value="$PROJECT_DIR$/statistics/plots/MST.js" />
+        <option value="$PROJECT_DIR$/statistics/plots/tableResultPlots.js" />
         <option value="$PROJECT_DIR$/statistics/statsTableResult.html" />
+        <option value="$PROJECT_DIR$/statistics/js/stats.js" />
+        <option value="$PROJECT_DIR$/statistics/try.html" />
       </list>
     </option>
   </component>
@@ -256,8 +256,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -292,6 +290,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -384,12 +384,13 @@
       <workItem from="1517572629624" duration="20105000" />
       <workItem from="1517633310722" duration="23804000" />
       <workItem from="1517919513313" duration="45703000" />
-      <workItem from="1518012034790" duration="257000" />
+      <workItem from="1518012034790" duration="388000" />
+      <workItem from="1518058527226" duration="29861000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="445778000" />
+    <option name="totallyTimeSpent" value="475770000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
@@ -632,30 +633,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/js/shapiro-wilk.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="3" column="30" lean-forward="false" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/plots/keep.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12775">
-          <caret line="511" column="1" lean-forward="false" selection-start-line="511" selection-start-column="1" selection-end-line="511" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/try.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1225">
-          <caret line="49" column="19" lean-forward="false" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/css/plots.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3475">
@@ -664,38 +641,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/plots/tableResultPlots.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11875">
-          <caret line="476" column="1" lean-forward="false" selection-start-line="476" selection-start-column="1" selection-end-line="476" selection-end-column="1" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/plots/MST.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="659">
+        <state relative-caret-position="14700">
           <caret line="588" column="5" lean-forward="true" selection-start-line="588" selection-start-column="5" selection-end-line="588" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
+    <entry file="file://$PROJECT_DIR$/statistics/js/sorttable.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="540" column="24" lean-forward="true" selection-start-line="540" selection-start-column="24" selection-end-line="540" selection-end-column="24" />
+        <state relative-caret-position="5450">
+          <caret line="233" column="11" lean-forward="false" selection-start-line="233" selection-start-column="11" selection-end-line="233" selection-end-column="11" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/js/shapiro-wilk.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="2" lean-forward="true" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/plots/keep.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="493" column="45" lean-forward="true" selection-start-line="493" selection-start-column="45" selection-end-line="493" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/statsMainpage.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="163" column="5" lean-forward="true" selection-start-line="163" selection-start-column="5" selection-end-line="163" selection-end-column="5" />
+        <state relative-caret-position="1150">
+          <caret line="46" column="39" lean-forward="false" selection-start-line="46" selection-start-column="39" selection-end-line="46" selection-end-column="39" />
           <folding>
             <element signature="n#style#0;n#p#1;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#select#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -704,10 +687,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/js/sorttable.js">
+    <entry file="file://$PROJECT_DIR$/statistics/plots/tableResultPlots.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2909">
-          <caret line="233" column="11" lean-forward="false" selection-start-line="233" selection-start-column="11" selection-end-line="233" selection-end-column="11" />
+        <state relative-caret-position="221">
+          <caret line="412" column="28" lean-forward="false" selection-start-line="412" selection-start-column="28" selection-end-line="412" selection-end-column="28" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -716,8 +699,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/statsTableResult.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1037">
-          <caret line="429" column="47" lean-forward="false" selection-start-line="429" selection-start-column="47" selection-end-line="429" selection-end-column="47" />
+        <state relative-caret-position="321">
+          <caret line="350" column="0" lean-forward="false" selection-start-line="350" selection-start-column="0" selection-end-line="350" selection-end-column="0" />
           <folding>
             <element signature="n#style#0;n#a#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="e#4040#4047#1" expanded="true" />
@@ -725,6 +708,24 @@
             <element signature="e#6635#6642#1" expanded="true" />
             <element signature="n#style#0;n#input#2;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#3;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/try.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="48" column="48" lean-forward="true" selection-start-line="48" selection-start-column="48" selection-end-line="48" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="617" column="0" lean-forward="true" selection-start-line="617" selection-start-column="0" selection-end-line="617" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
