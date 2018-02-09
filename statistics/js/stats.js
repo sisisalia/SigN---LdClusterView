@@ -85,6 +85,8 @@ function corrSpearman(x,y){
 function runKruskalWallisTest(x,y){
     // remove NA
     removeNA(x,y);
+    removeOneSample(x,y);
+    if(x.length == 0) return -1;
     var df = getDF(x);
     if(df == 0) return -1;
     var obj = transformToCategory(x,y);
@@ -161,6 +163,25 @@ function runKruskalWallisTest(x,y){
         result.perfect_separation = 'no';
     }
     return result;
+}
+
+function removeOneSample(x,y){
+    var obj = {};
+    for(var i = 0; i < x.length; i++){
+        if(!obj[x[i]]){
+            obj[x[i]] = 1;
+        }else{
+            obj[x[i]]++;
+        }
+    }
+    for(var i = 0; i < x.length; i++){
+        if(obj[x[i]] == 1){
+            x.splice(i,1);
+            y.splice(i,1);
+            i--;
+        }
+    }
+    return;
 }
 
 // Input : x must be array of categorical value and y is an array of numerical value
