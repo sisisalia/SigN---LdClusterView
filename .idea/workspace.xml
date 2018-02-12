@@ -17,8 +17,8 @@
       <file leaf-file-name="statsMainpage.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/statsMainpage.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1150">
-              <caret line="46" column="39" lean-forward="false" selection-start-line="46" selection-start-column="39" selection-end-line="46" selection-end-column="39" />
+            <state relative-caret-position="300">
+              <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#p#1;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#select#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -31,8 +31,8 @@
       <file leaf-file-name="keep.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/plots/keep.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="493" column="45" lean-forward="true" selection-start-line="493" selection-start-column="45" selection-end-line="493" selection-end-column="45" />
+            <state relative-caret-position="21300">
+              <caret line="852" column="1" lean-forward="false" selection-start-line="852" selection-start-column="1" selection-end-line="852" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -41,8 +41,8 @@
       <file leaf-file-name="tableResultPlots.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/plots/tableResultPlots.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="211" column="23" lean-forward="false" selection-start-line="211" selection-start-column="23" selection-end-line="211" selection-end-column="23" />
+            <state relative-caret-position="9350">
+              <caret line="375" column="18" lean-forward="false" selection-start-line="375" selection-start-column="18" selection-end-line="375" selection-end-column="18" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -50,28 +50,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="statsTableResult.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="statsTableResult.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/statsTableResult.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="496">
-              <caret line="264" column="0" lean-forward="false" selection-start-line="264" selection-start-column="0" selection-end-line="264" selection-end-column="0" />
+            <state relative-caret-position="6175">
+              <caret line="247" column="17" lean-forward="false" selection-start-line="247" selection-start-column="17" selection-end-line="247" selection-end-column="38" />
               <folding>
                 <element signature="n#style#0;n#a#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="e#4040#4047#1" expanded="true" />
-                <element signature="e#5007#5014#1" expanded="true" />
-                <element signature="e#6635#6642#1" expanded="true" />
+                <element signature="e#4097#4104#1" expanded="true" />
+                <element signature="e#5064#5071#1" expanded="true" />
+                <element signature="e#6692#6699#1" expanded="true" />
                 <element signature="n#style#0;n#input#2;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#input#3;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="e#9067#9074#1" expanded="true" />
+                <element signature="e#10045#10052#1" expanded="true" />
+                <element signature="e#11659#11666#1" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="shapiro-wilk.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/js/shapiro-wilk.js">
+      <file leaf-file-name="stats.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="2" lean-forward="true" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+            <state relative-caret-position="14825">
+              <caret line="594" column="14" lean-forward="true" selection-start-line="594" selection-start-column="14" selection-end-line="594" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -80,52 +83,18 @@
       <file leaf-file-name="plots.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/statistics/css/plots.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3475">
-              <caret line="139" column="11" lean-forward="false" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="11" />
+            <state relative-caret-position="1700">
+              <caret line="68" column="20" lean-forward="true" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sorttable.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/js/sorttable.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5450">
-              <caret line="233" column="11" lean-forward="false" selection-start-line="233" selection-start-column="11" selection-end-line="233" selection-end-column="11" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="try.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/try.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="44" column="0" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="stats.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="88" column="32" lean-forward="true" selection-start-line="88" selection-start-column="32" selection-end-line="88" selection-end-column="32" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MST.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MST.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/statistics/plots/MST.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="14700">
-              <caret line="588" column="5" lean-forward="true" selection-start-line="588" selection-start-column="5" selection-end-line="588" selection-end-column="5" />
+            <state relative-caret-position="247">
+              <caret line="26" column="51" lean-forward="true" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -145,36 +114,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>toe</find>
-      <find>toExponential(4)</find>
-      <find>chi</find>
-      <find>kruska</find>
-      <find>bord</find>
-      <find>toolti</find>
+      <find>id</find>
+      <find>d3.select(this</find>
+      <find>returnOp</find>
+      <find>tipMou</find>
+      <find>tooltip-conta</find>
+      <find>svg</find>
+      <find>p</find>
+      <find>group</find>
+      <find>scatterplotc</find>
+      <find>console.log</find>
+      <find>showg</find>
+      <find>path.sty</find>
+      <find>path</find>
+      <find>tooltip-</find>
+      <find>scat</find>
+      <find>showgra</find>
+      <find>scatter</find>
+      <find>tooltip-con</find>
       <find>remove</find>
-      <find>red</find>
-      <find>krusk</find>
-      <find>value</find>
-      <find>10</find>
-      <find>checkbox</find>
-      <find>nodes_label</find>
-      <find>td</find>
-      <find>mst</find>
-      <find>titles</find>
-      <find>minimum</find>
-      <find>mini</find>
-      <find>count</find>
-      <find>countCa</find>
-      <find>No</find>
-      <find>No.</find>
-      <find>linear</find>
-      <find>getDf</find>
-      <find>runk</find>
-      <find>getchioetable</find>
-      <find>getdf</find>
-      <find>kruskal</find>
-      <find>console</find>
-      <find>runkru</find>
+      <find>mst-tootleip</find>
+      <find>tooltip-container-mst</find>
+      <find>tooltip</find>
+      <find>spearman</find>
+      <find>force</find>
+      <find>blue</find>
+      <find>path.</find>
+      <find>highlightm</find>
+      <find>highlightnode</find>
+      <find>tick</find>
+      <find>returnOpacity</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -215,17 +184,18 @@
         <option value="$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/dist/example.html" />
         <option value="$PROJECT_DIR$/statistics/js/sorttable.js" />
         <option value="$PROJECT_DIR$/statistics/plots/scatterPlot.js" />
-        <option value="$PROJECT_DIR$/statistics/statsMainpage.html" />
         <option value="$PROJECT_DIR$/statistics/tsconfig.json" />
         <option value="$PROJECT_DIR$/statistics/try1.html" />
-        <option value="$PROJECT_DIR$/statistics/plots/keep.js" />
         <option value="$PROJECT_DIR$/statistics/css/excel-bootstrap-table-filter-style.css" />
-        <option value="$PROJECT_DIR$/statistics/css/plots.css" />
-        <option value="$PROJECT_DIR$/statistics/plots/MST.js" />
-        <option value="$PROJECT_DIR$/statistics/plots/tableResultPlots.js" />
         <option value="$PROJECT_DIR$/statistics/try.html" />
-        <option value="$PROJECT_DIR$/statistics/statsTableResult.html" />
+        <option value="$PROJECT_DIR$/statistics/statsMainpage.html" />
+        <option value="$PROJECT_DIR$/statistics/plots/keep.js" />
+        <option value="$PROJECT_DIR$/statistics/js/ShortestPathCalculator.js" />
         <option value="$PROJECT_DIR$/statistics/js/stats.js" />
+        <option value="$PROJECT_DIR$/statistics/css/plots.css" />
+        <option value="$PROJECT_DIR$/statistics/statsTableResult.html" />
+        <option value="$PROJECT_DIR$/statistics/plots/tableResultPlots.js" />
+        <option value="$PROJECT_DIR$/statistics/plots/MST.js" />
       </list>
     </option>
   </component>
@@ -236,9 +206,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="628" />
-    <option name="y" value="15" />
-    <option name="width" value="1477" />
+    <option name="x" value="-90" />
+    <option name="width" value="1280" />
     <option name="height" value="989" />
   </component>
   <component name="ProjectView">
@@ -290,8 +259,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -385,16 +354,17 @@
       <workItem from="1517633310722" duration="23804000" />
       <workItem from="1517919513313" duration="45703000" />
       <workItem from="1518012034790" duration="388000" />
-      <workItem from="1518058527226" duration="33631000" />
+      <workItem from="1518058527226" duration="90722000" />
+      <workItem from="1518405514775" duration="15843000" />
+      <workItem from="1518451131408" duration="2950000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="479540000" />
+    <option name="totallyTimeSpent" value="555424000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1953125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -441,12 +411,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="5" />
+      <option name="time" value="9" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/factor.js" />
     <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/confidence.js" />
     <entry file="file://$PROJECT_DIR$/modular/resources/js/statistics/jerzy-master/lib/anova.js" />
     <entry file="file://$PROJECT_DIR$/modular/resources/js/data/manhattanData.js">
@@ -608,14 +577,6 @@
     <entry file="file://$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/README.adoc" />
     <entry file="file://$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/dist/example.html" />
     <entry file="file://$PROJECT_DIR$/statistics/js/Excel-like-Bootstrap-Table-Sorting-Filtering-Plugin/src/FilterCollection.ts" />
-    <entry file="file://$PROJECT_DIR$/statistics/js/excel-bootstrap-table-filter-bundle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2400">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/js/jquery-ui-1.12.4.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -626,59 +587,105 @@
     <entry file="file://$PROJECT_DIR$/statistics/plots/scatterPlot.js" />
     <entry file="file://$PROJECT_DIR$/statistics/tsconfig.json" />
     <entry file="file://$PROJECT_DIR$/statistics/try1.html" />
-    <entry file="file://$PROJECT_DIR$/statistics/css/excel-bootstrap-table-filter-style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="1" column="23" lean-forward="false" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/css/plots.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3475">
-          <caret line="139" column="11" lean-forward="false" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/plots/MST.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14700">
-          <caret line="588" column="5" lean-forward="true" selection-start-line="588" selection-start-column="5" selection-end-line="588" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/statistics/js/sorttable.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5450">
           <caret line="233" column="11" lean-forward="false" selection-start-line="233" selection-start-column="11" selection-end-line="233" selection-end-column="11" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/try.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="44" column="0" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="285">
+          <caret line="41" column="51" lean-forward="true" selection-start-line="41" selection-start-column="51" selection-end-line="41" selection-end-column="51" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/js/shapiro-wilk.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="2" lean-forward="true" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+          <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/js/ShortestPathCalculator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="800">
+          <caret line="37" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/plots/keep.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21300">
+          <caret line="852" column="1" lean-forward="false" selection-start-line="852" selection-start-column="1" selection-end-line="852" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/css/excel-bootstrap-table-filter-style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1200">
+          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="51" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/js/excel-bootstrap-table-filter-bundle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14825">
+          <caret line="594" column="14" lean-forward="true" selection-start-line="594" selection-start-column="14" selection-end-line="594" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/css/plots.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1700">
+          <caret line="68" column="20" lean-forward="true" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/statsTableResult.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6175">
+          <caret line="247" column="17" lean-forward="false" selection-start-line="247" selection-start-column="17" selection-end-line="247" selection-end-column="38" />
+          <folding>
+            <element signature="n#style#0;n#a#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#4097#4104#1" expanded="true" />
+            <element signature="e#5064#5071#1" expanded="true" />
+            <element signature="e#6692#6699#1" expanded="true" />
+            <element signature="n#style#0;n#input#2;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#3;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#9067#9074#1" expanded="true" />
+            <element signature="e#10045#10052#1" expanded="true" />
+            <element signature="e#11659#11666#1" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistics/plots/tableResultPlots.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9350">
+          <caret line="375" column="18" lean-forward="false" selection-start-line="375" selection-start-column="18" selection-end-line="375" selection-end-column="18" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics/statsMainpage.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1150">
-          <caret line="46" column="39" lean-forward="false" selection-start-line="46" selection-start-column="39" selection-end-line="46" selection-end-column="39" />
+        <state relative-caret-position="300">
+          <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding>
             <element signature="n#style#0;n#p#1;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#select#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -687,46 +694,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/plots/tableResultPlots.js">
+    <entry file="file://$PROJECT_DIR$/statistics/plots/MST.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="211" column="23" lean-forward="false" selection-start-line="211" selection-start-column="23" selection-end-line="211" selection-end-column="23" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/plots/keep.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="493" column="45" lean-forward="true" selection-start-line="493" selection-start-column="45" selection-end-line="493" selection-end-column="45" />
+        <state relative-caret-position="247">
+          <caret line="26" column="51" lean-forward="true" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/js/stats.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="88" column="32" lean-forward="true" selection-start-line="88" selection-start-column="32" selection-end-line="88" selection-end-column="32" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistics/statsTableResult.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="496">
-          <caret line="264" column="0" lean-forward="false" selection-start-line="264" selection-start-column="0" selection-end-line="264" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#a#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="e#4040#4047#1" expanded="true" />
-            <element signature="e#5007#5014#1" expanded="true" />
-            <element signature="e#6635#6642#1" expanded="true" />
-            <element signature="n#style#0;n#input#2;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#3;n#div#1;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

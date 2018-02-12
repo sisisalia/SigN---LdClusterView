@@ -14,6 +14,7 @@
     <script src="js/d3.min.js"></script>
     <script src="plots/tableResultPlots.js"></script>
     <script src="plots/MST.js"></script>
+    <script src="js/ShortestPathCalculator.js"></script>
     <link rel="stylesheet" href="css/plots.css">
     <!--For sortable, rows-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
@@ -151,6 +152,9 @@
     <!--Tab content for MST graph-->
     <div id="mst-graph" class="tab-pane fade">
         <br/>
+        <!--Select Graph-->
+        <select class="form-control" id="select_graph"></select>
+        <br/>
         <!--Select Node Button and its menu-->
         <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#select_nodes">Select Nodes</button>
         <div id="select_nodes" class="collapse">
@@ -170,6 +174,79 @@
             <p></p>
             <button type="button" id="mst_setting_reset">Reset setting</button>
         </div>
+
+        <!-- Modal for spearman-->
+        <div class="modal fade" id="modal-spearman-mst" tabindex="-1" role="dialog" aria-labelledby="ModalLabelSpearmanMST" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabelSpearmanMST">Spearman Scatter Plot</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="spearman-body-mst">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Kruskal-->
+        <div class="modal fade" id="modal-kruskal-mst" tabindex="-1" role="dialog" aria-labelledby="ModalLabelKruskal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabelKruskalMST">Kruskal Wallis</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#kruskal-graph-mst">Kruskal Wallis Scatter Plot</a></li>
+                            <li><a data-toggle="tab" href="#kruskal-dunn-mst">Kruskal Wallis Post Hoc Dunn Test</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="kruskal-graph-mst" class="tab-pane fade in active">
+                            </div>
+                            <div id="kruskal-dunn-mst" class="tab-pane fade">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for chi-->
+        <div class="modal fade" id="modal-chi-mst" tabindex="-1" role="dialog" aria-labelledby="ModalLabelChiMST" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabelChiMST">Chi Observed/Expected(Result) Table</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="chi-oe-table-mst"></table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Tooltip container-->
+        <div id="tooltip-container-mst"></div>
+
     </div>
 </div>
 
@@ -322,19 +399,20 @@
                     break;
                 }
             }
-            scatterPlotNumerical(spearman[i],json_data[x_name],json_data[y_name],x_name, y_name);
+            scatterPlotNumerical(spearman[i],json_data[x_name],json_data[y_name],x_name, y_name, '#spearman-body', '#tooltip-container');
             return;
         }
         if(type == 'kruskal_table'){
             $('#kruskal-graph').empty();
             $('#kruskal-dunn').empty();
             removeNA(json_data[x_name], json_data[y_name]);
+            removeOneSample(json_data[x_name], json_data[y_name]);
             for(var i=0; i < kruskal.length; i++){
                 if(kruskal[i].x == x_name && kruskal[i].y == y_name){
                     break;
                 }
             }
-            scatterPlotCategorical(kruskal[i],json_data[x_name],json_data[y_name],x_name, y_name);
+            scatterPlotCategorical(kruskal[i],json_data[x_name],json_data[y_name],x_name, y_name, '#kruskal-graph', '#tooltip-container');
             $('#kruskal-dunn').html('<div id="dunn">\n' +
                 '    <hr />\n' +
                 '    <table id="dunn_table"></table>\n' +
@@ -348,74 +426,7 @@
         }
         if(type == 'chi_table'){
             $('#chi-oe-table').empty();
-            var chi_oe_result = getChiOETable(json_data[x_name],json_data[y_name]);
-            BindTable(chi_oe_result, '#chi-oe-table');
-            // Making the header as first column and style it
-            // find which row is the header
-            var counter = 0;
-            $('#chi-oe-table tr th').each(function(d,i){
-                if($(this).html() == 'xxx'){
-                    return false;
-                }
-                counter++;
-            });
-            $('#chi-oe-table tr').each(function(d,i){
-                var value = ($(this).children().eq(counter).html());
-                $(this).children().eq(counter).remove();
-                if(value == 'xxx'){
-                    $(this).prepend('<td></td>');
-                }else {
-                    $(this).prepend('<td class="chi-label">' + value + '</td>');
-                }
-            });
-
-            // Find maximum for < 1 and > 1
-            var min_lt = 999999;
-            var max_lt = -99999;
-            var max_mt = -99999;
-            var min_mt = 999999;
-
-            $('#chi-oe-table tr td').each(function(d,i){
-                var value = ($(this).html());
-                var index1 = value.indexOf('(');
-                var index2 = value.indexOf(')');
-                if(index1 != -1){
-                    value = Number(value.substring(index1+1,index2));
-                    if(value < 1){
-                        if(value < min_lt) min_lt = value;
-                        if(value > max_lt) max_lt = value;
-                    }
-                    if(value > 1){
-                        if(value < min_mt) min_mt = value;
-                        if(value > max_mt) max_mt = value;
-                    }
-                }
-            });
-
-            // Using d3 to scale the colour
-            var red_color = d3.scale.linear().domain([Math.log(Number(min_mt)),Math.log(Number(max_mt))]).range([0.1,1]);
-            var blue_color = d3.scale.linear().domain([(Number(min_lt)),(Number(max_lt))]).range([0.1,0.8]);
-
-            // Coloring of the cell
-            $('#chi-oe-table tr td').each(function(d,i){
-                var value = ($(this).html());
-                var index1 = value.indexOf('(');
-                var index2 = value.indexOf(')');
-                if(index1 != -1){
-                    value = Number(value.substring(index1+1,index2));
-                    if(value == 1){
-                        $(this).css('background-color','white');
-                    }
-                    if(value < 1){
-                        var color = blue_color((value));
-                        $(this).css('background-color','rgba(0,0,255,'+ color +')');
-                    }
-                    if(value > 1){
-                        var color = red_color(Math.log(value));
-                        $(this).css('background-color', 'rgba(255,0,0,'+ color +')');
-                    }
-                }
-            });
+            constructChiOETable(json_data,x_name,y_name, '#chi-oe-table')
         }
     });
 
@@ -459,7 +470,79 @@
     $('#chi_table').sorttable({items: '>:not(.nosort)'}).disableSelection();
 
     // Called for MST graph and its functions
-    MST(spearman, kruskal, chi);
+    var json_data = jQuery.extend(true, {}, data);
+    MST(json_data,spearman, kruskal, chi);
+
+    function constructChiOETable(json_data, x_name, y_name, id){
+        var chi_oe_result = getChiOETable(json_data[x_name],json_data[y_name]);
+        BindTable(chi_oe_result, id);
+        // Making the header as first column and style it
+        // find which row is the header
+        var counter = 0;
+        $(id + ' tr th').each(function(d,i){
+            if($(this).html() == 'xxx'){
+                return false;
+            }
+            counter++;
+        });
+        $(id + ' tr').each(function(d,i){
+            var value = ($(this).children().eq(counter).html());
+            $(this).children().eq(counter).remove();
+            if(value == 'xxx'){
+                $(this).prepend('<td></td>');
+            }else {
+                $(this).prepend('<td class="chi-label">' + value + '</td>');
+            }
+        });
+
+        // Find maximum for < 1 and > 1
+        var min_lt = 999999;
+        var max_lt = -99999;
+        var max_mt = -99999;
+        var min_mt = 999999;
+
+        $(id + ' tr td').each(function(d,i){
+            var value = ($(this).html());
+            var index1 = value.indexOf('(');
+            var index2 = value.indexOf(')');
+            if(index1 != -1){
+                value = Number(value.substring(index1+1,index2));
+                if(value < 1){
+                    if(value < min_lt) min_lt = value;
+                    if(value > max_lt) max_lt = value;
+                }
+                if(value > 1){
+                    if(value < min_mt) min_mt = value;
+                    if(value > max_mt) max_mt = value;
+                }
+            }
+        });
+
+        // Using d3 to scale the colour
+        var red_color = d3.scale.linear().domain([Math.log(Number(min_mt)),Math.log(Number(max_mt))]).range([0.1,1]);
+        var blue_color = d3.scale.linear().domain([(Number(min_lt)),(Number(max_lt))]).range([0.1,0.8]);
+
+        // Coloring of the cell
+        $(id + ' tr td').each(function(d,i){
+            var value = ($(this).html());
+            var index1 = value.indexOf('(');
+            var index2 = value.indexOf(')');
+            if(index1 != -1){
+                value = Number(value.substring(index1+1,index2));
+                if(value == 1){
+                    $(this).css('background-color','white');
+                }
+                if(value < 1){
+                    var color = blue_color((value));
+                    $(this).css('background-color','rgba(0,0,255,'+ color +')');
+                }
+                if(value > 1){
+                    var color = red_color(Math.log(value));
+                    $(this).css('background-color', 'rgba(255,0,0,'+ color +')');
+                }
+            }
+        });
+    }
 
     //Combining two json data, used to add adjusted p value
     function combineJsonData(obj1,obj2){
@@ -492,6 +575,9 @@
                 var row$ = $('<tr data-toggle="modal" data-target="#modal-chi"/>');
             }
             if(tableid == '#chi-oe-table') {
+                var row$ = $('<tr>');
+            }
+            if(tableid == '#chi-oe-table-mst') {
                 var row$ = $('<tr>');
             }
             for (var colIndex = 0; colIndex < columns.length; colIndex++) {

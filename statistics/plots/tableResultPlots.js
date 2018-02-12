@@ -1,6 +1,6 @@
 // Scatter plot for spearman
 // x_data and y_data should already removed NA
-function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name) {
+function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name, id, id_tooltip) {
     var margin = {top: 20, right: 70, bottom: 30, left: 50},
         width = 700 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
@@ -53,7 +53,7 @@ function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name) {
     y.domain([min_y,max_y]);
     x.domain([min_x,max_x]);
 
-    var svg = d3.select("#spearman-body").append("svg")
+    var svg = d3.select(id).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -82,7 +82,7 @@ function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name) {
         .text(y_name);
 
     // Add tooltip
-    var tooltip = d3.select("#tooltip-container").append("div")
+    var tooltip = d3.select(id_tooltip).append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
 
@@ -93,16 +93,12 @@ function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name) {
         tooltip.html(html)
             .style("left", (d3.event.pageX + 15) + "px")
             .style("top", (d3.event.pageY - 28) + "px")
-            .transition()
-            .duration(200) // ms
             .style("opacity", .9) // started as 0!
 
     };
     // tooltip mouseout event handler
     var tipMouseout = function(d) {
-        tooltip.transition()
-            .duration(300) // ms
-            .style("opacity", 0); // don't care about position!
+        tooltip.style("opacity", 0); // don't care about position!
     };
 
     svg.selectAll(".dot")
@@ -139,8 +135,6 @@ function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name) {
         tooltip.html(html)
             .style("left", (d3.event.pageX + 15) + "px")
             .style("top", (d3.event.pageY - 28) + "px")
-            .transition()
-            .duration(200) // ms
             .style("opacity", .9) // started as 0!
 
     };
@@ -211,7 +205,7 @@ function regression(x_data,y_data) {
 
 // Scatter plot for kruskal wallis
 // x_data and y_data has been cleaned from NA
-function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
+function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name,id, id_tooltip){
     var margin = {top: 50, right: 70, bottom: 30, left: 50},
         width = 900 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
@@ -268,7 +262,16 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
             if(store_count[j].x == x_data[i]){
                 if(store_count[j].y == y_data[i]){
                     store_count[j].count++;
-                    obj.x = x(x_data[i]) + store_count[j].count * 5;
+                    if(store_count[j].count == 1){
+                        obj.x = x(x_data[i]) + store_count[j].count * 7;
+                        temp = 1;
+                        continue;
+                    }
+                    if(store_count[j].count % 2 == 1) {
+                        obj.x = x(x_data[i]) + store_count[j].count * 4;
+                    }else{
+                        obj.x = x(x_data[i]) + store_count[j].count * -4;
+                    }
                     temp = 1;
                 }
             }
@@ -284,7 +287,7 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
 
     y.domain([min_y,max_y]);
 
-    var svg = d3.select("#kruskal-graph").append("svg")
+    var svg = d3.select(id).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -313,27 +316,24 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
         .text(y_name);
 
     // Add tooltip
-    var tooltip = d3.select("#tooltip-container").append("div")
+    var tooltip = d3.select(id_tooltip).append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
 
     // tooltip mouseover event handler
     var tipMouseover = function(d) {
+
         var html  = '<span>x : </span>' + d.x_name + '<br/><span>y : </span>' + d.y;
 
         tooltip.html(html)
             .style("left", (d3.event.pageX + 15) + "px")
             .style("top", (d3.event.pageY - 28) + "px")
-            .transition()
-            .duration(200) // ms
             .style("opacity", .9) // started as 0!
 
     };
     // tooltip mouseout event handler
     var tipMouseout = function(d) {
-        tooltip.transition()
-            .duration(300) // ms
-            .style("opacity", 0); // don't care about position!
+        tooltip.style("opacity", 0); // don't care about position!
     };
 
     svg.selectAll(".dot")
@@ -373,8 +373,6 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
         tooltip.html(html)
             .style("left", (d3.event.pageX + 15) + "px")
             .style("top", (d3.event.pageY - 28) + "px")
-            .transition()
-            .duration(200) // ms
             .style("opacity", .9) // started as 0!
 
     };
@@ -390,21 +388,21 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name){
             .attr("y2", y(median_value))
             .on("mouseover", lineMouseOver)
             .on("mouseout", tipMouseout);
-
-        svg.append("text")
-            .attr("x", 250)
-            .attr("y", -15)
-            .attr("dy", ".35em")
-            .attr('font-weight', 'bold')
-            .text('p-value : ' + kruskal_result.pvalue);
-
-        svg.append("text")
-            .attr("x", 450)
-            .attr("y", -15)
-            .attr("dy", ".35em")
-            .attr('font-weight', 'bold')
-            .text('adj-pvalue : ' + kruskal_result.pvalue_adj);
     }
+    svg.append("text")
+        .attr("x", 250)
+        .attr("y", -15)
+        .attr("dy", ".35em")
+        .attr('font-weight', 'bold')
+        .text('p-value : ' + kruskal_result.pvalue);
+
+    svg.append("text")
+        .attr("x", 450)
+        .attr("y", -15)
+        .attr("dy", ".35em")
+        .attr('font-weight', 'bold')
+        .text('adj-pvalue : ' + kruskal_result.pvalue_adj);
+
 }
 
 // Input : Two arrays of x and y

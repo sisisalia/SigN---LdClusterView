@@ -189,6 +189,8 @@ function removeOneSample(x,y){
 function runKruskalWallisDunnPostHocTest(x,y){
     // remove NA
     removeNA(x,y);
+    removeOneSample(x,y);
+    if(x.length == 0) return -1;
     var obj = transformToCategory(x,y);
     var array = y.slice(0);
     array.sort(function(a, b){return a-b});
@@ -518,6 +520,7 @@ function transformToCategory(x,y){
     var group_x = [];
     var obj = {};
     for(var i = 0; i < x.length; i++){
+        if(y[i] == undefined) continue;
         var index = group_x.indexOf(x[i]);
         if(index == -1){
             group_x.push(x[i]);
@@ -631,7 +634,7 @@ function addAdjPvalue(x,chi){
         if(!result[i] && result[i] != 0) console.log('result undefined');
     }
     for(var i = 0; i < x.length; i++){
-        x[i].pvalue_adj = result[i];
+        x[i].pvalue_adj = result[i].toExponential(5);
     }
     // console.log(x);
     return x;
