@@ -102,6 +102,14 @@ line.selected {
     stroke-width: 2px;
 }
 
+#spearman_table tr, #kruskal_table tr, #chi_table tr {
+    cursor : pointer;
+}
+
+.modal-dialog{
+    font-size : 12px;
+}
+
 /*MST*/
 #select_graph{
     position : relative;
@@ -153,6 +161,21 @@ line.selected {
     margin-top : 10px;
 }
 
+#print_mst{
+    position : relative;
+    z-index: 1;
+    width: fit-content;
+    height: fit-content;
+    font-size : 12px;
+    opacity: 0.9;
+    background : whitesmoke;
+    border-radius: 10px;
+    padding : 10px;
+    padding-top : 5px;
+    padding-bottom : 5px;
+    margin-top : 10px;
+}
+
 .select_nodes_label {
     padding-left : 5px;
 }
@@ -160,7 +183,7 @@ line.selected {
 #mst-graph-svg{
     position: absolute;
     left: 200px;
-    top: 70px;
+    top: 80px;
     z-index: 2;
 }
 

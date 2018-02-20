@@ -25,12 +25,17 @@
     <!--For filtering and sorting ascending, descending-->
     <script src="js/excel-bootstrap-table-filter-bundle.js"></script>
     <link rel="stylesheet" href="css/excel-bootstrap-table-filter-style.css">
+    <!--For printing-->
+    <script src="js/blob.js"></script>
+    <script src="js/jquery.sprintf.js"></script>
+    <script src="js/jspdf.debug.js"></script>
 </head>
 <body>
 <!--Back to main page-->
 <div>
     <a href="statsMainpage.html" style="float : right;">Main page</a>
 </div>
+<div id="main-content">
 <!--Tabs of tables and MST-->
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#table-result">Tables</a></li>
@@ -92,6 +97,13 @@
                     <div class="modal-body" id="spearman-body">
                     </div>
                     <div class="modal-footer">
+                        <!--Print Spearman-->
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#print_spearman" style="float:left;">Print</button>
+                        <div id="print_spearman" class="collapse" style="float:left; padding-left: 5px;">
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#spearman-scatter-plot')">PDF</button>
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#spearman-scatter-plot')">PNG</button>
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#spearman-scatter-plot')">SVG</button>
+                        </div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -122,6 +134,13 @@
                             </div>
                     </div>
                     <div class="modal-footer">
+                        <!--Print Kruskal-->
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#print_kruskal" style="float:left;">Print</button>
+                        <div id="print_kruskal" class="collapse" style="float:left; padding-left: 5px;">
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#kruskal-scatter-plot')">PDF</button>
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#kruskal-scatter-plot')">PNG</button>
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#kruskal-scatter-plot')">SVG</button>
+                        </div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -172,8 +191,24 @@
             Link charge : <br/>
             <input id='link_charge' style="width:120px;" type="range" min="0" max="1" step="any" value="0.5">
             <p></p>
-            <button type="button" id="mst_setting_reset">Reset setting</button>
         </div>
+
+        <br/>
+        <br/>
+        <!--Print MST-->
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#print_mst">Print MST</button>
+        <div id="print_mst" class="collapse">
+            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#mst-graph-svg')">PDF</button>
+            <p></p>
+            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#mst-graph-svg')">PNG</button>
+            <p></p>
+            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#mst-graph-svg')">SVG</button>
+        </div>
+
+        <br/>
+        <br/>
+        <!--Reset-->
+        <button type="button" class="btn btn-info" id="mst_reset">Reset</button>
 
         <!-- Modal for spearman-->
         <div class="modal fade" id="modal-spearman-mst" tabindex="-1" role="dialog" aria-labelledby="ModalLabelSpearmanMST" aria-hidden="true">
@@ -188,6 +223,13 @@
                     <div class="modal-body" id="spearman-body-mst">
                     </div>
                     <div class="modal-footer">
+                        <!--Print Spearman-->
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#print_spearman-mst" style="float:left;">Print</button>
+                        <div id="print_spearman-mst" class="collapse" style="float:left; padding-left: 5px;">
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#spearman-scatter-plot')">PDF</button>
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#spearman-scatter-plot')">PNG</button>
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#spearman-scatter-plot')">SVG</button>
+                        </div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -218,6 +260,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <!--Print Kruskal-->
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#print_kruskal-mst" style="float:left;">Print</button>
+                        <div id="print_kruskal-mst" class="collapse" style="float:left; padding-left: 5px;">
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#kruskal-scatter-plot')">PDF</button>
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#kruskal-scatter-plot')">PNG</button>
+                            <button type="button" class="btn btn-sm" onclick="exportFile($(this).text(), '#kruskal-scatter-plot')">SVG</button>
+                        </div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -249,8 +298,10 @@
 
     </div>
 </div>
+</div>
 
 <script type="text/javascript">
+
     // get data from the session storage submitted by the user
     data = JSON.parse(sessionStorage.getItem('json_data'));
     data_titles = Object.keys(data);
@@ -607,6 +658,126 @@
         }
         $(tableid).append(headerTr$);
         return columnSet;
+    }
+
+    function exportFile(text, target_svg){
+        $('body').append('<svg width="1000" height="1000" id="print_svg" style="background:white;"></svg>');
+        var height = 10;
+        var total_width = 0;
+        var width = $(window).width();
+        $(target_svg).each(function(d){
+            $(this).clone().attr('y', height).attr('x',10).appendTo($('#print_svg'));
+            var parent_id = '#' + $(this).parent().parent().attr('id');
+            $(parent_id + ' .rightSpace .plot').each(function(d){
+                if(parent_id.substring(1,14) == 'mainLeafNodes'){
+                    total_width = width + parseFloat($(this).width()) + 30;
+                    $(this).clone().attr('y', height).attr('x', width + 20).appendTo($('#print_svg'));
+                }else{
+                    $(this).clone().attr('y', height + 23).attr('x', width + 20).appendTo($('#print_svg'));
+                }
+            });
+            height = height + parseFloat($(this).attr('height')) + 10;
+        });
+        if(total_width == 0){
+            total_width = width + 170;
+        }
+        $('#print_svg').attr('height',height + 20);
+        $('#print_svg').attr('width', total_width);
+
+        var styleDefs = "";
+        var svgDomElement = document.getElementById('print_svg');
+        var sheets = document.styleSheets;
+        for (var i = 0; i < sheets.length; i++) {
+            var rules = sheets[i].cssRules;
+            if(!rules) continue;
+            for (var j = 0; j < rules.length; j++) {
+                var rule = rules[j];
+                if (rule.style) {
+                    var selectorText = rule.selectorText;
+                    var elems = svgDomElement.querySelectorAll(selectorText);
+
+                    if (elems.length) {
+                        styleDefs += selectorText + " { " + rule.style.cssText + " }\n";
+                    }
+                }
+            }
+        }
+
+        var s = document.createElement('style');
+        s.setAttribute('type', 'text/css');
+        s.innerHTML = styleDefs;
+
+        var defs = document.createElement('defs');
+        defs.appendChild(s);
+        svgDomElement.insertBefore(defs, svgDomElement.firstChild);
+
+        var svg = document.querySelector( "#print_svg" );
+        var svgData = new XMLSerializer().serializeToString( svg );
+
+        var canvas = document.createElement( "canvas" );
+        canvas.width = total_width;
+        canvas.height = d3.select("#print_svg").attr("height");
+        var ctx = canvas.getContext( "2d" );
+
+        if(text == 'PNG' || text == 'PDF'){
+            var dataUri = '';
+            dataUri = 'data:image/svg+xml;base64,' + btoa(svgData);
+
+            var img = document.createElement( "img" );
+
+            img.onload = function() {
+                ctx.drawImage( img, 0, 0 );
+
+                try {
+                    if(text == 'PNG'){
+                        // Try to initiate a download of the image
+                        var a = document.createElement("a");
+                        a.download = "LdCLusterView.png";
+                        a.href = canvas.toDataURL("image/png");
+                        document.querySelector("body").appendChild(a);
+                        a.click();
+                        document.querySelector("body").removeChild(a);
+                    }
+
+                    if(text == 'PDF'){
+
+                        var imgData = canvas.toDataURL("image/png");
+
+                        var imgWidth = 210;
+                        var pageHeight = 295;
+                        var imgHeight = canvas.height * imgWidth / canvas.width;
+
+                        var doc = new jsPDF('p', 'mm');
+                        doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                        doc.save('LdClusterView.pdf');
+                    }
+
+                } catch (ex) {
+
+                    // If downloading not possible (as in IE due to canvas.toDataURL() security issue)
+                    // then display image for saving via right-click
+
+                    var imgPreview = document.createElement("div");
+                    imgPreview.appendChild(img);
+                    document.querySelector("body").appendChild(imgPreview);
+
+                }
+            };
+
+            img.src = dataUri;
+        }
+
+        if(text == 'SVG') {
+            var svg = document.querySelector("#print_svg");
+            var svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
+            var svgUrl = URL.createObjectURL(svgBlob);
+            var downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = "LdCLusterView.svg";
+            downloadLink.click();
+        }
+
+        $('#print_svg').remove();
     }
 </script>
 </body>

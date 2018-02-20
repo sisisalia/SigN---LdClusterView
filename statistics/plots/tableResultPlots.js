@@ -54,6 +54,7 @@ function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name, i
     x.domain([min_x,max_x]);
 
     var svg = d3.select(id).append("svg")
+        .attr('id','spearman-scatter-plot')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -149,14 +150,14 @@ function scatterPlotNumerical(spearman_result, x_data, y_data, x_name, y_name, i
 
     svg.append("text")
         .attr("x", 150)
-        .attr("y", -15)
+        .attr("y", -10)
         .attr("dy", ".35em")
         .attr('font-weight', 'bold')
         .text('p-value : ' + spearman_result.pvalue);
 
     svg.append("text")
         .attr("x", 350)
-        .attr("y", -15)
+        .attr("y", -10)
         .attr("dy", ".35em")
         .attr('font-weight', 'bold')
         .text('adj-pvalue : ' + spearman_result.pvalue_adj);
@@ -288,6 +289,7 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name,i
     y.domain([min_y,max_y]);
 
     var svg = d3.select(id).append("svg")
+        .attr('id','kruskal-scatter-plot')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -391,14 +393,14 @@ function scatterPlotCategorical(kruskal_result, x_data, y_data, x_name, y_name,i
     }
     svg.append("text")
         .attr("x", 250)
-        .attr("y", -15)
+        .attr("y", -10)
         .attr("dy", ".35em")
         .attr('font-weight', 'bold')
         .text('p-value : ' + kruskal_result.pvalue);
 
     svg.append("text")
         .attr("x", 450)
-        .attr("y", -15)
+        .attr("y", -10)
         .attr("dy", ".35em")
         .attr('font-weight', 'bold')
         .text('adj-pvalue : ' + kruskal_result.pvalue_adj);
