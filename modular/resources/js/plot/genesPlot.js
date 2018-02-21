@@ -19,8 +19,8 @@ function drawGenesPlot(table, transcripts, newRow, plotId, leftPlotId, rightPlot
 
     $("#" + plotId + "_td").html(html);
 
-    var start = data.startRuler - 100;
-    var end = data.endRuler + 100;
+    var start = startRuler - 100;
+    var end = endRuler + 100;
     var height = newRow ? transcripts.length * 20 : $("#" + plotId).closest('svg').attr("height");
     var width = $("#" + plotId).width() - 10;
 

@@ -11,7 +11,7 @@
     <script src="js/shapiro-wilk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
     <!--For visualization-->
-    <script src="js/d3.min.js"></script>
+    <script src="utilities/d3.min.js"></script>
     <script src="plots/tableResultPlots.js"></script>
     <script src="plots/MST.js"></script>
     <script src="js/ShortestPathCalculator.js"></script>
@@ -21,14 +21,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.css" rel="stylesheet">
     <!--For sorttable, column-->
-    <script src="js/sorttable.js"></script>
+    <script src="utilities/sorttable.js"></script>
     <!--For filtering and sorting ascending, descending-->
-    <script src="js/excel-bootstrap-table-filter-bundle.js"></script>
+    <script src="utilities/excel-bootstrap-table-filter-bundle.js"></script>
     <link rel="stylesheet" href="css/excel-bootstrap-table-filter-style.css">
     <!--For printing-->
-    <script src="js/blob.js"></script>
-    <script src="js/jquery.sprintf.js"></script>
-    <script src="js/jspdf.debug.js"></script>
+    <script src="utilities/blob.js"></script>
+    <script src="utilities/jquery.sprintf.js"></script>
+    <script src="utilities/jspdf.debug.js"></script>
 </head>
 <body>
 <!--Back to main page-->
@@ -484,12 +484,7 @@
     // 'nosort' class is added to not allow moving 'x' and 'y' column, this could mess up the code where getting x and y name during computing result
     // filter class is added to allow for filtering and sorting
     $('th').each(function(d){
-//        if($(this).html() == 'x' || $(this).html() == 'y'){
-//            $(this).attr('class','filter nosort');
-//        }else{
-            $(this).attr('class','filter nosort');
-//        }
-
+        $(this).attr('class','filter nosort');
     });
 
     // wrap the heading with thead to allow filtering and sorting

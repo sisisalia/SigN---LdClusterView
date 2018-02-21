@@ -6,17 +6,18 @@ view_object = {
     'distance - Cluttered' : 'clutteredr2',
     'distance - Expanded' : 'expandedr2'
 };
+
 function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId, leftPlotId, rightPlotId) {
     var textID = plotId + "_textRef";
-    var refId = data.refSnp;
+    var refId = refSnp;
 
     if (newRow) {
         insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
         $("#" + leftPlotId).empty();
-        var html = "<br>Reference SNP: <input id=\'" + textID + "\' type='text' value='" + data.refSnp + "' readonly></input>";
+        var html = "<br>Reference SNP: <input id=\'" + textID + "\' type='text' value='" + refSnp + "' readonly></input>";
         html += '<br><br>';
-// LD cut off
-        html += "<div style=\"float: left;\">LD threshold : <select id='cutoff_select' onChange='updateLD(); data = computeDistance(data); renderEverything();'>";
+        // LD cut off
+        html += "<div style=\"float: left;\">LD threshold : <select id='cutoff_select' onChange='updateLD(); allDistances = computeDistance(); dendogram = computeDendrogram(ld_distance); renderEverything();'>";
         html += $.map([0, 0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], function(n, i) {
             if(n == ld_distance){
                 return "<option selected=selected>" + n + "</option>";
@@ -99,8 +100,8 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
     var html = "<svg class=\"plot\" id=\"" + plotId + "\"></svg>";
     $("#" + plotId + "_td").html(html);
 
-    var start = data.startRuler - 100;
-    var end = data.endRuler + 100;
+    var start = startRuler - 100;
+    var end = endRuler + 100;
     var height = leaf_nodes.length * 15;
     var width = $("#" + plotId).width();
 
@@ -109,12 +110,12 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
         .append("line")
         .attr("x1", function(d) {
             return (Math.min.apply(null, $.map(d.nodes[0].snps, function(snp, i) {
-                return data.snps[snp].pos
+                return snps[snp].pos
             })) - start) / (end - start) * width
         })
         .attr("x2", function(d) {
             return (Math.max.apply(null, $.map(d.nodes[0].snps, function(snp, i) {
-                return data.snps[snp].pos
+                return snps[snp].pos
             })) - start) / (end - start) * width
         })
         .attr("y1", function(d) {
@@ -129,10 +130,10 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
     target.selectAll("rect").data(function() {
         return $.map(leaf_nodes, function(node, i) {
             return $.map(node.nodes[0].snps, function(snp, j) {
-                data.snps[snp].plot_x = (data.snps[snp].pos - start) / (end - start) * width;
+                snps[snp].plot_x = (snps[snp].pos - start) / (end - start) * width;
                 return {
                     snp: snp,
-                    xpos: data.snps[snp].pos,
+                    xpos: snps[snp].pos,
                     ypos: (orderedPlot ? (clutteredPlot ? (maxD - node.ypos)/(maxD - minD) : (leaf_nodes.indexOf(node) + 1) / leaf_nodes.length) : node.ypos),
                     displayText: snp + (orderedPlot ? " (" + node.ypos + ")" : "")
                 };
@@ -172,14 +173,14 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
         var rightWidth = $("#" + rightPlotId).width() - 30;
         d3.select("#" + rightPlotId).append("g").attr("id", "ordered_axis").attr("transform", "translate(0, 35)").call(axis);
     } else if (addDendrogram) {
-        drawDendrogramPlot("table-1", data.dendrogram, false, rightPlotId, heightOfPlot);
+        drawDendrogramPlot("table-1", dendrogram, false, rightPlotId, heightOfPlot);
         $("#" + plotId).closest('tr').attr("class", "dendrogram");
     }
 
     if (newRow) {
         $(function() {
             $("input[name=\"viewLeaf_" + plotId + "\"]").change(function() {
-                drawLeafNodesPlot(table, data.leaf_nodes, data.allDistances, false, plotId, leftPlotId, rightPlotId);
+                drawLeafNodesPlot(table, leaf_nodes, allDistances, false, plotId, leftPlotId, rightPlotId);
                 sizeAndFunctions([plotId]);
             })
         });

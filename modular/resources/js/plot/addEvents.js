@@ -1,14 +1,13 @@
 function addEvents(mainSVGid, plotType, plotId) {
     // Define drag beavior
-    // Define drag beavior
     var drag = d3.behavior.drag()
         .on("dragstart", function(d) {
-            data.startDrag = data.startRuler;
+            startDrag = startRuler;
         })
         .on("drag", dragmove)
         .on("dragend", function() {
-            if (data.startDrag != data.startRuler) {
-                getData(1);
+            if (startDrag != startRuler) {
+                subject.notify();
                 renderEverything();
             }
         });
@@ -19,10 +18,10 @@ function addEvents(mainSVGid, plotType, plotId) {
 
     function dragmove(d) {
         var x = d3.event.dx;
-        var shift = Math.round((data.endRuler - data.startRuler) / $("#" + plotId).width() * x);
-        data.startRuler -= shift;
-        data.endRuler -= shift;
-        $("#studyDataText").attr("value", data.gene.chr + ": " + data.startRuler + " - " + data.endRuler);
+        var shift = Math.round((endRuler - startRuler) / $("#" + plotId).width() * x);
+        startRuler -= shift;
+        endRuler -= shift;
+        $("#studyDataText").attr("value", gene.chr + ": " + startRuler + " - " + endRuler);
     }
 
     d3.select("#" + plotId).call(drag);
@@ -31,10 +30,6 @@ function addEvents(mainSVGid, plotType, plotId) {
     if (plotType.toLowerCase().startsWith("manhattan")) {
         element = d3.select("#" + plotId + "_manhattan_plot");
 
-    // if (selected_study.length != 0) {
-    //   for(var i = 0; i < selected_study.length ; i++){
-    //     element = d3.select("#" + 'mainMan' + i + "_manhattan_plot");
-        //console.log(element);
         element.selectAll("circle")
             .on("mouseover", function(d) {
                 //Get this bar's x/y values, then augment for the tooltip
@@ -61,14 +56,13 @@ function addEvents(mainSVGid, plotType, plotId) {
                 // reorderClustersByReferenceSnp(d.snp);
                 //window.open("http://bioserver1.sign.a-star.edu.sg:9000/snp/" + d.snp);
             });
-          }
+    }
 
     if (plotType.toLowerCase().startsWith("genes")) {
         if (geneClicked == undefined)
             var geneClicked = false;
 
         element = d3.select("#" + plotId + "_genes_plot");
-        //console.log(element);
         element.selectAll("rect")
             .on("mouseover", function(d) {
                 //Get this bar's x/y values, then augment for the tooltip
@@ -130,13 +124,8 @@ function addEvents(mainSVGid, plotType, plotId) {
                 html += "</ul";
                 $("#context-menu-body").html(html);
                 $("#context-menu").modal("show");
-                // d3.select('#context-menu')
-                //   .style('position', 'absolute')
-                //   .style('left', position[0] + "px")
-                //   .style('top', position[1] + "px");
 
                 d3.event.preventDefault();
-                // alert("hello");
             });
     }
 
@@ -151,8 +140,8 @@ function addEvents(mainSVGid, plotType, plotId) {
                 var text = d3.select(this).attr("id");
                 //Update the tooltip position and value
                 d3.select("#tooltip")
-                    .style("left", xPosition)
-                    .style("top", yPosition)
+                    .style("left", xPosition + 'px')
+                    .style("top", yPosition + 'px')
                     .style("width", "auto")
                     .select("#value")
                     .text(function(p) {
@@ -182,12 +171,12 @@ function addEvents(mainSVGid, plotType, plotId) {
                 var rightPlotId = ($($("#" + plotId + "_leafNodes_plot").closest('tr')[0].children[3].children[0]).attr("id"));
 
                 var refId = d3.select(this).attr("id").split(" ")[0];
-                data.refSnp = refId;
+                refSnp = refId;
                 $("#" + plotId + "_textRef").attr("value", refId);
                 d3.select("#tooltip").classed("hidden", true);
 
-                dataFunctions();
-                drawLeafNodesPlot($("#" + plotId + "_leafNodes_plot").closest('table').attr('id'), data.leaf_nodes, data.allDistances, false, plotId, leftPlotId, rightPlotId);
+                dendrogram = computeDendrogram(distance_cutoff);
+                drawLeafNodesPlot($("#" + plotId + "_leafNodes_plot").closest('table').attr('id'), leaf_nodes, allDistances, false, plotId, leftPlotId, rightPlotId);
                 sizeAndFunctions([plotId]);
             });
     }
@@ -292,26 +281,18 @@ function zoomed(zoomLevel) {
     // for zooming
     if (scaleVal == 0.5 || scaleVal == 2) {
         scaleVal = Math.round(zoomLevel == undefined ? (d3.event.scale) : zoomLevel);
-        var differenceRuler = data.endRuler - data.startRuler;
+        var differenceRuler = endRuler - startRuler;
         var change = Math.floor(Math.pow(-1, scaleVal) * (differenceRuler) / Math.pow(2, scaleVal));
-        if (data.startRuler + change < data.endRuler - change) {
-            data.startRuler += change;
-            data.endRuler -= change;
-            $("#studyDataText").attr("value", data.gene.chr + ": " + data.startRuler + " - " + data.endRuler);
+        if (startRuler + change < endRuler - change) {
+            startRuler += change;
+            endRuler -= change;
+            $("#studyDataText").attr("value", gene.chr + ": " + startRuler + " - " + endRuler);
             if(zoomLevel == 0.5){
-                getData(1);
+                subject.notify();
                 renderEverything();
             }else{
                 renderEverything();
             }
-            // console.log(data.eqtls.length);
-            // if (data.eqtls.length > 0 && Object.keys(data.snps).length > 0 && data.ld.length > 0) {
-            //     renderEverything();
-            // }
-            // else {
-            //     alert("Maximum zoom level reached");
-            //     zoomed(0.5);
-            // }
         } else
             console.log("Maximum zoom level reached");
     }
@@ -322,13 +303,17 @@ function dragSVG(direction){
     if(direction == "left"){
         sign = -1;
     }
-    var shift = Math.round((data.endRuler - data.startRuler) / 5);
-    data.startRuler += sign*shift;
-    data.endRuler += sign*shift;
-    $("#studyDataText").attr("value", data.gene.chr + ": " + data.startRuler + " - " + data.endRuler);
-    getData(1);
+    var shift = Math.round((endRuler - startRuler) / 5);
+    startRuler += sign*shift;
+    endRuler += sign*shift;
+    $("#studyDataText").attr("value", gene.chr + ": " + startRuler + " - " + endRuler);
+    subject.notify();
     renderEverything();
 }
+
+///////////////////////
+// Printing Function //
+///////////////////////
 
 function exportFile(text){
     $('body').append('<svg width="1000" height="1000" id="print_svg" style="background:white;"></svg>');
@@ -455,4 +440,37 @@ function exportFile(text){
     }
 
     $('#print_svg').remove();
+}
+
+/////////////////////////
+// Help Modal function //
+/////////////////////////
+
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    var dots = document.getElementsByClassName("dot");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].className += " active";
 }

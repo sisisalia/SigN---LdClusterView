@@ -1,9 +1,21 @@
+var eqtls;
 var eqtls_result = {};
-var min_p = 99999;
 var eqtl_study_order;
 var eqtl_studies;
 
-// filter the eqtls for the SNPs which are present
+function updateManhattanData(){
+    eqtls = ajaxCall('/ldcluster2/eqtls/' + geneid);
+    var ld_snps = ajaxCall('/ldcluster2/ld/'+ chr + '/' + startRuler + '/' + endRuler + '/' + population);
+    var ld = ld_snps.ld;
+    var snps = ld_snps.snps;
+
+    eqtls_result = {};
+    eqtl_study_order;
+    eqtl_studies;
+
+    min_p = 99999;
+
+    // filter the eqtls for the SNPs which are present
     for (var i = 0; i < Object.keys(eqtls).length; i++) {
         var temp = [];
         var key = Object.keys(eqtls)[i];
@@ -18,7 +30,7 @@ var eqtl_studies;
         }
     }
 
-// find min_p which is not 0
+    // find min_p which is not 0
     for (var i = 0; i < Object.keys(eqtls_result).length; i++) {
         var key = Object.keys(eqtls_result)[i];
         var eqtl = eqtls_result[key];
@@ -33,14 +45,10 @@ var eqtl_studies;
     }
 
     for (var i = 0; i < Object.keys(eqtls_result).length; i++) {
-        var temp = [];
         var key = Object.keys(eqtls_result)[i];
         var eqtl = eqtls_result[key];
         for (var j = 0; j < eqtl.length; j++) {
             eqtl[j].bp = snps[eqtl[j].snp].pos;
-            if (snps[eqtl[j].snp] != undefined) {
-                temp.push(eqtl[j]);
-            }
             var p_value = eqtl[j].p;
             if (p_value == 0) {
                 eqtl[j].neglog10p = -Math.log10(min_p);
@@ -55,7 +63,7 @@ var eqtl_studies;
 
     eqtl_studies = eqtls_result;
 
-// sort the eqtl studies by the best P values and compute the unit -log10 P
+    // sort the eqtl studies by the best P values and compute the unit -log10 P
     for (study in eqtl_studies) {
         eqtl_studies[study].sort(function (a, b) {
             return a.p < b.p ? -1 : 1
@@ -73,7 +81,4 @@ var eqtl_studies;
     eqtl_study_order.sort(function (a, b) {
         return eqtl_studies[a][0].p < eqtl_studies[b][0].p ? -1 : 1
     });
-
-data['eqtls'] = eqtls;
-data['eqtl_studies'] = eqtl_studies;
-data['eqtl_study_order'] = eqtl_study_order;
+}
