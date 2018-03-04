@@ -277,6 +277,11 @@ function addEvents(mainSVGid, plotType, plotId) {
 
 // both for zoom and scaling
 function zoomed(zoomLevel) {
+    if(plotOrder.length == 1 && plotOrder[0].type == 'genesPlot'){
+        $.LoadingOverlay("hide");
+    }else{
+        $.LoadingOverlay("show");
+    }
     var scaleVal = zoomLevel == undefined ? (d3.event.scale) : zoomLevel;
     // for zooming
     if (scaleVal == 0.5 || scaleVal == 2) {
@@ -296,10 +301,15 @@ function zoomed(zoomLevel) {
         } else
             console.log("Maximum zoom level reached");
     }
+    $.LoadingOverlay("hide");
 }
 
 function dragSVG(direction){
-    var sign = 1;
+    if(plotOrder.length == 1 && plotOrder[0].type == 'genesPlot'){
+        $.LoadingOverlay("hide");
+    }else{
+        $.LoadingOverlay("show");
+    }    var sign = 1;
     if(direction == "left"){
         sign = -1;
     }
@@ -309,6 +319,7 @@ function dragSVG(direction){
     $("#studyDataText").attr("value", gene.chr + ": " + startRuler + " - " + endRuler);
     subject.notify();
     renderEverything();
+    $.LoadingOverlay("hide");
 }
 
 ///////////////////////

@@ -27,56 +27,59 @@ function drawManhattanPlot(table, eqtls, newRow, plotId, leftPlotId, rightPlotId
     d3.select('#'+ plotId).append('rect').attr('x', 0).attr('y',5).attr('width',width).attr('height',20).style('fill','transparent').style('stroke','black').style('stroke-width','1px');
 
     var target = d3.select("#" + plotId).append("g").attr("id", plotId + "_manhattan_plot");
-    target.selectAll("circle").data(eqtls).enter()
-        .append("circle")
-        .attr("cx", function(d) {
-            return (d.bp - start) / (end - start) * width
-        })
-        .attr("cy", function(d) {
-            return scale(d.neglog10p);
-            // return d.neglog10p_unit * (height - 10) + 5
-        })
-        .attr("r", function(d) {
-            return 4
-        })
-        .attr("transform", "translate(0, 42)")
-        .attr("fill", function(d) {
-            return "black"
-        })
-        .attr("id", function(d) {
-            return d.displayText;
-        });
 
-    target.selectAll("line").data(eqtls).enter()
-        .append("line")
-        .attr("x1", function(d){
-            return (d.bp - start) / (end - start) * width
-        })
-        .attr("x2", function(d){
-            return (d.bp - start) / (end - start) * width
-        })
-        .attr("y1", function(d){
-            return scale(d.neglog10p) + 12;
-        })
-        .attr("y2", function(d){
-            return scale(scale_end) + 7;
-        })
-        .attr("transform", "translate(0, 35)")
-        .attr("stroke", "#E0E0E0")
-        .attr("stroke-width", 1.5)
+    if(eqtls) {
+        target.selectAll("circle").data(eqtls).enter()
+            .append("circle")
+            .attr("cx", function (d) {
+                return (d.bp - start) / (end - start) * width
+            })
+            .attr("cy", function (d) {
+                return scale(d.neglog10p);
+                // return d.neglog10p_unit * (height - 10) + 5
+            })
+            .attr("r", function (d) {
+                return 4
+            })
+            .attr("transform", "translate(0, 42)")
+            .attr("fill", function (d) {
+                return "black"
+            })
+            .attr("id", function (d) {
+                return d.displayText;
+            });
+
+        target.selectAll("line").data(eqtls).enter()
+            .append("line")
+            .attr("x1", function (d) {
+                return (d.bp - start) / (end - start) * width
+            })
+            .attr("x2", function (d) {
+                return (d.bp - start) / (end - start) * width
+            })
+            .attr("y1", function (d) {
+                return scale(d.neglog10p) + 12;
+            })
+            .attr("y2", function (d) {
+                return scale(scale_end) + 7;
+            })
+            .attr("transform", "translate(0, 35)")
+            .attr("stroke", "#E0E0E0")
+            .attr("stroke-width", 1.5)
         ;
+    }
 
     target.append("line")
-        .attr("x1", function(d){
+        .attr("x1", function (d) {
             return 0
         })
-        .attr("x2", function(d){
+        .attr("x2", function (d) {
             return width
         })
-        .attr("y1", function(d){
+        .attr("y1", function (d) {
             return height;
         })
-        .attr("y2", function(d){
+        .attr("y2", function (d) {
             return height;
         })
         .attr("transform", "translate(0, -10)")

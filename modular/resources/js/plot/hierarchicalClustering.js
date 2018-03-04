@@ -162,17 +162,19 @@ function findDendrogramNodeBySnp(node, snp) {
 
 // funtion to bubble the SNP to the top of the dendrogram
 function bubbleDendrogramNodeToTop(node) {
-    if (node.parent != null) {
-        // get the index position of the node
-        var i = node.parent.nodes.indexOf(node);
-        // swap the position if required
-        if (i != 0) {
-            var n = node.parent.nodes[0];
-            node.parent.nodes[0] = node;
-            node.parent.nodes[i] = n;
+    if (node) {
+        if (node.parent != null) {
+            // get the index position of the node
+            var i = node.parent.nodes.indexOf(node);
+            // swap the position if required
+            if (i != 0) {
+                var n = node.parent.nodes[0];
+                node.parent.nodes[0] = node;
+                node.parent.nodes[i] = n;
+            }
+            // make the parent do the same
+            bubbleDendrogramNodeToTop(node.parent);
         }
-        // make the parent do the same
-        bubbleDendrogramNodeToTop(node.parent);
     }
 }
 

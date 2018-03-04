@@ -50,6 +50,7 @@ Subject.prototype.notify = function( context ){
     var manhattanCounter = 0;
     for(var i=0; i < observerCount; i++){
         if(this.observers.get(i) == 'manhattanPlot'){
+            // prevent multiple activation
             if(manhattanCounter != 0) continue;
             manhattanCounter = 1;
             updateManhattanData();

@@ -186,5 +186,4 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
         });
 
     }
-
 }

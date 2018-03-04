@@ -9,6 +9,8 @@ table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     font-size : 12px;
+    width : auto;
+    height : auto;
 }
 
 #chi-oe-table td, #dunn_table td{

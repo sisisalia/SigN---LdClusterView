@@ -98,7 +98,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="renderEverything();" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="renderEverything();subject.notify();renderEverything();" data-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>
@@ -255,9 +255,14 @@
     <!--Utilities-->
     <script type="text/javascript" src="resources/js/utilities/jquery-ui-1.12.4.js"></script>
     <script type="text/javascript" src="resources/js/utilities/jquery-ui.js"></script>
+    <!--Loading Jquery plugin-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@1.6.0/src/loadingoverlay.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@1.6.0/extras/loadingoverlay_progress/loadingoverlay_progress.min.js"></script>
     <script type="text/javascript" src="ajaxCall.js"></script>
+    <script type="text/javascript">
+        $.LoadingOverlay("show");
+    </script>
     <script type="text/javascript" src="resources/js/utilities/jquery.sprintf.js"></script>
-    <script type="text/javascript" src="resources/js/utilities/jquery.tablednd-v340.js"></script>
     <script type="text/javascript" src="resources/js/utilities/d3.min.js"></script>
     <script type="text/javascript" src="resources/js/utilities/d3-tip.js"></script>
     <script type="text/javascript" src="resources/js/utilities/bootstrap.min.js"></script>
@@ -484,6 +489,8 @@
         function updateSL(){
             sankey_value_selection = $("input[name='sankey_links']:checked").val();;
         }
+
+        $.LoadingOverlay("hide");
 
     </script>
 

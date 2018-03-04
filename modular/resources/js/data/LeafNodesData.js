@@ -2,7 +2,7 @@ refSnp = null;
 var ld;
 var snps;
 
-function updateLeafNodesData(update){
+function updateLeafNodesData(){
     ld_snps = ajaxCall('/ldcluster2/ld/'+ chr + '/' + startRuler + '/' + endRuler + '/' + population);
     ld = ld_snps.ld;
     snps = ld_snps.snps;

@@ -328,6 +328,7 @@ function createMST(choosen_links, groups_obj, graph, nodes, links, max_value, mi
 
     // tooltip mouseout event handler
     var tipMouseoutMST = function (d) {
+        $('.tooltip').css('opacity',0);
         tooltip.style('opacity', 0);
     };
 
