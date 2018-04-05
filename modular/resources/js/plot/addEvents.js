@@ -8,7 +8,6 @@ function addEvents(mainSVGid, plotType, plotId) {
         .on("dragend", function() {
             if (startDrag != startRuler) {
                 subject.notify();
-                renderEverything();
             }
         });
 
@@ -294,7 +293,6 @@ function zoomed(zoomLevel) {
             $("#studyDataText").attr("value", gene.chr + ": " + startRuler + " - " + endRuler);
             if(zoomLevel == 0.5){
                 subject.notify();
-                renderEverything();
             }else{
                 renderEverything();
             }
@@ -318,7 +316,6 @@ function dragSVG(direction){
     endRuler += sign*shift;
     $("#studyDataText").attr("value", gene.chr + ": " + startRuler + " - " + endRuler);
     subject.notify();
-    renderEverything();
     $.LoadingOverlay("hide");
 }
 

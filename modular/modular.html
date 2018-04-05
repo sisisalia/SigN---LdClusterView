@@ -98,7 +98,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="renderEverything();subject.notify();renderEverything();" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="renderEverything();" data-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>
@@ -273,6 +273,7 @@
     <!--Observer framework-->
     <script type="text/javascript" src="resources/js/data/observer.js"></script>
     <!--Data-->
+    <script type="text/javascript" src="resources/js/data/data.js"></script>
     <script type="text/javascript" src="resources/js/data/genesData.js"></script>
     <script type="text/javascript" src="resources/js/data/manhattanData.js"></script>
     <script type="text/javascript" src="resources/js/data/LeafNodesData.js"></script>
@@ -305,7 +306,8 @@
             connectWith: ".connectedSortable"
         }).disableSelection();
 
-        updateLeafNodesData();
+        var start_leaf = 0;
+        //updateLeafNodesData();
         updateManhattanData();
         updateMethylationData();
 
@@ -400,8 +402,12 @@
                     drawManhattanPlot("table-1", eqtl_studies[plot.data], true, plot.plotId, plot.leftPlotId, plot.rightPlotId, plot.data);
                 if(plot.type == "genesPlot")
                     drawGenesPlot("table-1", genes_data, true, plot.plotId, plot.leftPlotId, plot.rightPlotId);
-                else if(plot.type == "leafNodesPlot")
+                else if(plot.type == "leafNodesPlot") {
+                    // set that to update when first time uploading the data
+                    if(start_leaf == 0) updateLeafNodesData();
                     drawLeafNodesPlot("table-1", leaf_nodes, allDistances, true, plot.plotId, plot.leftPlotId, plot.rightPlotId, true);
+                    start_leaf = 1;
+                }
                 else if(plot.type == 'barChartPlot')
                     drawBarChartPlot("table-1", methylation_data, true, plot.leftPlotId, plot.rightPlotId, plot.plotId, plot.data);
                 else if(plot.type == 'sankeyPlot')

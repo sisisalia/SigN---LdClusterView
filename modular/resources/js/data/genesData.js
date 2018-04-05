@@ -1,17 +1,6 @@
-// get data from the session storage submitted by the user
-population = sessionStorage.getItem('population_choice');
-symbol = sessionStorage.getItem('gene_choice');
-gene_optional = sessionStorage.getItem('gene_optional');
+startRuler = null;
+endRuler = null;
 
-// initialized
-var gene;
-var geneid;
-var startRuler;
-var endRuler;
-var chr;
-
-// get gene
-gene = ajaxCall('/gene/symbol/hg19_gencode24/' + symbol);
 // if the gene contains more than one sub-gene, get the one chosen by the user
 if(Object.keys(gene).length != 1){
     geneid = gene_optional;

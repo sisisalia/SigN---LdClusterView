@@ -4,10 +4,15 @@ var eqtl_study_order;
 var eqtl_studies;
 
 function updateManhattanData(){
-    eqtls = ajaxCall('/ldcluster2/eqtls/' + geneid);
-    var ld_snps = ajaxCall('/ldcluster2/ld/'+ chr + '/' + startRuler + '/' + endRuler + '/' + population);
-    var ld = ld_snps.ld;
-    var snps = ld_snps.snps;
+    if(typeof getManhattanData == 'function'){
+        getManhattanData();
+    }else{
+        return;
+    }
+    // eqtls = ajaxCall('/ldcluster2/eqtls/' + geneid);
+    // var ld_snps = ajaxCall('/ldcluster2/ld/'+ chr + '/' + startRuler + '/' + endRuler + '/' + population);
+    // var ld = ld_snps.ld;
+    // var snps = ld_snps.snps;
 
     eqtls_result = {};
     eqtl_study_order;

@@ -70,14 +70,6 @@ function drawBarChartPlot(table, methyl_data, newRow, leftPlotId, rightPlotId, p
         .attr("stroke", "#000000")
         .attr("stroke-width", 1.5);
 
-    // target.append("rect")
-    //     .attr("x", width - 100)
-    //     .attr("y", 190)
-    //     .attr("width", 40)
-    //     .attr("height", 40)
-    //     .attr('fill','black')
-    //     .attr('class','block');
-
     var heightOfPlot = 210;
 
     if (newRow) {

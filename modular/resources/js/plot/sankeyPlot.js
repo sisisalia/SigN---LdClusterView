@@ -152,7 +152,6 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
         $("#" + plotId).closest('svg').attr('height', heightOfPlot);
     }
 
-    // html = "<br>Links : <select id='sankey_links' onChange='updateSL(); renderEverything();'><br><option>P-value</option> <br> <option>FDR</option> <br> <option>Beta</option> </select>";
     html = "<br>Links : <br><input type='radio' name='sankey_links' value='p_value' onclick='updateSL(); renderEverything();'>P-value</input> <br> <input type='radio' name='sankey_links' value='fdr' onclick='updateSL(); renderEverything();'>FDR</input> <br> <input type='radio' name='sankey_links' value='beta' onclick='updateSL(); renderEverything();'>Beta</input>";
 
     $("#" + leftPlotId + "_td").append(html);
@@ -161,5 +160,12 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
         if($(this).val() == sankey_value_selection){
           $(this).attr('checked','checked');
         }
-    })
+    });
+
+    html = "<svg class=\"plot\" id=\"" + rightPlotId + "\"></svg>";
+    $("#" + rightPlotId + "_td").html(html);
+    $("#" + rightPlotId).closest('svg').attr('height', heightOfPlot);
+
+    d3.select("#" + rightPlotId).append('text').attr('x', 35).attr('y', 10).text('Probes').style('font-style', 'italic');
+    d3.select("#" + rightPlotId).append('text').attr('x', 35).attr('y', heightOfPlot - 17).text('SNPs').style('font-style', 'italic');
 }
