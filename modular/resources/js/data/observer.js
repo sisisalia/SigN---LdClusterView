@@ -28,8 +28,9 @@ ObserverList.prototype.removeAt = function( index ){
     this.observerList.splice( index, 1 );
 };
 
-function Subject(){
+function Subject(that){
     this.observers = new ObserverList();
+    this.object = that;
 }
 
 Subject.prototype.addObserver = function( observer ){
@@ -48,30 +49,11 @@ Subject.prototype.notify = function( context ){
             // prevent multiple activation
             if(manhattanCounter != 0) continue;
             manhattanCounter = 1;
-            updateManhattanData();
+            this.object.updateManhattanData();
         }
         if(this.observers.get(i) == 'leafNodesPlot'){
-            updateLeafNodesData();
-        }
-        if(this.observers.get(i) == 'barChartPlot'){
-            updateMethylationData();
+            this.object.updateLeafNodesData();
         }
     }
-
-    //exclude out sankey plot if it is not in the range
-    //currently because data is not from database yet
-    var probe_inside = 0;
-    for(var i = 0; i < mqtls_raw.length; i++){
-        if((mqtls_raw[i].probe_position <= endRuler)&&(mqtls_raw[i].probe_position >= startRuler)){
-            probe_inside = 1;
-        }
-    }
-    if((probe_inside != 0) && ($('.show_mainSankeyPlot').length == 0)){
-        $('#invisible').append('<li class="show_mainSankeyPlot">Sankey Plot</li>');
-    }
-
-    renderEverything();
+    this.object.renderEverything();
 };
-
-subject = new Subject();
-

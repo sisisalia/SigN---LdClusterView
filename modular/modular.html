@@ -5,10 +5,12 @@
 <link rel="stylesheet" href="resources/css/bootstrap-3.3.7-dist/css/bootstrap-toggle.min.css">
 <link rel="stylesheet" type="text/css" href="resources/css/style.css">
 <body>
+<div id="inserthere"></div>
+<div id="LdClusterViewContainer">
     <div id="extraDetails">
         <div id='plot_menu' style='position: relative;'>
             Window size :
-            <select id='window_size_select' onChange='changeSize();'>
+            <select id='window_size_select'>
                 <option value="600">600</option>
                 <option value="800">800</option>
                 <option value="1000">1000</option>
@@ -24,17 +26,15 @@
 
             | <input type="checkbox" id="showHover"> Show Hover </input>
 
-            | <button type="button" onclick="configureList();" data-toggle="modal" data-target="#configureModal"> Configure Plots </button>
+            | <button type="button" data-toggle="modal" data-target="#configureModal"> Configure Plots </button>
             | <button type="button" class="dropdown-toggle" data-toggle="dropdown"> Save Plot <span class="caret"></span></button>
             <div class="dropdown-menu">
-                <button onclick='exportFile($(this).text())' style='cursor:auto;width:150px;margin:5px;text-align:center;'>PNG</button><br>
-                <button onclick='exportFile($(this).text())' style='cursor:auto;width:150px;margin:5px;text-align:center;'>PDF</button><br>
-                <button onclick='exportFile($(this).text())' style='cursor:auto;width:150px;margin:5px;text-align:center;'>SVG</button>
+                <button class="print" style='cursor:auto;width:150px;margin:5px;text-align:center;'>PNG</button><br>
+                <button class="print" style='cursor:auto;width:150px;margin:5px;text-align:center;'>PDF</button><br>
+                <button class="print" style='cursor:auto;width:150px;margin:5px;text-align:center;'>SVG</button>
             </div>
 
             | <button type="button" data-toggle="modal" data-target="#helpModal"> Help </button>
-
-            | <a href='mainpage.html' id='back'> Back to Main Page</a>
 
         </div>
 
@@ -98,7 +98,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="renderEverything();" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-primary" id="save_changes" data-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>
@@ -233,22 +233,19 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Next and previous buttons -->
-                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
                 </div>
                 <br>
 
                 <!-- The dots/circles -->
                 <div style="text-align:center">
-                    <span class="dot" onclick="currentSlide(1)"></span>
-                    <span class="dot" onclick="currentSlide(2)"></span>
-                    <span class="dot" onclick="currentSlide(3)"></span>
-                    <span class="dot" onclick="currentSlide(4)"></span>
+                    <span class="dot" id="dot1"></span>
+                    <span class="dot" id="dot2"></span>
+                    <span class="dot" id="dot3"></span>
+                    <span class="dot" id="dot4"></span>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 
@@ -258,7 +255,6 @@
     <!--Loading Jquery plugin-->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@1.6.0/src/loadingoverlay.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@1.6.0/extras/loadingoverlay_progress/loadingoverlay_progress.min.js"></script>
-    <script type="text/javascript" src="ajaxCall.js"></script>
     <script type="text/javascript">
         $.LoadingOverlay("show");
     </script>
@@ -277,8 +273,6 @@
     <script type="text/javascript" src="resources/js/data/genesData.js"></script>
     <script type="text/javascript" src="resources/js/data/manhattanData.js"></script>
     <script type="text/javascript" src="resources/js/data/LeafNodesData.js"></script>
-    <script type="text/javascript" src="resources/js/data/methylationData.js"></script>
-    <script type="text/javascript" src="resources/js/data/mqtls.js"></script>
     <!--Table construction-->
     <script type="text/javascript" src="resources/js/plot/emptyTab.js"></script>
     <script type="text/javascript" src="resources/js/plot/hoverLine.js"></script>
@@ -296,82 +290,205 @@
     <script type="text/javascript" src="resources/js/plot/addEvents.js"></script>
 
     <script type="text/javascript">
-        // Add a textbox with chr : startRuler - endRuler
-        var windowSize = 1400;
-        var size = gene.chr.length + startRuler.toString().length + endRuler.toString().length + 7;
-        var html = "<input type='text' id='studyDataText' value='" + gene.chr + ": " + startRuler + " - " + endRuler + "' readonly class=\"ruler-point\" size=" + size + "></input>";
-        $("#position-container").append(html);
 
-        $( "#invisible, #visible" ).sortable({
-            connectWith: ".connectedSortable"
-        }).disableSelection();
+        var myPlot = new LdClusterView(gene,eqtls,ld_snps,methylation,mqtls, "#inserthere");
+        myPlot.plot();
 
-        var start_leaf = 0;
-        //updateLeafNodesData();
-        updateManhattanData();
-        updateMethylationData();
-
-        var html = $.map(eqtl_study_order, function(n, i) {
-            return $.sprintf("<li class='show_mainMan'  id='%s'>%s (P=%0.3E)</li>", n, n, eqtl_studies[n][0].p);
-        });
-        $('#invisible').prepend(html);
-
-        bar_chart_choices = [];
-        for(var i=0; i < Object.keys(methylation_data).length; i++){
-            if(Object.keys(methylation_data['PBMC 112 samples'].probes).length == 0){
-                break;
+        // object
+        function LdClusterView(gene,eqtls,ld_snps,methylation,mqtls, id) {
+            // data
+            this.gene = gene;
+            this.eqtls = eqtls;
+            this.ld = ld_snps.ld;
+            this.snps = ld_snps.snps;
+            this.methylation = methylation;
+            if(!mqtls.isArray){
+                var key = Object.keys(mqtls)[0];
+                this.mqtls = mqtls[key].mQTLs;
+            }else{
+                this.mqtls = mqtls;
             }
-            bar_chart_choices.push(Object.keys(methylation_data)[i]);
-            $('#invisible').append($.sprintf("<li class='show_mainBar' id='%s'>%s</li>",Object.keys(methylation_data)[i], Object.keys(methylation_data)[i]));
-        };
+            this.original_snps = null;
+            this.original_ld = null;
+            // insertion point
+            this.id = id;
+            // variables needed
+            this.slideIndex = 1;
+            this.startRuler = -1;
+            this.endRuler = -1;
+            this.chr = '';
+            this.genes_data = {};
+            this.start_leaf = 0;
+            this.eqtl_study_order = {};
+            this.eqtl_studies = {};
+            this.plotOrder = [];
+            this.subject = new Subject();
+            this.refSnp = null;
+            this.snp_r2 = {};
+            this.snp_hc = {};
+            this.distance_cutoff;
+            this.dendrogram;
+            this.allDistances;
+            this.snp_order = {};
+            // draw the leaf nodes
+            this.ld_distance = 0;
+            this.view_choice = 'dendrogram';
+            this.view_object = {
+                'Dendrogram' : 'dendrogram',
+                'distance - Cluttered' : 'clutteredr2',
+                'distance - Expanded' : 'expandedr2'
+            };
+            this.sankey_value_selection = 'p_value';
+            this.sankey_links = {
+                'P-value' : 'p_value',
+                'FDR' : 'fdr',
+                'Beta' : 'beta'
+            };
+            // configuration list
+            this.visible = '';
+            this.invisible = '';
+            this.deleted_track = [];
+            // functions
+            this.plot = plot;
+            this.updateGeneData = updateGeneData;
+            this.updateManhattanData = updateManhattanData;
+            this.updateLeafNodesData = updateLeafNodesData;
+            this.renderEverything = renderEverything;
+            this.changeSize = changeSize;
+            this.drawAxis = drawAxis;
+            this.drawManhattanPlot = drawManhattanPlot;
+            this.drawGenesPlot = drawGenesPlot;
+            this.drawLeafNodesPlot = drawLeafNodesPlot;
+            this.drawBarChartPlot = drawBarChartPlot;
+            this.drawSankeyPlot = drawSankeyPlot;
+            this.sizeAndFunctions = sizeAndFunctions;
+            this.configureList = configureList;
+            this.enableHover = enableHover;
+            this.addEvents = addEvents;
+            this.updateLD = updateLD;
+            this.updateVC = updateVC;
+            this.updateSL = updateSL;
+            this.zoomed = zoomed;
+            this.dragSVG = dragSVG;
+            this.drawEmpty = drawEmpty;
+            this.findLeafNodes = findLeafNodes;
+            this.hclust = hclust;
+            this.collapseByDistance = collapseByDistance;
+            this.findDendrogramNodeBySnp = findDendrogramNodeBySnp;
+            this.bubbleDendrogramNodeToTop = bubbleDendrogramNodeToTop;
+            this.computeDendrogram = computeDendrogram;
+            this.computeDistance = computeDistance;
+            this.insertRow = insertRow;
+            this.drawDendrogramPlot = drawDendrogramPlot;
+            this.currentSlide = currentSlide;
+            this.exportFile = exportFile;
+            this.showSlides = showSlides;
+            this.Subject = Subject;
+        }
 
-        //exclude out sankey plot if it is not in the range
-        //currently because data is not from database yet
-        var probe_inside = 0;
-        for(var i = 0; i < mqtls_raw.length; i++){
-            if((mqtls_raw[i].probe_position <= endRuler)&&(mqtls_raw[i].probe_position >= startRuler)){
-                probe_inside = 1;
+        function plot() {
+            var that = Object.assign(this);
+
+            this.updateGeneData();
+            this.updateManhattanData();
+
+            // Add a textbox with chr : startRuler - endRuler
+            var size = this.gene.chr.length + this.startRuler.toString().length + this.endRuler.toString().length + 7;
+            var html = "<input type='text' id='studyDataText' value='" + this.gene.chr + ": " + this.startRuler + " - " + this.endRuler + "' readonly class=\"ruler-point\" size=" + size + "></input>";
+            $("#position-container").append(html);
+
+            $("#invisible, #visible").sortable({
+                connectWith: ".connectedSortable"
+            }).disableSelection();
+
+            var eqtl_studies = this.eqtl_studies;
+
+            var html = $.map(this.eqtl_study_order, function (n, i) {
+                return $.sprintf("<li class='show_mainMan'  id='%s'>%s (P=%0.3E)</li>", n, n, eqtl_studies[n][0].p);
+            });
+            $('#invisible').prepend(html);
+
+            if(this.methylation != null) {
+                var bar_chart_choices = [];
+                for (var i = 0; i < Object.keys(this.methylation).length; i++) {
+                    bar_chart_choices.push(Object.keys(this.methylation)[i]);
+                    $('#invisible').append($.sprintf("<li class='show_mainBar' id='%s'>%s</li>", Object.keys(this.methylation)[i], Object.keys(this.methylation)[i]));
+                };
             }
+
+            if(this.mqtls != null) {
+                $('#invisible').append('<li class="show_mainSankeyPlot">Sankey Plot</li>');
+            }
+
+            this.renderEverything();
+
+            $('#window_size_select').on('change',function(){
+                that.changeSize();
+            });
+
+            $('.print').on('click',function(){
+                that.exportFile($(this).text());
+            });
+
+            $('#save_changes').on('click',function(){
+                that.renderEverything();
+            });
+
+            $('.dot').on('click',function(){
+               var id = $(this).attr('id');
+               id = id.substring(id.length - 1);
+               that.currentSlide(id);
+            });
+
+            this.showSlides(this.slideIndex);
         }
-        if((probe_inside != 0) && ($('.show_mainSankeyPlot').length == 0)){
-            $('#invisible').append('<li class="show_mainSankeyPlot">Sankey Plot</li>');
-        }
 
-        plotObjects = {
-            "show_mainMan" : {"type": "manhattanPlot", "plotId": "mainMan", "leftPlotId": "leftMan", "rightPlotId": "rightMan"},
-            "show_mainGenes" : {"type": "genesPlot", "plotId": "mainGenes", "leftPlotId": "leftGenes", "rightPlotId": "rightGenes"},
-            "show_mainLeafNodes" : {"type": "leafNodesPlot", "plotId": "mainLeafNodes", "leftPlotId": "leftLeafNodes", "rightPlotId": "rightLeafNodes"},
-            "show_mainBar" : {"type": "barChartPlot", "plotId": "mainBarChart", "leftPlotId": "leftBarChart", "rightPlotId": "rightBarChart"},
-            "show_mainSankeyPlot" : {"type" : "sankeyPlot", "plotId" : "mainSankeyPlot", "leftPlotId" : "leftSankeyPlot", "rightPlotId" : "rightSankeyPlot"}
-        };
-
-        plot_color = {
-            'show_mainMan' : '#AFEEEE',
-            'show_mainGenes' : '#FF9999',
-            'show_mainLeafNodes' : '#89DA49',
-            'show_mainSankeyPlot' : '#E1B16A',
-            'show_mainBar' : '#FFFF99',
-        };
-
-        renderEverything();
-
-        $(window).resize(function() {
-            renderEverything();
-        });
-
-        function changeSize(){
-            renderEverything();
+        function changeSize() {
+            this.renderEverything();
         }
 
         function renderEverything(){
-            windowSize = $('#window_size_select').val();
+            var plotObjects = {
+                "show_mainMan": {
+                    "type": "manhattanPlot",
+                    "plotId": "mainMan",
+                    "leftPlotId": "leftMan",
+                    "rightPlotId": "rightMan"
+                },
+                "show_mainGenes": {
+                    "type": "genesPlot",
+                    "plotId": "mainGenes",
+                    "leftPlotId": "leftGenes",
+                    "rightPlotId": "rightGenes"
+                },
+                "show_mainLeafNodes": {
+                    "type": "leafNodesPlot",
+                    "plotId": "mainLeafNodes",
+                    "leftPlotId": "leftLeafNodes",
+                    "rightPlotId": "rightLeafNodes"
+                },
+                "show_mainBar": {
+                    "type": "barChartPlot",
+                    "plotId": "mainBarChart",
+                    "leftPlotId": "leftBarChart",
+                    "rightPlotId": "rightBarChart"
+                },
+                "show_mainSankeyPlot": {
+                    "type": "sankeyPlot",
+                    "plotId": "mainSankeyPlot",
+                    "leftPlotId": "leftSankeyPlot",
+                    "rightPlotId": "rightSankeyPlot"
+                }
+            };
+
+            var windowSize = $('#window_size_select').val();
 
             $("#table-1").empty();
 
             $('#window_size_select').val(windowSize);
 
-            plotOrder = [];
-            subject = new Subject();
+            var plotOrder = [];
+            var temp_type = [];
             $("#visible").children().each(function(d){
                 var class_name = $(this).attr('class');
                 if(class_name.indexOf(' ') != -1){
@@ -385,35 +502,78 @@
                     temp.data = $(this).attr('id');
                 }
                 plotOrder.push(temp);
-                subject.addObserver(temp.type);
+                temp_type.push(temp.type);
             });
 
-            invisible = $('#invisible').html();
-            visible = $('#visible').html();
-            deleted_track = [];
+            this.subject = new this.Subject(this);
+            for(var i = 0; i < temp_type.length; i++){
+                this.subject.addObserver(temp_type[i]);
+            }
+
+            this.plotOrder = plotOrder;
+
+            this.invisible = $('#invisible').html();
+            this.visible = $('#visible').html();
 
             $("#table-1").attr('width', windowSize);
 
-            drawAxis("table-1", "leftGenomicAxis", "genomic_axis", "rightGenomicAxis", startRuler, endRuler);
+            this.drawAxis("table-1", "leftGenomicAxis", "genomic_axis", "rightGenomicAxis", this.startRuler, this.endRuler);
 
-            for(var i = 0; i < plotOrder.length; i++){
+            for(var i = 0; i < this.plotOrder.length; i++){
                 var plot = plotOrder[i];
                 if(plot.type == "manhattanPlot")
-                    drawManhattanPlot("table-1", eqtl_studies[plot.data], true, plot.plotId, plot.leftPlotId, plot.rightPlotId, plot.data);
+                    this.drawManhattanPlot("table-1", this.eqtl_studies[plot.data], true, plot.plotId, plot.leftPlotId, plot.rightPlotId, plot.data);
                 if(plot.type == "genesPlot")
-                    drawGenesPlot("table-1", genes_data, true, plot.plotId, plot.leftPlotId, plot.rightPlotId);
+                    this.drawGenesPlot("table-1", this.genes_data, true, plot.plotId, plot.leftPlotId, plot.rightPlotId);
                 else if(plot.type == "leafNodesPlot") {
                     // set that to update when first time uploading the data
-                    if(start_leaf == 0) updateLeafNodesData();
-                    drawLeafNodesPlot("table-1", leaf_nodes, allDistances, true, plot.plotId, plot.leftPlotId, plot.rightPlotId, true);
-                    start_leaf = 1;
+                    if(this.start_leaf == 0) this.updateLeafNodesData();
+                    this.drawLeafNodesPlot("table-1", this.leaf_nodes, this.allDistances, this.snps,true, plot.plotId, plot.leftPlotId, plot.rightPlotId, true);
+                    this.start_leaf = 1;
                 }
                 else if(plot.type == 'barChartPlot')
-                    drawBarChartPlot("table-1", methylation_data, true, plot.leftPlotId, plot.rightPlotId, plot.plotId, plot.data);
+                    this.drawBarChartPlot("table-1", this.methylation, true, plot.leftPlotId, plot.rightPlotId, plot.plotId, plot.data);
                 else if(plot.type == 'sankeyPlot')
-                    drawSankeyPlot("table-1", true, plot.plotId, plot.leftPlotId, plot.rightPlotId);
+                    this.drawSankeyPlot("table-1", this.mqtls, true, plot.plotId, plot.leftPlotId, plot.rightPlotId);
             }
-            sizeAndFunctions();
+            this.sizeAndFunctions();
+
+            var that = Object.assign(this);
+
+            $('#dragLeft').on('click',function(){
+                that.dragSVG('left');
+            });
+
+            $('#dragRight').on('click',function(){
+                that.dragSVG('right');
+            });
+
+            $('#zoom2').on('click',function(){
+                that.zoomed(2);
+            });
+
+            $('#zoom05').on('click',function(){
+                that.zoomed(0.5);
+            });
+
+            $('.leaf_radio').on('click',function(){
+                that.updateVC();
+                that.renderEverything();
+            })
+
+            $('#cutoff_select').on('change',function(){
+                that.updateLD();
+                that.allDistances = that.computeDistance();
+                that.dendogram = that.computeDendrogram(that.ld_distance);
+                that.renderEverything();
+            })
+
+            $('.sankey_radio').on('click',function(){
+                that.updateSL();
+                that.renderEverything();
+            })
+
+            $('#LdClusterViewContainer').appendTo(this.id);
         }
 
         function nthIndex(str, pat, n){
@@ -426,7 +586,11 @@
         }
 
         function sizeAndFunctions(plots){
+            var deleted_track = this.deleted_track;
+            var visible = this.visible;
+            var invisible = this.invisible;
             $(".close-plot").on("click", function(d){
+                // originally this.closest
                 var plotId = $(this.closest('tr')).attr("id");
                 plotId = plotId.replace(/\D/g, '');
                 var number = parseInt(plotId) + 1;
@@ -441,28 +605,45 @@
                 var temp = visible.substring(index1, index2 + 5);
                 visible = visible.replace(temp, '');
                 invisible += temp;
-                configureList();
                 this.closest('tr').remove();
                 $("#mainSVG").attr("x", $("#table-1").offset().left);
                 $("#mainSVG").attr("y", $("#table-1").offset().top);
                 $("#mainSVG").attr("height", $("#table-1").height() + 40);
                 $("#mainSVG").attr("width", $("#table-1").width() + 40);
+                updateValue(deleted_track,visible,invisible);
             });
+
+            function updateValue(deleted_track,visible,invisible){
+                this.deleted_track = deleted_track;
+                this.visible = visible;
+                this.invisible = invisible;
+                this.configureList();
+            }
+
+            this.configureList();
 
             $("#mainSVG").attr("x", $("#table-1").offset().left);
             $("#mainSVG").attr("y", $("#table-1").offset().top);
             $("#mainSVG").attr("height", $("#table-1").height() + 40);
             $("#mainSVG").attr("width", $("#table-1").width() + 40);
-            enableHover("mainSVG");
+            this.enableHover("mainSVG");
 
-            for(var i = 0; i < plotOrder.length; i++){
-                addEvents("mainSVG", plotOrder[i].type, plotOrder[i].plotId);
+            for(var i = 0; i < this.plotOrder.length; i++){
+                this.addEvents("mainSVG", this.plotOrder[i].type, this.plotOrder[i].plotId);
             }
         }
 
         function configureList(){
-            $('#invisible').html(invisible);
-            $('#visible').html(visible);
+            var plot_color = {
+                'show_mainMan': '#AFEEEE',
+                'show_mainGenes': '#FF9999',
+                'show_mainLeafNodes': '#89DA49',
+                'show_mainSankeyPlot': '#E1B16A',
+                'show_mainBar': '#FFFF99',
+            };
+
+            $('#invisible').html(this.invisible);
+            $('#visible').html(this.visible);
             $('#invisible li').each(function(d){
                 var temp = $(this).attr('class');
                 temp = $.trim(temp);
@@ -484,16 +665,16 @@
         }
 
         function updateLD(){
-            ld_distance = parseFloat($("#cutoff_select").val());
-            view_choice = 'dendrogram';
+            this.ld_distance = parseFloat($("#cutoff_select").val());
+            this.view_choice = 'dendrogram';
         }
 
         function updateVC(){
-            view_choice = $('input:radio[name="viewLeaf"]:checked').val();
+            this.view_choice = $('input:radio[name="viewLeaf"]:checked').val();
         }
 
         function updateSL(){
-            sankey_value_selection = $("input[name='sankey_links']:checked").val();;
+            this.sankey_value_selection = $("input[name='sankey_links']:checked").val();
         }
 
         $.LoadingOverlay("hide");

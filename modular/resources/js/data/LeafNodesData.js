@@ -1,50 +1,58 @@
-refSnp = null;
-var ld;
-var snps;
-
 function updateLeafNodesData(){
-    if(typeof getLeafNodesData == 'function'){
-        getLeafNodesData();
-    }else{
-        return;
-    }
-    // ld_snps = ajaxCall('/ldcluster2/ld/'+ chr + '/' + startRuler + '/' + endRuler + '/' + population);
-    // ld = ld_snps.ld;
-    // snps = ld_snps.snps;
 
-    // else if(data.)
-    snp_r2 = {};
-    for (snp1 in snps) {
-        snp_r2[snp1] = {};
-        for (snp2 in snps) {
-            snp_r2[snp1][snp2] = 1;
+    if(this.original_snps == null){
+        this.original_snps = jQuery.extend({}, this.snps);
+        this.original_ld = jQuery.extend([], this.ld);
+    }
+    else{
+        this.snps = jQuery.extend({}, this.original_snps);
+        this.ld = jQuery.extend([], this.original_ld);
+    }
+
+    var tempSnps = {};
+
+    for(var obj in this.original_snps){
+        if(this.original_snps[obj].pos >= this.startRuler && this.original_snps[obj].pos <= this.endRuler)
+            tempSnps[obj] = this.original_snps[obj];
+    }
+
+    this.snps = tempSnps;
+
+    var snps = this.snps;
+    this.ld = this.ld.filter(function(d){
+        return (d[0] in snps) && (d[1] in snps);
+    });
+
+        // else if(data.)
+    this.snp_r2 = {};
+    for (var snp1 in this.snps) {
+        this.snp_r2[snp1] = {};
+        for (this.snp2 in this.snps) {
+            this.snp_r2[snp1][this.snp2] = 1;
         }
     }
 
     // set the value from the LD calculations
-    for (var i = 0; i < ld.length; i++) {
-        snp_r2[ld[i][0]][ld[i][1]] = 1 - ld[i][2];
-        snp_r2[ld[i][1]][ld[i][0]] = 1 - ld[i][2];
+    for (var i = 0; i < this.ld.length; i++) {
+        this.snp_r2[this.ld[i][0]][this.ld[i][1]] = 1 - this.ld[i][2];
+        this.snp_r2[this.ld[i][1]][this.ld[i][0]] = 1 - this.ld[i][2];
     }
 
     // cluster the snps
-    snp_hc = hclust(snp_r2);
+    this.snp_hc = this.hclust(this.snp_r2);
+
     // generate the snp order
+    this.snp_order = $.map(this.snps, function(snp, id) { return id; });
+    this.snp_order.sort(function(a, b) {
+        if (snps[a].pos < snps[b].pos) {
+            return -1;
+        }
+        else {
+            return 1;
+        }
+    });
 
-    // snp_order = $.map(snps, function(snp, id) { return id; });
-    //
-    // snp_order.sort(function(a, b) {
-    //     // seems the same as the code below, sort in ascending order of snp according to its position
-    //     // return (data.snps[a].pos - data.snps[b].pos);
-    //     if (snps[a].pos < snps[b].pos) {
-    //         return -1;
-    //     }
-    //     else {
-    //         return 1;
-    //     }
-    // });
-
-    distance_cutoff = ld_distance;
-    dendrogram = computeDendrogram(distance_cutoff);
-    allDistances = computeDistance();
+    this.distance_cutoff = this.ld_distance;
+    this.dendrogram = this.computeDendrogram(this.distance_cutoff);
+    this.allDistances = this.computeDistance();
 }

@@ -1,33 +1,50 @@
 function addEvents(mainSVGid, plotType, plotId) {
-    // Define drag beavior
+    var startRuler = this.startRuler;
+    var endRuler = this.endRuler;
+    var chr = this.gene.chr;
+    var subject = this.subject;
+    var startDrag;
+
+    var that = Object.assign(this);
+
+    // Define drag behaviour
     var drag = d3.behavior.drag()
         .on("dragstart", function(d) {
             startDrag = startRuler;
         })
-        .on("drag", dragmove)
+        .on("drag", function(){
+            var result = dragmove();
+            that.startRuler = result.startRuler;
+            that.endRuler = result.endRuler;
+        })
         .on("dragend", function() {
             if (startDrag != startRuler) {
                 subject.notify();
             }
         });
 
-    var zoom = d3.behavior.zoom()
-        .scaleExtent([-10, 10])
-        .on("zoom", zoomed);
-
     function dragmove(d) {
         var x = d3.event.dx;
         var shift = Math.round((endRuler - startRuler) / $("#" + plotId).width() * x);
         startRuler -= shift;
         endRuler -= shift;
-        $("#studyDataText").attr("value", gene.chr + ": " + startRuler + " - " + endRuler);
+        $("#studyDataText").attr("value", chr + ": " + startRuler + " - " + endRuler);
+        var result = {
+            'startRuler' : startRuler,
+            'endRuler' : endRuler
+        }
+        return result;
     }
+
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([-10, 10])
+        .on("zoom", this.zoomed);
 
     d3.select("#" + plotId).call(drag);
     d3.select("#" + plotId).call(zoom).on('wheel.zoom', null);
 
     if (plotType.toLowerCase().startsWith("manhattan")) {
-        element = d3.select("#" + plotId + "_manhattan_plot");
+        var element = d3.select("#" + plotId + "_manhattan_plot");
 
         element.selectAll("circle")
             .on("mouseover", function(d) {
@@ -61,7 +78,7 @@ function addEvents(mainSVGid, plotType, plotId) {
         if (geneClicked == undefined)
             var geneClicked = false;
 
-        element = d3.select("#" + plotId + "_genes_plot");
+        var element = d3.select("#" + plotId + "_genes_plot");
         element.selectAll("rect")
             .on("mouseover", function(d) {
                 //Get this bar's x/y values, then augment for the tooltip
@@ -129,7 +146,7 @@ function addEvents(mainSVGid, plotType, plotId) {
     }
 
     if (plotType.toLowerCase().startsWith("leafnodes")) {
-        element = d3.select("#" + plotId + "_leafNodes_plot");
+        var element = d3.select("#" + plotId + "_leafNodes_plot");
         //console.log(element);
         element.selectAll("rect")
             .on("mouseover", function(d) {
@@ -170,19 +187,19 @@ function addEvents(mainSVGid, plotType, plotId) {
                 var rightPlotId = ($($("#" + plotId + "_leafNodes_plot").closest('tr')[0].children[3].children[0]).attr("id"));
 
                 var refId = d3.select(this).attr("id").split(" ")[0];
-                refSnp = refId;
+                that.refSnp = refId;
                 $("#" + plotId + "_textRef").attr("value", refId);
                 d3.select("#tooltip").classed("hidden", true);
 
-                dendrogram = computeDendrogram(distance_cutoff);
-                drawLeafNodesPlot($("#" + plotId + "_leafNodes_plot").closest('table').attr('id'), leaf_nodes, allDistances, false, plotId, leftPlotId, rightPlotId);
-                sizeAndFunctions([plotId]);
+                that.dendrogram = that.computeDendrogram(that.distance_cutoff);
+                that.drawLeafNodesPlot($("#" + plotId + "_leafNodes_plot").closest('table').attr('id'), that.leaf_nodes, that.allDistances,that.snps, false, plotId, leftPlotId, rightPlotId);
+                that.sizeAndFunctions([plotId]);
             });
     }
 
     // Bar chart tooltip
     if (plotType.toLowerCase().startsWith("barchart")) {
-        element = d3.select("#" + plotId + "_barchart_plot");
+        var element = d3.select("#" + plotId + "_barchart_plot");
         element.selectAll("rect")
             .on("mouseover", function(d) {
                 //Get this bar's x/y values, then augment for the tooltip
@@ -218,7 +235,7 @@ function addEvents(mainSVGid, plotType, plotId) {
     // Sankey plot tooltip
     // Bar chart tooltip
     if (plotType.toLowerCase().startsWith("sankey")) {
-        element = d3.select("#" + plotId + "_sankey_plot");
+        var element = d3.select("#" + plotId + "_sankey_plot");
         element.selectAll("rect")
             .on("mouseover", function(d) {
                 //Get this bar's x/y values, then augment for the tooltip
@@ -276,25 +293,21 @@ function addEvents(mainSVGid, plotType, plotId) {
 
 // both for zoom and scaling
 function zoomed(zoomLevel) {
-    if(plotOrder.length == 1 && plotOrder[0].type == 'genesPlot'){
-        $.LoadingOverlay("hide");
-    }else{
-        $.LoadingOverlay("show");
-    }
+    $.LoadingOverlay("show");
     var scaleVal = zoomLevel == undefined ? (d3.event.scale) : zoomLevel;
     // for zooming
     if (scaleVal == 0.5 || scaleVal == 2) {
         scaleVal = Math.round(zoomLevel == undefined ? (d3.event.scale) : zoomLevel);
-        var differenceRuler = endRuler - startRuler;
+        var differenceRuler = this.endRuler - this.startRuler;
         var change = Math.floor(Math.pow(-1, scaleVal) * (differenceRuler) / Math.pow(2, scaleVal));
-        if (startRuler + change < endRuler - change) {
-            startRuler += change;
-            endRuler -= change;
-            $("#studyDataText").attr("value", gene.chr + ": " + startRuler + " - " + endRuler);
+        if (this.startRuler + change < this.endRuler - change) {
+            this.startRuler += change;
+            this.endRuler -= change;
+            $("#studyDataText").attr("value", this.gene.chr + ": " + this.startRuler + " - " + this.endRuler);
             if(zoomLevel == 0.5){
-                subject.notify();
+                this.subject.notify();
             }else{
-                renderEverything();
+                this.renderEverything();
             }
         } else
             console.log("Maximum zoom level reached");
@@ -303,19 +316,16 @@ function zoomed(zoomLevel) {
 }
 
 function dragSVG(direction){
-    if(plotOrder.length == 1 && plotOrder[0].type == 'genesPlot'){
-        $.LoadingOverlay("hide");
-    }else{
-        $.LoadingOverlay("show");
-    }    var sign = 1;
+    $.LoadingOverlay("show");
+    var sign = 1;
     if(direction == "left"){
         sign = -1;
     }
-    var shift = Math.round((endRuler - startRuler) / 5);
-    startRuler += sign*shift;
-    endRuler += sign*shift;
-    $("#studyDataText").attr("value", gene.chr + ": " + startRuler + " - " + endRuler);
-    subject.notify();
+    var shift = Math.round((this.endRuler - this.startRuler) / 5);
+    this.startRuler += sign*shift;
+    this.endRuler += sign*shift;
+    $("#studyDataText").attr("value", this.gene.chr + ": " + this.startRuler + " - " + this.endRuler);
+    this.subject.notify();
     $.LoadingOverlay("hide");
 }
 
@@ -454,31 +464,23 @@ function exportFile(text){
 // Help Modal function //
 /////////////////////////
 
-var slideIndex = 1;
-showSlides(slideIndex);
-
-// Next/previous controls
-function plusSlides(n) {
-    showSlides(slideIndex += n);
-}
-
 // Thumbnail image controls
 function currentSlide(n) {
-    showSlides(slideIndex = n);
+    this.showSlides(this.slideIndex = n);
 }
 
 function showSlides(n) {
     var i;
     var slides = document.getElementsByClassName("mySlides");
     var dots = document.getElementsByClassName("dot");
-    if (n > slides.length) {slideIndex = 1}
-    if (n < 1) {slideIndex = slides.length}
+    if (n > slides.length) {this.slideIndex = 1}
+    if (n < 1) {this.slideIndex = slides.length}
     for (i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
     }
     for (i = 0; i < dots.length; i++) {
         dots[i].className = dots[i].className.replace(" active", "");
     }
-    slides[slideIndex-1].style.display = "block";
-    dots[slideIndex-1].className += " active";
+    slides[this.slideIndex-1].style.display = "block";
+    dots[this.slideIndex-1].className += " active";
 }

@@ -1,23 +1,25 @@
 function drawAxis(table, leftPlotId, plotId, rightPlotId, startRuler, endRuler) {
     // insertRow(table, "leftGenomicAxis", "genomic_axis", "rightGenomicAxis", true, true);
 
-    var start = startRuler - 100;
-    var end = endRuler + 100;
+    var start = startRuler;
+    var end = endRuler;
 
-    insertRow(table, leftPlotId, plotId, rightPlotId, true, true);
+    var that = Object.assign(this);
+
+    this.insertRow(table, leftPlotId, plotId, rightPlotId, true, true);
 
     $("#" + leftPlotId).empty();
 
-    var html = "<button type=\"button\" class=\"btn ruler-btn\" onclick=\"dragSVG('left')\">";
+    var html = "<button type=\"button\" id='dragLeft' class=\"btn ruler-btn\">";
     html += "<span class=\"glyphicon glyphicon-chevron-left\"></span>";
     html += "</button>";
-    html += "<button type=\"button\" class=\"btn ruler-btn\" onclick=\"dragSVG('right')\">";
+    html += "<button type=\"button\" id='dragRight' class=\"btn ruler-btn\">";
     html += "<span class=\"glyphicon glyphicon-chevron-right\"></span>";
     html += "</button>";
-    html += "<button type=\"button\" class=\"btn ruler-btn\" onclick=\"zoomed(2);\">";
+    html += "<button type=\"button\" id='zoom2' class=\"btn ruler-btn\">";
     html += "<span class=\"glyphicon glyphicon-zoom-in\"></span>";
     html += "</button>";
-    html += "<button type=\"button\" class=\"btn ruler-btn\" onclick=\"zoomed(0.5);\">";
+    html += "<button type=\"button\" id='zoom05' class=\"btn ruler-btn\">";
     html += "<span class=\"glyphicon glyphicon-zoom-out\"></span>";
     html += "</button>";
 

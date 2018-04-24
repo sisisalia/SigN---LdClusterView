@@ -1,25 +1,18 @@
-// draw the leaf nodes
-ld_distance = 0;
-view_choice = 'dendrogram';
-view_object = {
-    'Dendrogram' : 'dendrogram',
-    'distance - Cluttered' : 'clutteredr2',
-    'distance - Expanded' : 'expandedr2'
-};
-
-function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId, leftPlotId, rightPlotId) {
+function drawLeafNodesPlot(table, leaf_nodes_data, allDistances,snps, newRow, plotId, leftPlotId, rightPlotId) {
     var textID = plotId + "_textRef";
-    var refId = refSnp;
+    var refId = this.refSnp;
+
+    var that = Object.assign(this);
 
     if (newRow) {
-        insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
+        this.insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
         $("#" + leftPlotId).empty();
-        var html = "<br>Reference SNP: <input id=\'" + textID + "\' type='text' value='" + refSnp + "' readonly></input>";
+        var html = "<br>Reference SNP: <input id=\'" + textID + "\' type='text' value='" + this.refSnp + "' readonly></input>";
         html += '<br><br>';
         // LD cut off
-        html += "<div style=\"float: left;\">LD threshold : <select id='cutoff_select' onChange='updateLD(); allDistances = computeDistance(); dendogram = computeDendrogram(ld_distance); renderEverything();'>";
+        html += "<div style=\"float: left;\">LD threshold : <select id='cutoff_select'>";
         html += $.map([0, 0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], function(n, i) {
-            if(n == ld_distance){
+            if(n == that.ld_distance){
                 return "<option selected=selected>" + n + "</option>";
             }else{
                 return "<option>" + n + "</option>";
@@ -28,13 +21,15 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
         html += "</select>";
         html += "<br><br><b>View: </b>";
         // html += "<select id='view_choice' onChange='updateVC(); renderEverything();'> <option>Dendrogram</option><option>distance - Cluttered</option><option>distance - Expanded</option></select>";
-        html += "<br><input type=\"radio\" id=\"dendrogram\" value='dendrogram' onclick='updateVC();renderEverything();' name=\"viewLeaf" + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\">Dendrogram</input>";
-        html += "<br><input type=\"radio\" id=\"clutteredr2\" value='clutteredr2' onclick='updateVC();renderEverything();' name=\"viewLeaf" + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup>distance - Cluttered</input>";
-        html += "<br><input type=\"radio\" id=\"expandedr2\" value='expandedr2' onclick='updateVC();renderEverything();' name=\"viewLeaf" + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup>distance - Expanded</input>";
+        html += "<br><input type=\"radio\" class='leaf_radio' id=\"dendrogram\" value='dendrogram' name=\"viewLeaf" + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\">Dendrogram</input>";
+        html += "<br><input type=\"radio\" class='leaf_radio' id=\"clutteredr2\" value='clutteredr2' name=\"viewLeaf" + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup>distance - Cluttered</input>";
+        html += "<br><input type=\"radio\" class='leaf_radio' id=\"expandedr2\" value='expandedr2' name=\"viewLeaf" + "\" style=\"margin-left:20px; margin-right:5px; margin-top: 5px;\"> r<sup>2</sup>distance - Expanded</input>";
 // html += "<br><input type=\"checkbox\" id=\"" + checkBoxID + "\"> Show by r2 distance from the ref SNP</input>";
         var initialHTML = $("#" + leftPlotId + "_td").html();
         $("#" + leftPlotId + "_td").html(initialHTML + html);
     }
+
+    var view_choice = this.view_choice;
 
     $('input:radio[name="viewLeaf"]').each(function(){
         if($(this).val() == view_choice){
@@ -42,32 +37,13 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
         }
     });
 
-    // $('#view_choice option').each(function(){
-    //     if(view_object[$(this).text()] == view_choice){
-    //         $(this).attr('selected','selected');
-    //     }
-    // });
-
     $("#" + rightPlotId).empty();
     $("#" + plotId).empty();
-
-    // if(view_object[$('#view_choice').val()] == 'dendrogram' ){
-    //     var orderedPlot = false;
-    // }else{
-    //     var orderedPlot = true;
-    // }
-    //
-    // if(view_object[$('#view_choice').val()] == 'clutteredr2' ){
-    //     var clutteredPlot = true;
-    // }else{
-    //     var clutteredPlot = false;
-    // }
 
     var orderedPlot = !($("#dendrogram").prop('checked'));
     var clutteredPlot = $("#clutteredr2").prop('checked');
 
     var addDendrogram = orderedPlot ? false : true;
-// var orderedPlot = checkBoxID;
 
     var leaf_nodes = leaf_nodes_data;
 
@@ -100,8 +76,8 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
     var html = "<svg class=\"plot\" id=\"" + plotId + "\"></svg>";
     $("#" + plotId + "_td").html(html);
 
-    var start = startRuler - 100;
-    var end = endRuler + 100;
+    var start = this.startRuler;
+    var end = this.endRuler;
     var height = leaf_nodes.length * 15;
     var width = $("#" + plotId).width();
 
@@ -173,15 +149,15 @@ function drawLeafNodesPlot(table, leaf_nodes_data, allDistances, newRow, plotId,
         var rightWidth = $("#" + rightPlotId).width() - 30;
         d3.select("#" + rightPlotId).append("g").attr("id", "ordered_axis").attr("transform", "translate(0, 35)").call(axis);
     } else if (addDendrogram) {
-        drawDendrogramPlot("table-1", dendrogram, false, rightPlotId, heightOfPlot);
+        this.drawDendrogramPlot("table-1", this.dendrogram, false, rightPlotId, heightOfPlot);
         $("#" + plotId).closest('tr').attr("class", "dendrogram");
     }
 
     if (newRow) {
         $(function() {
             $("input[name=\"viewLeaf_" + plotId + "\"]").change(function() {
-                drawLeafNodesPlot(table, leaf_nodes, allDistances, false, plotId, leftPlotId, rightPlotId);
-                sizeAndFunctions([plotId]);
+                this.drawLeafNodesPlot(table, leaf_nodes, allDistances,snps, false, plotId, leftPlotId, rightPlotId);
+                this.sizeAndFunctions([plotId]);
             })
         });
 

@@ -1,7 +1,7 @@
 // draw the genes
 function drawGenesPlot(table, transcripts, newRow, plotId, leftPlotId, rightPlotId) {
     if(newRow){
-        insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
+        this.insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
         $("#" + leftPlotId).empty();
         $("#" + rightPlotId).empty();
         $("#" + plotId).empty();
@@ -19,8 +19,8 @@ function drawGenesPlot(table, transcripts, newRow, plotId, leftPlotId, rightPlot
 
     $("#" + plotId + "_td").html(html);
 
-    var start = startRuler - 100;
-    var end = endRuler + 100;
+    var start = this.startRuler;
+    var end = this.endRuler;
     var height = newRow ? transcripts.length * 20 : $("#" + plotId).closest('svg').attr("height");
     var width = $("#" + plotId).width() - 10;
 

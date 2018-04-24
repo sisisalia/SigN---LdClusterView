@@ -1,7 +1,7 @@
 // draw the manhattan plot
 function drawManhattanPlot(table, eqtls, newRow, plotId, leftPlotId, rightPlotId, selected_study) {
     if(newRow){
-        insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
+        this.insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
         $("#" + leftPlotId).empty();
         $("#" + rightPlotId).empty();
         $("#" + plotId).empty();
@@ -10,8 +10,8 @@ function drawManhattanPlot(table, eqtls, newRow, plotId, leftPlotId, rightPlotId
     var html = "<svg class=\"plot\" id=\"" + plotId + "\"></svg>";
     $("#" + plotId + "_td").append(html);
 
-    var start = startRuler - 100;
-    var end = endRuler + 100;
+    var start = this.startRuler;
+    var end = this.endRuler;
     var height = newRow ? 255 : $("#" + plotId).closest('svg').attr("height");
     var width = $("#" + plotId).width();
 

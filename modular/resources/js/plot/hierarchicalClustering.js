@@ -4,8 +4,8 @@ function findLeafNodes(node) {
     if (node.nodes.length == 1) {
         return [node];
     } else {
-        nodes = $.map(node.nodes, function(v, i) {
-            return findLeafNodes(v)
+        var nodes = $.map(node.nodes, function(v, i) {
+            return this.findLeafNodes(v)
         });
         return nodes;
     }
@@ -35,8 +35,8 @@ function hclust(dist) {
 
     // find the closest max distance
     function completeLinkage(dist, a, b) {
-        var anodes = findLeafNodes(a);
-        var bnodes = findLeafNodes(b);
+        var anodes = this.findLeafNodes(a);
+        var bnodes = this.findLeafNodes(b);
         var best_dist = null;
         var d = null;
         for (var i = 0; i < anodes.length; i++) {
@@ -57,8 +57,8 @@ function hclust(dist) {
     }
     // find the closest average distance
     function averageLinkage(dist, a, b) {
-        var anodes = findLeafNodes(a);
-        var bnodes = findLeafNodes(b);
+        var anodes = this.findLeafNodes(a);
+        var bnodes = this.findLeafNodes(b);
         var sum = 0;
         var n = 0;
         for (var i = 0; i < anodes.length; i++) {
@@ -149,7 +149,7 @@ function findDendrogramNodeBySnp(node, snp) {
     } else if (node.nodes.length > 1) {
         var n = null;
         for (var i = 0; i < node.nodes.length; i++) {
-            n = findDendrogramNodeBySnp(node.nodes[i], snp);
+            n = this.findDendrogramNodeBySnp(node.nodes[i], snp);
             if (n != null) {
                 break;
             }
@@ -173,7 +173,7 @@ function bubbleDendrogramNodeToTop(node) {
                 node.parent.nodes[i] = n;
             }
             // make the parent do the same
-            bubbleDendrogramNodeToTop(node.parent);
+            this.bubbleDendrogramNodeToTop(node.parent);
         }
     }
 }
@@ -181,17 +181,19 @@ function bubbleDendrogramNodeToTop(node) {
 // compute the dendrogram specifying the distance cutoff
 function computeDendrogram(distance_cutoff) {
     // collapse the cluster by distance
-    dendrogram = collapseByDistance(snp_hc, distance_cutoff);
+    this.dendrogram = this.collapseByDistance(this.snp_hc, distance_cutoff);
     // fix to the reference SNP if there is one
-    if (refSnp != null) {
-        var n = findDendrogramNodeBySnp(dendrogram, refSnp);
-        bubbleDendrogramNodeToTop(n);
+    if (this.refSnp != null) {
+        var n = this.findDendrogramNodeBySnp(this.dendrogram, this.refSnp);
+        this.bubbleDendrogramNodeToTop(n);
     }
     // compute the leaf nodes
-    leaf_nodes = findLeafNodes(dendrogram);
-    if(refSnp == null)
-        refSnp = leaf_nodes[0].nodes[0].snps[0];
-    $.map(leaf_nodes, function(node, i) {
+    this.leaf_nodes = this.findLeafNodes(this.dendrogram);
+    if(this.refSnp == null)
+        this.refSnp = this.leaf_nodes[0].nodes[0].snps[0];
+    var leaf_nodes = this.leaf_nodes;
+    $.map(this.leaf_nodes, function(node, i) {
+        node.ypos = i / (leaf_nodes.length - 1);
         node.ypos = i / (leaf_nodes.length - 1);
         node.xpos = 0
     });
@@ -211,26 +213,26 @@ function computeDendrogram(distance_cutoff) {
         }
         return node;
     }
-    dendrogram = computePosition(dendrogram);
-    return dendrogram;
+    this.dendrogram = computePosition(this.dendrogram);
+    return this.dendrogram;
 }
 
 // compute the distances
 function computeDistance(linkage = "complete") {
-    var dist = snp_r2;
-    var cluster = dendrogram;
-    allDendrogramNodes = [];
-    for (var key in snps) {
-        if (snps.hasOwnProperty(key)) {
-            var snpsTemp = findDendrogramNodeBySnp(cluster, key);
+    var dist = this.snp_r2;
+    var cluster = this.dendrogram;
+    var allDendrogramNodes = [];
+    for (var key in this.snps) {
+        if (this.snps.hasOwnProperty(key)) {
+            var snpsTemp = this.findDendrogramNodeBySnp(cluster, key);
             if (allDendrogramNodes.indexOf(snpsTemp.nodes[0].snps) < 0) {
                 allDendrogramNodes.push(snpsTemp.nodes[0].snps);
             }
         }
     }
-    allDistances = [];
-    for (snp1 in allDendrogramNodes) {
-        for (snp2 in allDendrogramNodes) {
+    this.allDistances = [];
+    for (var snp1 in allDendrogramNodes) {
+        for (var snp2 in allDendrogramNodes) {
             var node = {};
             var best_dist = null;
             var d = null;
@@ -254,8 +256,8 @@ function computeDistance(linkage = "complete") {
                 refSnp: allDendrogramNodes[snp1],
                 snps: allDendrogramNodes[snp2]
             });
-            allDistances = allDistances.concat(node);
+            this.allDistances = this.allDistances.concat(node);
         }
     }
-    return allDistances;
+    return this.allDistances;
 }

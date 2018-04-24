@@ -2,7 +2,7 @@ function drawDendrogramPlot(table, node, newRow, plotId, leftPlotId, rightPlotId
   // console.log((node.nodes));
     if (node.nodes.length > 1) {
         if(newRow){
-	    	insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
+	    	this.insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
 	    	$("#" + leftPlotId).empty();
 	    	$("#" + rightPlotId).empty();
 	    	$("#" + plotId).empty();
@@ -34,7 +34,7 @@ function drawDendrogramPlot(table, node, newRow, plotId, leftPlotId, rightPlotId
                 .attr("stroke-width", 1);
         });
         $.map(node.nodes, function(n, i) {
-            drawDendrogramPlot(table, n, false, plotId);
+            this.drawDendrogramPlot(table, n, false, plotId);
         });
 
 	    var heightOfPlot = $("#" + plotId + "_leafNodes_plot").get(0).getBBox().height + 10;

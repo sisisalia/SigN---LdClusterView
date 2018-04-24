@@ -1,32 +1,32 @@
-var eqtls;
-var eqtls_result = {};
-var eqtl_study_order;
-var eqtl_studies;
-
 function updateManhattanData(){
-    if(typeof getManhattanData == 'function'){
-        getManhattanData();
-    }else{
-        return;
-    }
-    // eqtls = ajaxCall('/ldcluster2/eqtls/' + geneid);
-    // var ld_snps = ajaxCall('/ldcluster2/ld/'+ chr + '/' + startRuler + '/' + endRuler + '/' + population);
-    // var ld = ld_snps.ld;
-    // var snps = ld_snps.snps;
+    var eqtls_result = {};
+    var eqtl_study_order;
+    var eqtl_studies;
 
-    eqtls_result = {};
-    eqtl_study_order;
-    eqtl_studies;
-
-    min_p = 99999;
+    var min_p = 99999;
 
     // filter the eqtls for the SNPs which are present
-    for (var i = 0; i < Object.keys(eqtls).length; i++) {
+    for (var i = 0; i < Object.keys(this.eqtls).length; i++) {
         var temp = [];
-        var key = Object.keys(eqtls)[i];
-        var eqtl = eqtls[key];
+        var key = Object.keys(this.eqtls)[i];
+        var eqtl = this.eqtls[key];
         for (var j = 0; j < eqtl.length; j++) {
-            if (snps[eqtl[j].snp] != undefined) {
+            if (this.snps[eqtl[j].snp] != undefined) {
+                temp.push(eqtl[j]);
+            }
+        }
+        if (temp.length != 0) {
+            eqtls_result[key] = temp;
+        }
+    }
+
+    // filter the eqtls that are not in the ruler
+    for (var i = 0; i < Object.keys(eqtls_result).length; i++) {
+        var temp = [];
+        var key = Object.keys(eqtls_result)[i];
+        var eqtl = eqtls_result[key];
+        for (var j = 0; j < eqtl.length; j++) {
+            if(eqtl[j].pos >= this.startRuler && eqtl[j].pos <= this.endRuler){
                 temp.push(eqtl[j]);
             }
         }
@@ -53,7 +53,7 @@ function updateManhattanData(){
         var key = Object.keys(eqtls_result)[i];
         var eqtl = eqtls_result[key];
         for (var j = 0; j < eqtl.length; j++) {
-            eqtl[j].bp = snps[eqtl[j].snp].pos;
+            eqtl[j].bp = this.snps[eqtl[j].snp].pos;
             var p_value = eqtl[j].p;
             if (p_value == 0) {
                 eqtl[j].neglog10p = -Math.log10(min_p);
@@ -69,7 +69,7 @@ function updateManhattanData(){
     eqtl_studies = eqtls_result;
 
     // sort the eqtl studies by the best P values and compute the unit -log10 P
-    for (study in eqtl_studies) {
+    for (var study in eqtl_studies) {
         eqtl_studies[study].sort(function (a, b) {
             return a.p < b.p ? -1 : 1
         });
@@ -86,4 +86,7 @@ function updateManhattanData(){
     eqtl_study_order.sort(function (a, b) {
         return eqtl_studies[a][0].p < eqtl_studies[b][0].p ? -1 : 1
     });
+
+    this.eqtl_study_order = eqtl_study_order;
+    this.eqtl_studies = eqtl_studies;
 }

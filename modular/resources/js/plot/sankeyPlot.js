@@ -1,12 +1,6 @@
-sankey_value_selection = 'p_value';
-sankey_links = {
-    'P-value' : 'p_value',
-    'FDR' : 'fdr',
-    'Beta' : 'beta'
-};
-function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
+function drawSankeyPlot(table, mqtls_raw, newRow, plotId, leftPlotId, rightPlotId) {
     if(newRow){
-        insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
+        this.insertRow(table, leftPlotId, plotId, rightPlotId, false, false);
         $("#" + leftPlotId).empty();
         $("#" + rightPlotId).empty();
         $("#" + plotId).empty();
@@ -15,8 +9,8 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
     var html = "<svg class=\"plot\" id=\"" + plotId + "\"></svg>";
     $("#" + plotId + "_td").append(html);
 
-    var start = startRuler - 100;
-    var end = endRuler + 100;
+    var start = this.startRuler;
+    var end = this.endRuler;
     var height = newRow ? 200 : $("#" + plotId).closest('svg').attr("height");
     var width = $("#" + plotId).width();
 
@@ -29,7 +23,9 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
 
     var path = sankey.link();
 
-        var mqtls = {
+    var sankey_value_selection = this.sankey_value_selection;
+
+    var mqtls = {
             "nodes": [],
             "links": []
         };
@@ -152,7 +148,7 @@ function drawSankeyPlot(table, newRow, plotId, leftPlotId, rightPlotId) {
         $("#" + plotId).closest('svg').attr('height', heightOfPlot);
     }
 
-    html = "<br>Links : <br><input type='radio' name='sankey_links' value='p_value' onclick='updateSL(); renderEverything();'>P-value</input> <br> <input type='radio' name='sankey_links' value='fdr' onclick='updateSL(); renderEverything();'>FDR</input> <br> <input type='radio' name='sankey_links' value='beta' onclick='updateSL(); renderEverything();'>Beta</input>";
+    html = "<br>Links : <br><input type='radio' class='sankey_radio' name='sankey_links' value='p_value'>P-value</input> <br> <input type='radio' class='sankey_radio' name='sankey_links' value='fdr'>FDR</input> <br> <input type='radio' class='sankey_radio' name='sankey_links' value='beta'>Beta</input>";
 
     $("#" + leftPlotId + "_td").append(html);
 
