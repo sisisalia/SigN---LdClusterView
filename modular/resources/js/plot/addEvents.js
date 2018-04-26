@@ -335,7 +335,9 @@ function dragSVG(direction){
 
 function exportFile(text){
     var sheets = document.styleSheets;
-    if(!sheets[0].hasOwnProperty('cssRules')) {
+    try {
+        var rules = sheets[0].cssRules;
+    } catch(err) {
         alert('Please use http protocol to be able to activate printing function');
         return;
     }

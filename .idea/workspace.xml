@@ -14,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="modular.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="modular.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modular/modular.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="164" column="44" lean-forward="true" selection-start-line="164" selection-start-column="44" selection-end-line="164" selection-end-column="44" />
+            <state relative-caret-position="486">
+              <caret line="308" column="13" lean-forward="true" selection-start-line="308" selection-start-column="13" selection-end-line="308" selection-end-column="13" />
               <folding>
                 <element signature="n#style#0;n#button#1;n#div#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#button#2;n#div#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -27,14 +27,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addEvents.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="addEvents.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modular/resources/js/plot/addEvents.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="338" column="13" lean-forward="false" selection-start-line="338" selection-start-column="13" selection-end-line="338" selection-end-column="13" />
+            <state relative-caret-position="417">
+              <caret line="343" column="0" lean-forward="false" selection-start-line="343" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
               <folding>
-                <marker date="1524755296098" expanded="true" signature="5345:5374" ph="..." />
-                <marker date="1524755296098" expanded="true" signature="14031:14048" ph="..." />
+                <marker date="1524755977389" expanded="true" signature="5345:5374" ph="..." />
+                <marker date="1524755977389" expanded="true" signature="14052:14069" ph="..." />
               </folding>
             </state>
           </provider>
@@ -48,16 +48,6 @@
               <folding>
                 <marker date="1524722243060" expanded="true" signature="1462:1561" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="data.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modular/resources/js/data/data.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2525">
-              <caret line="2" column="11" lean-forward="false" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -76,7 +66,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>probe</find>
       <find>alt_a</find>
       <find>rsid</find>
       <find>allele</find>
@@ -106,6 +95,7 @@
       <find>notify</find>
       <find>insertRow</find>
       <find>myPlo</find>
+      <find>mqtls</find>
     </findStrings>
     <replaceStrings>
       <replace>original_eqtls</replace>
@@ -163,8 +153,8 @@
         <option value="$PROJECT_DIR$/modular/resources/js/plot/ruler.js" />
         <option value="$PROJECT_DIR$/modular/resources/js/plot/sankeyPlot.js" />
         <option value="$PROJECT_DIR$/modular/resources/js/data/observer.js" />
-        <option value="$PROJECT_DIR$/modular/resources/js/plot/addEvents.js" />
         <option value="$PROJECT_DIR$/modular/modular.html" />
+        <option value="$PROJECT_DIR$/modular/resources/js/plot/addEvents.js" />
       </list>
     </option>
   </component>
@@ -380,12 +370,12 @@
       <workItem from="1524463951027" duration="792000" />
       <workItem from="1524474602263" duration="19477000" />
       <workItem from="1524534487164" duration="22167000" />
-      <workItem from="1524722028451" duration="2198000" />
+      <workItem from="1524722028451" duration="2735000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="735793000" />
+    <option name="totallyTimeSpent" value="736330000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
@@ -584,10 +574,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/data/data.js">
+    <entry file="file://$PROJECT_DIR$/modular/resources/js/plot/emptyTab.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2525">
-          <caret line="2" column="11" lean-forward="false" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+        <state relative-caret-position="275">
+          <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -602,32 +592,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/plot/addEvents.js">
+    <entry file="file://$PROJECT_DIR$/modular/resources/js/data/data.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="338" column="13" lean-forward="false" selection-start-line="338" selection-start-column="13" selection-end-line="338" selection-end-column="13" />
-          <folding>
-            <marker date="1524755296098" expanded="true" signature="5345:5374" ph="..." />
-            <marker date="1524755296098" expanded="true" signature="14031:14048" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modular/resources/js/plot/emptyTab.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+        <state relative-caret-position="241">
+          <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modular/modular.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="164" column="44" lean-forward="true" selection-start-line="164" selection-start-column="44" selection-end-line="164" selection-end-column="44" />
+        <state relative-caret-position="486">
+          <caret line="308" column="13" lean-forward="true" selection-start-line="308" selection-start-column="13" selection-end-line="308" selection-end-column="13" />
           <folding>
             <element signature="n#style#0;n#button#1;n#div#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#2;n#div#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modular/resources/js/plot/addEvents.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="417">
+          <caret line="343" column="0" lean-forward="false" selection-start-line="343" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
+          <folding>
+            <marker date="1524755977389" expanded="true" signature="5345:5374" ph="..." />
+            <marker date="1524755977389" expanded="true" signature="14052:14069" ph="..." />
           </folding>
         </state>
       </provider>
