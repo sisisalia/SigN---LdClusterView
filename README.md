@@ -7,7 +7,7 @@ Data required are gene, gene, eqtls, ld_snps, methylation, mqtls as described in
 Setting up the data and running the application:
 1. Input the data into respective variables. No restriction is made in naming the variables.
 2. At 'modular/modular.html', insert : <br />
-        // the parameters are : gene data, eqtls data, ld_snps data, methylation data, mqtls data, entry point to html DOM (must input either id(#) or class(.)) <br />
+        // the parameters are : gene data, eqtls data, ld_snps data, methylation data, mqtls data, entry point to HTML DOM (must input either id(#) or class(.)) <br />
         var myPlot = new LdClusterView(gene,eqtls,ld_snps,methylation,mqtls, "#inserthere"); <br />
         // activate plot function <br />
         myPlot.plot(); <br />
@@ -17,7 +17,7 @@ Setting up the data and running the application:
 Currently the files are accompanied by the sample data. Hence, to delete sample data :
 1. Delete 'modular/resources/js/data/data.js' file
 2. At 'modular/modular.html' : 
-   - Delete "<div id="inserthere"></div>" at line 8
+   - Delete "inserthere" division at line 8
    - Delete "<script type="text/javascript" src="resources/js/data/data.js"></script>" at line 272
    - Delete myPlot declarations at line 293 and 294
 
