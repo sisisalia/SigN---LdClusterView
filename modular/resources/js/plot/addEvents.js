@@ -335,10 +335,12 @@ function dragSVG(direction){
 
 function exportFile(text){
     var sheets = document.styleSheets;
-    if (!sheets[0].hasOwnProperty('rules')){
+    try {
+        var rules = sheets[0].cssRules;
+    } catch(err) {
         alert('Please use http protocol to be able to activate printing function');
         return;
-    };
+    }
     $('body').append('<svg width="1000" height="1000" id="print_svg" style="background:white;"></svg>');
     var height = 10;
     var total_width = 0;
