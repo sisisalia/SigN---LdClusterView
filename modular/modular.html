@@ -274,7 +274,6 @@
     <script type="text/javascript" src="resources/js/data/manhattanData.js"></script>
     <script type="text/javascript" src="resources/js/data/LeafNodesData.js"></script>
     <!--Table construction-->
-    <script type="text/javascript" src="resources/js/plot/emptyTab.js"></script>
     <script type="text/javascript" src="resources/js/plot/hoverLine.js"></script>
     <script type="text/javascript" src="resources/js/plot/insertRow.js"></script>
     <script type="text/javascript" src="resources/js/plot/ruler.js"></script>
@@ -308,6 +307,7 @@
             }else{
                 this.mqtls = mqtls;
             }
+            // to keep the original for filtering purpose
             this.original_snps = null;
             this.original_ld = null;
             // insertion point
@@ -370,7 +370,6 @@
             this.updateSL = updateSL;
             this.zoomed = zoomed;
             this.dragSVG = dragSVG;
-            this.drawEmpty = drawEmpty;
             this.findLeafNodes = findLeafNodes;
             this.hclust = hclust;
             this.collapseByDistance = collapseByDistance;
@@ -540,6 +539,7 @@
 
             var that = Object.assign(this);
 
+            // add interactive function
             $('#dragLeft').on('click',function(){
                 that.dragSVG('left');
             });
