@@ -337,6 +337,7 @@ function exportFile(text){
     var sheets = document.styleSheets;
     try {
         var rules = sheets[0].cssRules;
+        console.log(rules)
     } catch(err) {
         alert('Please use http protocol to be able to activate printing function');
         return;
