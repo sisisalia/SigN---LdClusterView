@@ -17,6 +17,7 @@ Setting up the data and running the application:
 Currently the files are accompanied by the sample data. Hence, to delete sample data :
 1. Delete 'modular/resources/js/data/data.js' file
 2. At 'modular/modular.html' : 
+   - Delete "<div id="inserthere"></div>" at line 8
    - Delete "<script type="text/javascript" src="resources/js/data/data.js"></script>" at line 272
    - Delete myPlot declarations at line 293 and 294
 
