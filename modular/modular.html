@@ -290,16 +290,16 @@
 
     <script type="text/javascript">
 
-        var myPlot = new LdClusterView(gene,eqtls,ld_snps,methylation,mqtls, "#inserthere");
+        var myPlot = new LdClusterView(gene,eqtls,ld,snps,methylation,mqtls, "#inserthere");
         myPlot.plot();
 
         // object
-        function LdClusterView(gene,eqtls,ld_snps,methylation,mqtls, id) {
+        function LdClusterView(gene,eqtls,ld,snps,methylation,mqtls, id) {
             // data
             this.gene = gene;
             this.eqtls = eqtls;
-            this.ld = ld_snps.ld;
-            this.snps = ld_snps.snps;
+            this.ld = ld;
+            this.snps = snps;
             this.methylation = methylation;
             if(!mqtls.isArray){
                 var key = Object.keys(mqtls)[0];
